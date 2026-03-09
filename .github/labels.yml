@@ -1,0 +1,57 @@
+[
+  {
+    "name": "type:feature",
+    "color": "1f6feb",
+    "description": "New user-facing capability or repository feature",
+  },
+  {
+    "name": "type:fix",
+    "color": "d73a4a",
+    "description": "Bug fix or correction",
+  },
+  {
+    "name": "type:docs",
+    "color": "0e8a16",
+    "description": "Documentation-only change",
+  },
+  {
+    "name": "type:chore",
+    "color": "6f42c1",
+    "description": "Maintenance, housekeeping, or non-functional repo work",
+  },
+  {
+    "name": "type:ci",
+    "color": "5319e7",
+    "description": "Continuous integration or automation workflow change",
+  },
+  {
+    "name": "status:blocked",
+    "color": "b60205",
+    "description": "Work cannot proceed until dependency or decision is resolved",
+  },
+  {
+    "name": "status:needs-review",
+    "color": "fbca04",
+    "description": "Ready for reviewer attention",
+  },
+  {
+    "name": "priority:high",
+    "color": "d93f0b",
+    "description": "High priority work",
+  },
+  {
+    "name": "priority:medium",
+    "color": "fbca04",
+    "description": "Normal priority work",
+  },
+  {
+    "name": "priority:low",
+    "color": "0e8a16",
+    "description": "Low priority work",
+  },
+  {
+    "name": "bootstrap",
+    "color": "1d76db",
+    "description": "Repository bootstrap and foundation work",
+  },
+]
