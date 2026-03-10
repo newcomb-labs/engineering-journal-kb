@@ -6,7 +6,7 @@ Describe the feature and the problem it solves.
 
 ## Related Issue
 
-Closes #
+Closes: #
 
 ---
 

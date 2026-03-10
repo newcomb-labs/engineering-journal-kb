@@ -6,7 +6,7 @@ Describe the documentation change.
 
 ## Related Issue
 
-Closes #
+Closes: #
 
 ---
 

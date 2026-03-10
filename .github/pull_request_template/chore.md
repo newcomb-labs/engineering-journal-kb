@@ -6,7 +6,7 @@ Describe the repository maintenance change.
 
 ## Related Issue
 
-Closes #
+Closes: #
 
 ---
 

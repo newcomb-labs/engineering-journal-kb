@@ -6,7 +6,7 @@ Describe the bug that was fixed.
 
 ## Related Issue
 
-Closes #
+Closes: #
 
 ---
 

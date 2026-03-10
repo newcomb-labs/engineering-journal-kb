@@ -1,0 +1,51 @@
+---
+name: PR Auto Label
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto label PR
+        uses: Naturalclar/issue-action@v2.0.2
+        with:
+          title-or-body: both
+          parameters: >-
+            [
+              {
+                "keywords": ["## Summary", "## Changes Introduced", "feature"],
+                "labels": ["type:feature"]
+              },
+              {
+                "keywords": ["## Root Cause", "## Fix Description", "fix", "bug"],
+                "labels": ["type:fix"]
+              },
+              {
+                "keywords": ["## Changes", "## Validation", "docs", "documentation"],
+                "labels": ["type:docs"]
+              },
+              {
+                "keywords": ["dependency", "workflow", "maintenance", "chore", "config"],
+                "labels": ["type:chore"]
+              },
+              {
+                "keywords": ["workflow", "action", "ci", "lint"],
+                "labels": ["area:ci"]
+              },
+              {
+                "keywords": ["repo", "template", "labels", "governance", "config"],
+                "labels": ["area:repo"]
+              },
+              {
+                "keywords": ["security", "secret", "credential", "token", "gitleaks"],
+                "labels": ["area:security"]
+              }
+            ]
+          github-token: ${{ secrets.GITHUB_TOKEN }}
