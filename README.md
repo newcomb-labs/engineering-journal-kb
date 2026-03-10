@@ -17,6 +17,7 @@ The system is designed to support long-term learning, documentation discipline, 
 ## Structure
 
 docs/
+
 - notes/ — staging notes from classes, reading, and experiments
 - zettel/ — refined permanent knowledge notes
 - mocs/ — maps of content (topic indexes)
