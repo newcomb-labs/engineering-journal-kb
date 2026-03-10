@@ -6,10 +6,13 @@ The format is based on Keep a Changelog.
 This project uses Semantic Versioning.
 
 ## [Unreleased]
+
 ### Added
+
 - GitHub Pages deployment workflow for publishing MkDocs documentation from `main`.
 
 ### Changed
+
 - Set `site_url` in `mkdocs.yml` for GitHub Pages publishing.
 - Repository-managed canonical GitHub label definitions in `.github/labels.yml`.
 - `scripts/sync_labels.sh` for syncing labels to GitHub via `gh`.

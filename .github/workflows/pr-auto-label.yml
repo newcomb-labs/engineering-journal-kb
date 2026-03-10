@@ -1,0 +1,84 @@
+name: PR Auto Label
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto label PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const title = (pr.title || "").toLowerCase();
+            const body = (pr.body || "").toLowerCase();
+            const text = `${title}\n\n${body}`;
+
+            const rules = [
+              {
+                keywords: ["feat(", "feature", "enhancement"],
+                labels: ["type:feature"],
+              },
+              {
+                keywords: ["fix(", "bug", "bugfix", "root cause", "fix description"],
+                labels: ["type:fix"],
+              },
+              {
+                keywords: ["docs(", "documentation", "readme", "mkdocs", "docusaurus"],
+                labels: ["type:docs"],
+              },
+              {
+                keywords: ["chore(", "maintenance", "dependency", "dependencies", "config"],
+                labels: ["type:chore"],
+              },
+              {
+                keywords: ["ci(", "workflow", "action", "github actions", "lint"],
+                labels: ["area:ci"],
+              },
+              {
+                keywords: ["repo", "template", "labels", "governance", ".github/"],
+                labels: ["area:repo"],
+              },
+              {
+                keywords: ["security", "secret", "credential", "token", "gitleaks"],
+                labels: ["area:security"],
+              },
+            ];
+
+            const labelsToAdd = new Set();
+
+            for (const rule of rules) {
+              if (rule.keywords.some((keyword) => text.includes(keyword))) {
+                for (const label of rule.labels) {
+                  labelsToAdd.add(label);
+                }
+              }
+            }
+
+            const labels = [...labelsToAdd];
+
+            if (labels.length === 0) {
+              core.info("No matching labels found.");
+              return;
+            }
+
+            core.info(`Adding labels: ${labels.join(", ")}`);
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels,
+            });

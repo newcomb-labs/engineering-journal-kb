@@ -1,0 +1,13 @@
+title = "journal-gitleaks"
+
+[allowlist]
+description = "Allow obvious non-secret placeholders"
+paths = [
+  '''(^|/)tests?/''',
+  '''(^|/)fixtures?/'''
+]
+regexes = [
+  '''example[-_]?token''',
+  '''fake[-_]?key''',
+  '''dummy[-_]?secret'''
+]
