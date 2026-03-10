@@ -1,131 +1,58 @@
-- name: "type:feature"
-  color: "1f6feb"
-  description: "New user-facing capability or repository feature"
-
-- name: "type:fix"
-  color: "d73a4a"
-  description: "Bug fix or correction"
-
-- name: "type:docs"
-  color: "0e8a16"
-  description: "Documentation-only change"
-
-- name: "type:chore"
-  color: "6f42c1"
-  description: "Maintenance, housekeeping, or non-functional repo work"
-
-- name: "type:ci"
-  color: "5319e7"
-  description: "Continuous integration or automation workflow change"
-
-- name: "status:blocked"
-  color: "b60205"
-  description: "Work cannot proceed until dependency or decision is resolved"
-
-- name: "status:needs-review"
-  color: "fbca04"
-  description: "Ready for reviewer attention"
-
-- name: "priority:high"
-  color: "d93f0b"
-  description: "High priority work"
-
-- name: "priority:medium"
-  color: "fbca04"
-  description: "Normal priority work"
-
-- name: "priority:low"
-  color: "0e8a16"
-  description: "Low priority work"
-
-- name: "bootstrap"
-  color: "1d76db"
-  description: "Repository bootstrap and foundation work"
-
-- name: "note"
-  color: "ededed"
-  description: "General engineering journal note"
-
-- name: "deep-dive"
-  color: "fef2c0"
-  description: "Long-form technical exploration"
-
-- name: "topic:security"
-  color: "b60205"
-  description: "Cybersecurity, trust and safety, and defensive security notes"
-
-- name: "topic:networking"
-  color: "1d76db"
-  description: "Networking concepts, infrastructure, routing, switching, DNS, and related notes"
-
-- name: "topic:systems"
-  color: "0052cc"
-  description: "Operating systems, system administration, and host management notes"
-
-- name: "topic:automation"
-  color: "5319e7"
-  description: "Automation tools, scripting, and infrastructure as code notes"
-
-- name: "topic:cloud"
-  color: "0366d6"
-  description: "Cloud infrastructure, platforms, and services notes"
-
-- name: "topic:devops"
-  color: "6f42c1"
-  description: "CI/CD, delivery pipelines, release automation, and operations notes"
-
-- name: "topic:programming"
-  color: "0e8a16"
-  description: "Programming languages, coding patterns, and software development notes"
-
-- name: "topic:architecture"
-  color: "c5def5"
-  description: "System architecture, design decisions, and technical design notes"
-
-- name: "topic:api"
-  color: "bfdadc"
-  description: "API design, integrations, contracts, and interface documentation"
-
-- name: "topic:homelab"
-  color: "f9d0c4"
-  description: "Home lab infrastructure, experiments, and operational notes"
-
-- name: "topic:netbox"
-  color: "c2e0c6"
-  description: "NetBox inventory, modeling, and integration notes"
-
-- name: "topic:ansible"
-  color: "d4c5f9"
-  description: "Ansible playbooks, roles, task structure, and automation notes"
-
-- name: "topic:learning"
-  color: "fbca04"
-  description: "General study notes, class notes, and learning material"
-
-- name: "topic:reference"
-  color: "ededed"
-  description: "Quick reference material, cheatsheets, and reusable lookup notes"
-
-- name: "topic:research"
-  color: "e99695"
-  description: "Exploratory research, investigation notes, and findings"
-
-- name: "topic:career"
-  color: "cfd3d7"
-  description: "Career development, professional growth, and job search notes"
-
-- name: "topic:interview-prep"
-  color: "bfd4f2"
-  description: "Interview preparation, questions, and practice notes"
-
-- name: "topic:repo"
-  color: "7057ff"
-  description: "Repository structure, governance, standards, and maintenance notes"
-
-- name: "topic:github"
-  color: "24292f"
-  description: "GitHub workflows, Actions, templates, labels, and repository automation"
-
-- name: "topic:documentation"
-  color: "0075ca"
-  description: "Documentation systems, style, structure, and publishing notes"
+---
+[
+  {
+    "name": "type:feature",
+    "color": "1f6feb",
+    "description": "New user-facing capability or repository feature",
+  },
+  {
+    "name": "type:fix",
+    "color": "d73a4a",
+    "description": "Bug fix or correction",
+  },
+  {
+    "name": "type:docs",
+    "color": "0e8a16",
+    "description": "Documentation-only change",
+  },
+  {
+    "name": "type:chore",
+    "color": "6f42c1",
+    "description": "Maintenance, housekeeping, or non-functional repo work",
+  },
+  {
+    "name": "type:ci",
+    "color": "5319e7",
+    "description": "Continuous integration or automation workflow change",
+  },
+  {
+    "name": "status:blocked",
+    "color": "b60205",
+    "description": "Work cannot proceed until dependency or decision is resolved",
+  },
+  {
+    "name": "status:needs-review",
+    "color": "fbca04",
+    "description": "Ready for reviewer attention",
+  },
+  {
+    "name": "priority:high",
+    "color": "d93f0b",
+    "description": "High priority work",
+  },
+  {
+    "name": "priority:medium",
+    "color": "fbca04",
+    "description": "Normal priority work",
+  },
+  {
+    "name": "priority:low",
+    "color": "0e8a16",
+    "description": "Low priority work",
+  },
+  {
+    "name": "bootstrap",
+    "color": "1d76db",
+    "description": "Repository bootstrap and foundation work",
+  },
+]
