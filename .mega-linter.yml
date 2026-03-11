@@ -1,0 +1,15 @@
+APPLY_FIXES: none
+DISABLE:
+  - SPELL
+  - COPYPASTE
+ENABLE_LINTERS:
+  - YAML_PRETTIER
+  - YAML_YAMLLINT
+  - JSON_PRETTIER
+  - MARKDOWN_MARKDOWNLINT
+  - REPOSITORY_GITLEAKS
+FILTER_REGEX_EXCLUDE: |
+  (^vendor/)
+  (^node_modules/)
+  (^dist/)
+  (^\.git/)
