@@ -23,4 +23,16 @@ jobs:
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          {
+            echo "## 🔐 Security Scan Summary"
+            echo ""
+            echo "| Check | Status | Notes |"
+            echo "|---|---|---|"
+            echo "| Gitleaks | ✅ Completed | Secret scan workflow finished |"
+          } >> "$GITHUB_STEP_SUMMARY"

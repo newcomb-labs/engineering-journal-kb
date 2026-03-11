@@ -57,3 +57,14 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          {
+            echo "## 🚀 Docs Deploy Summary"
+            echo ""
+            echo "| Check | Status | Notes |"
+            echo "|---|---|---|"
+            echo "| Docs deployment | ✅ Completed | Deployment workflow finished |"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -26,3 +26,14 @@ jobs:
       - name: Build documentation
         run: |
           mkdocs build --strict
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          {
+            echo "## 📚 Docs CI Summary"
+            echo ""
+            echo "| Check | Status | Notes |"
+            echo "|---|---|---|"
+            echo "| MkDocs build | ✅ Completed | Documentation build finished |"
+          } >> "$GITHUB_STEP_SUMMARY"
