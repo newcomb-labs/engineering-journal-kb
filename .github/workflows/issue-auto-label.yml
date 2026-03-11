@@ -1,0 +1,66 @@
+---
+name: Issue Auto Label
+
+"on":
+  issues:
+    types: [opened, edited]
+  pull_request:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto label and assign
+        uses: Naturalclar/issue-action@v2.0.2
+        with:
+          title-or-body: both
+          parameters: >-
+            [
+              {
+                "keywords": ["bug", "error", "failure", "broken"],
+                "labels": ["type:fix"],
+                "assignees": []
+              },
+              {
+                "keywords": ["docs", "documentation", "readme"],
+                "labels": ["type:docs"],
+                "assignees": []
+              },
+              {
+                "keywords": ["workflow", "action", "ci", "lint"],
+                "labels": ["area:ci"],
+                "assignees": []
+              },
+              {
+                "keywords": [
+                  "security",
+                  "secret",
+                  "credential",
+                  "token"
+                ],
+                "labels": ["area:security"],
+                "assignees": []
+              },
+              {
+                "keywords": ["feature", "enhancement"],
+                "labels": ["type:feature"],
+                "assignees": []
+              },
+              {
+                "keywords": ["chore", "cleanup", "housekeeping"],
+                "labels": ["type:chore"],
+                "assignees": []
+              },
+              {
+                "keywords": ["repo", "governance", "template", "label"],
+                "labels": ["area:repo"],
+                "assignees": []
+              }
+            ]
+          github-token: ${{ secrets.GITHUB_TOKEN }}

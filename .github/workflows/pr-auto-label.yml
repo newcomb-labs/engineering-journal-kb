@@ -1,9 +1,13 @@
 ---
 name: PR Auto Label
 
-on:
+"on":
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
 
 permissions:
   contents: read
@@ -12,40 +16,85 @@ permissions:
 jobs:
   auto-label:
     runs-on: ubuntu-latest
+
     steps:
       - name: Auto label PR
         uses: Naturalclar/issue-action@v2.0.2
+
         with:
           title-or-body: both
+
           parameters: >-
             [
               {
-                "keywords": ["## Summary", "## Changes Introduced", "feature"],
-                "labels": ["type:feature"]
+                "keywords": [
+                  "feature",
+                  "enhancement",
+                  "Changes Introduced"
+                ],
+                "labels": ["type:feature"],
+                "assignees": []
               },
               {
-                "keywords": ["## Root Cause", "## Fix Description", "fix", "bug"],
-                "labels": ["type:fix"]
+                "keywords": [
+                  "fix",
+                  "bug",
+                  "Root Cause",
+                  "Fix Description"
+                ],
+                "labels": ["type:fix"],
+                "assignees": []
               },
               {
-                "keywords": ["## Changes", "## Validation", "docs", "documentation"],
-                "labels": ["type:docs"]
+                "keywords": [
+                  "docs",
+                  "documentation",
+                  "readme"
+                ],
+                "labels": ["type:docs"],
+                "assignees": []
               },
               {
-                "keywords": ["dependency", "workflow", "maintenance", "chore", "config"],
-                "labels": ["type:chore"]
+                "keywords": [
+                  "chore",
+                  "maintenance",
+                  "workflow",
+                  "config"
+                ],
+                "labels": ["type:chore"],
+                "assignees": []
               },
               {
-                "keywords": ["workflow", "action", "ci", "lint"],
-                "labels": ["area:ci"]
+                "keywords": [
+                  "ci",
+                  "workflow",
+                  "lint",
+                  "action"
+                ],
+                "labels": ["area:ci"],
+                "assignees": []
               },
               {
-                "keywords": ["repo", "template", "labels", "governance", "config"],
-                "labels": ["area:repo"]
+                "keywords": [
+                  "repo",
+                  "governance",
+                  "template",
+                  "label"
+                ],
+                "labels": ["area:repo"],
+                "assignees": []
               },
               {
-                "keywords": ["security", "secret", "credential", "token", "gitleaks"],
-                "labels": ["area:security"]
+                "keywords": [
+                  "security",
+                  "secret",
+                  "credential",
+                  "token",
+                  "gitleaks"
+                ],
+                "labels": ["area:security"],
+                "assignees": []
               }
             ]
+
           github-token: ${{ secrets.GITHUB_TOKEN }}
