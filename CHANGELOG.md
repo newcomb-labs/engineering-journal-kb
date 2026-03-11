@@ -5,20 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog.
 This project uses Semantic Versioning.
 
-## [Unreleased]
+## v0.2.0 (2026-03-11)
 
-### Added
+### Feat
 
-- GitHub Pages deployment workflow for publishing MkDocs documentation from `main`.
+- **release**: add Commitizen bump and changelog workflow (#30)
+- **repo**: add Commitizen configuration and commit validation (#29)
+- **ci**: add MegaLinter workflow (#28)
+- **repo**: add label source of truth and sync script (#26)
+- **repo**: add pull request auto-label workflow (#23)
+- **repo**: add automated labeling workflows (#24)
+- **repo**: add label source of truth and sync script (#20)
+- **docs**: add GitHub Pages deployment workflow (#11)
+- **repo**: establish canonical label governance (#9)
+- **repo**: add GitHub issue and pull request templates (#6)
+- **docs**: initialize engineering journal documentation foundation (#3)
+- **docs**: initialize engineering journal documentation foundation (#1)
 
-### Changed
+### Fix
 
-- Set `site_url` in `mkdocs.yml` for GitHub Pages publishing.
-- Repository-managed canonical GitHub label definitions in `.github/labels.yml`.
-- `scripts/sync_labels.sh` for syncing labels to GitHub via `gh`.
-- Initial documentation platform foundation
-- MkDocs Material configuration
-- Zettelkasten-compatible knowledge structure
-- Documentation CI workflow
-- MIT license
-- Minimal pre-commit hooks with CI enforcement
+- **repo**: add empty assignees arrays to pull request auto-label workflow (#27)
