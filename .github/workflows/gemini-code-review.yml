@@ -1,0 +1,23 @@
+name: Gemini AI Code Reviewer
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  gemini-code-review:
+    if: >
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '/gemini-review')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Gemini reviewer
+        uses: truongnh1992/gemini-ai-code-reviewer@v9.2.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
