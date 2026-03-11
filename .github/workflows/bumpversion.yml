@@ -1,34 +1,62 @@
-name: Bump Version
+---
+name: Release Version
 
-on:
+"on":
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
-  bump_version:
-    if: "!startsWith(github.event.head_commit.message, 'bump:')"
+  bump-version:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
 
-      - name: Bump version and changelog
-        id: cz
-        uses: commitizen-tools/commitizen-action@master
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
+          python-version: "3.11"
 
-      - name: Show outputs
+      - name: Install Commitizen
+        run: pip install commitizen
+
+      - name: Bump version
         run: |
-          echo "Version: ${{ steps.cz.outputs.version }}"
-          echo "Tag: ${{ steps.cz.outputs.tag }}"
+          cz bump --yes --changelog
+          VERSION=$(cz version -p)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create release branch
+        run: |
+          git checkout -b release/v${VERSION}
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore(release): v${VERSION}"
+
+      - name: Push branch
+        run: |
+          git push origin release/v${VERSION}
+
+      - name: Create Pull Request
+        uses: gh-actions/create-pull-request@v6
+        with:
+          title: "chore(release): v${{ env.VERSION }}"
+          body: |
+            Automated version bump and changelog update.
+
+            ## Release
+            Version: `${{ env.VERSION }}`
+
+            This PR was generated automatically by the release workflow.
+          base: main
+          head: release/v${{ env.VERSION }}
