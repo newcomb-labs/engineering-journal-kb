@@ -1,8 +1,29 @@
----
 extends: default
 
 rules:
   line-length:
-    max: 160
+    max: 200
     allow-non-breakable-words: true
     allow-non-breakable-inline-mappings: true
+
+  trailing-spaces: enable
+  new-lines: enable
+
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+    check-multi-line-strings: false
+
+  comments:
+    min-spaces-from-content: 1
+
+  truthy:
+    allowed-values: ["true", "false", "on", "off"]
+    check-keys: true
+
+ignore: |
+  .venv/
+  site/
+  dist/
+  build/
+  node_modules/

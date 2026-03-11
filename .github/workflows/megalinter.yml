@@ -1,0 +1,27 @@
+name: MegaLinter
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+  statuses: write
+
+jobs:
+  megalinter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Run MegaLinter
+        uses: oxsecurity/megalinter@v8
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
