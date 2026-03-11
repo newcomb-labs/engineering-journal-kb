@@ -1,0 +1,58 @@
+---
+name: Release Tag
+
+"on":
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  tag-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Commitizen
+        run: pip install commitizen
+
+      - name: Determine version
+        id: version
+        run: |
+          VERSION=$(cz version -p)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create tag
+        run: |
+          git tag v${VERSION}
+          git push origin v${VERSION}
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          generate_release_notes: true
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          {
+            echo "## 📦 Release Tag Summary"
+            echo ""
+            echo "| Item | Value |"
+            echo "|---|---|"
+            echo "| Version | v${VERSION} |"
+            echo "| Tag | Created |"
+            echo "| GitHub Release | Published |"
+          } >> "$GITHUB_STEP_SUMMARY"
