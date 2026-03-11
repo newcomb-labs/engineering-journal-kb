@@ -38,7 +38,12 @@ jobs:
                 "assignees": []
               },
               {
-                "keywords": ["security", "secret", "credential", "token"],
+                "keywords": [
+                  "security",
+                  "secret",
+                  "credential",
+                  "token"
+                ],
                 "labels": ["area:security"],
                 "assignees": []
               },
