@@ -1,31 +1,29 @@
 ---
-name: PR Auto Label
+name: Issue Auto Label
 
 "on":
+  issues:
+    types: [opened, edited]
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, edited]
 
 permissions:
   contents: read
+  issues: write
   pull-requests: write
 
 jobs:
   auto-label:
     runs-on: ubuntu-latest
     steps:
-      - name: Auto label PR
+      - name: Auto label and assign
         uses: Naturalclar/issue-action@v2.0.2
         with:
           title-or-body: both
           parameters: >-
             [
               {
-                "keywords": ["feature", "enhancement", "## Changes Introduced"],
-                "labels": ["type:feature"],
-                "assignees": []
-              },
-              {
-                "keywords": ["fix", "bug", "## Root Cause", "## Fix Description"],
+                "keywords": ["bug", "error", "failure", "broken"],
                 "labels": ["type:fix"],
                 "assignees": []
               },
@@ -35,23 +33,28 @@ jobs:
                 "assignees": []
               },
               {
-                "keywords": ["chore", "maintenance", "workflow", "config"],
-                "labels": ["type:chore"],
+                "keywords": ["workflow", "action", "ci", "lint"],
+                "labels": ["area:ci"],
                 "assignees": []
               },
               {
-                "keywords": ["ci", "workflow", "lint", "action"],
-                "labels": ["area:ci"],
+                "keywords": ["security", "secret", "credential", "token"],
+                "labels": ["area:security"],
+                "assignees": []
+              },
+              {
+                "keywords": ["feature", "enhancement"],
+                "labels": ["type:feature"],
+                "assignees": []
+              },
+              {
+                "keywords": ["chore", "cleanup", "housekeeping"],
+                "labels": ["type:chore"],
                 "assignees": []
               },
               {
                 "keywords": ["repo", "governance", "template", "label"],
                 "labels": ["area:repo"],
-                "assignees": []
-              },
-              {
-                "keywords": ["security", "secret", "credential", "token", "gitleaks"],
-                "labels": ["area:security"],
                 "assignees": []
               }
             ]
