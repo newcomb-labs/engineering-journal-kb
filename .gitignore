@@ -1,8 +1,8 @@
 ################################
-# Sistemas Operativos
+# Operating systems
 ################################
 
-### macOS ###
+# macOS
 .DS_Store
 .DS_Store?
 .AppleDouble
@@ -18,15 +18,19 @@
 Network Trash Folder
 Temporary Items
 .apdisk
+.DocumentRevisions-V100
+.TemporaryItems
+Icon
+Icon?
 
-### Windows ###
+# Windows
 Thumbs.db
 Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
-*.stackdump
 [Dd]esktop.ini
 $RECYCLE.BIN/
+*.stackdump
 *.cab
 *.msi
 *.msix
@@ -34,7 +38,7 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 
-### Linux ###
+# Linux and Unix
 *~
 .fuse_hidden*
 .directory
@@ -42,33 +46,28 @@ $RECYCLE.BIN/
 .nfs*
 
 ################################
-# IDEs y Editores
+# Editors and IDEs
 ################################
 
-### Visual Studio Code ###
+# Visual Studio Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+.vscode-test
 .history/
-*.vsix
 
-### JetBrains (IntelliJ, PyCharm, WebStorm, etc) ###
+# JetBrains
 .idea/
 *.iml
 *.iws
 *.ipr
-out/
 .idea_modules/
 atlassian-ide-plugin.xml
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
 
-### Vim ###
+# Vim
 *.swp
 *.swo
 *.swn
@@ -82,12 +81,11 @@ fabric.properties
 Session.vim
 Sessionx.vim
 .netrwhist
-*~
 tags
 [._]*.un~
+.viminfo
 
-### Emacs ###
-*~
+# Emacs
 \#*\#
 /.emacs.desktop
 /.emacs.desktop.lock
@@ -101,17 +99,10 @@ tramp
 /eshell/history
 /eshell/lastdir
 /elpa/
-*.rel
 /auto/
-.cask/
-dist/
-flycheck_*.el
 /server/
-.projectile
-.dir-locals.el
-/network-security.data
 
-### Sublime Text ###
+# Sublime Text
 *.tmlanguage.cache
 *.tmPreferences.cache
 *.stTheme.cache
@@ -131,7 +122,7 @@ oscrypto-ca-bundle.crt
 bh_unicode_properties.cache
 GitHub.sublime-settings
 
-### Xcode ###
+# Xcode
 xcuserdata/
 *.xcscmblueprint
 *.xccheckout
@@ -148,21 +139,22 @@ DerivedData/
 *.xcworkspace
 !default.xcworkspace
 *.xcuserstate
+*.xcodeproj
 
 ################################
-# Herramientas de IA y Asistentes
+# AI tools and assistants
 ################################
 
-### GitHub Copilot ###
+# GitHub Copilot
 .copilot/
 .github/copilot/
 
-### Cursor ###
+# Cursor
 .cursor/
 *.cursor
 .cursor-tutor/
 
-### Claude ###
+# Claude
 .claude/
 .claudecode/
 *.claude
@@ -171,36 +163,36 @@ DerivedData/
 CLAUDE.md
 claude-dev/
 
-### ChatGPT/OpenAI ###
+# ChatGPT and OpenAI
 .openai/
 .chatgpt/
 *.openai
 
-### Codeium ###
+# Codeium
 .codeium/
 *.codeium
 
-### Tabnine ###
+# Tabnine
 .tabnine/
 TabNine.toml
 
-### Amazon CodeWhisperer ###
+# Amazon CodeWhisperer
 .codewhisperer/
 *.codewhisperer
 
-### Windsurf ###
+# Windsurf
 .windsurf/
 *.windsurf
 
-### Taskmaster AI ###
+# Taskmaster AI
 .taskmaster/
 *.taskmaster
 
-### Cline ###
+# Cline
 .cline/
 *.cline
 
-### AI General ###
+# General AI artifacts
 .ai/
 .ai-cache/
 *.ai-session
@@ -210,21 +202,21 @@ ai-artifacts/
 .llm-cache/
 
 ################################
-# Lenguajes de Programación
+# Python
 ################################
 
-### Python ###
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
+.python-version
+.venv
 venv/
+env/
 ENV/
 env.bak/
 venv.bak/
-.venv
 pip-log.txt
 pip-delete-this-directory.txt
 .tox/
@@ -239,11 +231,9 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pybuilder/
-target/
 .ipynb_checkpoints
 profile_default/
 ipython_config.py
-.python-version
 .mypy_cache/
 .dmypy.json
 dmypy.json
@@ -255,8 +245,6 @@ cython_debug/
 .installed.cfg
 *.egg
 *.egg-info/
-dist/
-build/
 develop-eggs/
 downloads/
 eggs/
@@ -279,7 +267,10 @@ instance/
 docs/_build/
 .ruff_cache/
 
-### Node.js ###
+################################
+# Node.js and frontend tooling
+################################
+
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -296,21 +287,17 @@ lerna-debug.log*
 .node_repl_history
 *.tgz
 .yarn-integrity
-.cache
 .parcel-cache
 .next
 out
 .nuxt
 dist
-.cache/
-.vuepress/dist
 .temp
 .docusaurus
 .serverless/
 .fusebox/
 .dynamodb/
 .tern-port
-.vscode-test
 .yarn/
 .pnp.*
 web_modules/
@@ -324,18 +311,25 @@ jspm_packages/
 .env.production.local
 .env.local
 
-### Java ###
+################################
+# Docusaurus generated files
+################################
+
+website/.docusaurus/
+website/build/
+website/node_modules/
+
+################################
+# Java
+################################
+
 *.class
-*.log
 *.ctxt
 .mtj.tmp/
 *.jar
 *.war
 *.nar
 *.ear
-*.zip
-*.tar.gz
-*.rar
 hs_err_pid*
 replay_pid*
 .classpath
@@ -345,13 +339,27 @@ bin/
 .apt_generated/
 .factorypath
 
-### Ruby ###
+################################
+# Ruby
+################################
+
 *.gem
 *.rbc
-/.config
-/coverage/
-/InstalledFiles
+.bundle/
+/vendor/bundle
+/lib/bundler/man/
+.rvmrc
+.ruby-version
+.ruby-gemset
+.rspec
+.byebug_history
+/spring
+*.thor
+/public/system
+/public/uploads
+/public/assets
 /pkg/
+/coverage/
 /spec/reports/
 /spec/examples.txt
 /test/tmp/
@@ -362,42 +370,36 @@ bin/
 *.bridgesupport
 build-iPhoneOS/
 build-iPhoneSimulator/
-/.bundle/
-/vendor/bundle
-/lib/bundler/man/
-.rvmrc
-.ruby-version
-.ruby-gemset
-.rspec
-/public/system
-/public/uploads
-/public/assets
-.byebug_history
-/spring
-*.thor
-bundle/**/*
 application.css
 application.js
 tags.html
 
-### Go ###
+################################
+# Go
+################################
+
 *.exe
 *.exe~
 *.dll
-*.so
 *.dylib
 *.test
 *.out
 go.work
 vendor/
 
-### Rust ###
+################################
+# Rust
+################################
+
 /target/
 Cargo.lock
 **/*.rs.bk
 *.pdb
 
-### C/C++ ###
+################################
+# C and C++
+################################
+
 *.d
 *.o
 *.obj
@@ -417,25 +419,30 @@ Cargo.lock
 *.suo
 *.user
 *.userosscache
-*.sln.docstates
 
-### Swift ###
+################################
+# Swift
+################################
+
 .build/
 Packages/
 Package.pins
 Package.resolved
-*.xcodeproj
-xcuserdata/
-DerivedData/
 .swiftpm/
 
-### Kotlin ###
+################################
+# Kotlin
+################################
+
 .kotlin/
 *.kotlin_module
 *.kotlin_builtins
 *.kotlin_metadata
 
-### PHP ###
+################################
+# PHP
+################################
+
 /vendor/
 composer.phar
 phpunit.xml
@@ -443,11 +450,10 @@ phpunit.xml
 .php_cs.cache
 .php-cs-fixer.cache
 
-### .NET ###
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
+################################
+# .NET
+################################
+
 .vs/
 [Dd]ebug/
 [Rr]elease/
@@ -459,10 +465,10 @@ phpunit.xml
 .aspnet/
 
 ################################
-# Herramientas de Build
+# Build tools
 ################################
 
-### Gradle ###
+# Gradle
 .gradle
 **/build/
 !src/**/build/
@@ -471,7 +477,7 @@ gradle-app.setting
 !gradle-wrapper.properties
 .gradletasknamecache
 
-### Maven ###
+# Maven
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -484,7 +490,7 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-### CMake ###
+# CMake
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -498,113 +504,70 @@ CTestTestfile.cmake
 _deps
 cmake-build-*/
 
-### Make ###
+# Make
 Makefile.in
 
 ################################
-# Frameworks Web
+# Web frameworks
 ################################
 
-### Jekyll ###
+# Jekyll
 _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
 
-### Gatsby ###
+# Gatsby
 public/
-.cache/
 
-### Next.js ###
-.next/
-out/
-
-### Nuxt.js ###
-.nuxt/
-dist/
-
-### Angular ###
+# Angular
 .angular/
 
-### Vue ###
-.nuxt/
-
-### Django ###
-*.log
-local_settings.py
+# Django
 db.sqlite3
 db.sqlite3-journal
 media/
 staticfiles/
 
-### Flask ###
-instance/
-.webassets-cache
-
-### Laravel ###
-/vendor/
+# Laravel
 .env
 .env.backup
-.phpunit.result.cache
 Homestead.json
 Homestead.yaml
-npm-debug.log
-yarn-error.log
 
-### Rails ###
-*.rbc
+# Rails
 capybara-*.html
-.rspec
 /db/*.sqlite3
 /db/*.sqlite3-journal
 /db/*.sqlite3-*
-/public/system
-/coverage/
 /spec/tmp
-*.orig
 rerun.txt
 pickle-email-*.html
-.byebug_history
-/vendor/bundle
-/.bundle
-.rvmrc
 /.yardoc
 /_yardoc/
 /doc/
 /rdoc/
-/.config
-/InstalledFiles
-/pkg/
-/spec/reports/
-/spec/examples.txt
-/test/tmp/
-/test/version_tmp/
-/tmp/
 /public/packs
 /public/packs-test
-/node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
 /storage/*
 !/storage/.keep
-/public/uploads
 
 ################################
-# Contenedores y Virtualización
+# Containers and virtualization
 ################################
 
-### Docker ###
+# Docker
 .docker/
 .dockerignore.local
 
-### Vagrant ###
+# Vagrant
 .vagrant/
 *.box
 
 ################################
-# Bases de Datos
+# Databases
 ################################
+
 *.sql
 *.sqlite
 *.sqlite3
@@ -614,8 +577,9 @@ yarn-debug.log*
 *.sl3
 
 ################################
-# Logs y Temporales
+# Logs and temporary files
 ################################
+
 *.log
 *.tmp
 *.temp
@@ -635,8 +599,9 @@ tmp/
 cache/
 
 ################################
-# Archivos de Configuración Local
+# Local configuration
 ################################
+
 .env
 .env.*
 !.env.example
@@ -652,10 +617,16 @@ secrets.yaml
 credentials.json
 credentials.yml
 credentials.yaml
+.gitconfig.local
+.node-version
+.nvmrc
+.java-version
+.tool-versions
 
 ################################
-# Certificados y Claves
+# Certificates and keys
 ################################
+
 *.pem
 *.key
 *.crt
@@ -677,26 +648,24 @@ id_ed25519*
 !*test.key
 
 ################################
-# Archivos Comprimidos
+# Compressed archives
 ################################
+
 *.7z
 *.dmg
 *.gz
 *.iso
-*.jar
 *.rar
 *.tar
 *.zip
-*.war
-*.ear
 *.sar
-*.nar
 *.xz
 *.bz2
 
 ################################
-# Multimedia y Binarios
+# Media and binary documents
 ################################
+
 *.mp3
 *.mp4
 *.avi
@@ -724,75 +693,13 @@ id_ed25519*
 *.odp
 
 ################################
-# Misceláneos
+# Security - never commit
 ################################
-.history/
-.viminfo
-.bash_history
-.zsh_history
-.lesshst
-.wget-hsts
-.gitconfig.local
-.bundle/
-.rbenv-gemsets
-.ruby-version
-.node-version
-.nvmrc
-.python-version
-.java-version
-.tool-versions
-Desktop.ini
-$RECYCLE.BIN/
-*.bak
-*.gho
-*.ori
-*.orig
-*.tmp
-*.temp
-*~
-.fuse_hidden*
-.Trash-*
-.nfs*
-.DocumentRevisions-V100
-.fseventsd
-.TemporaryItems
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-.LSOverride
-Icon
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-ehthumbs_vista.db
-*.stackdump
-[Dd]esktop.ini
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-*.lnk
 
-################################
-# Padrino
-################################
-coverage/*
-
-################################
-# Seguridad - NO SUBIR NUNCA
-################################
 *_rsa
 *_dsa
 *_ed25519
 *_ecdsa
-*.pem
-*.key
 private/
 secrets/
 .secrets/
@@ -803,6 +710,7 @@ passwords.*
 ################################
 # Terraform
 ################################
+
 *.tfstate
 *.tfstate.*
 .terraform/
@@ -820,7 +728,7 @@ terraform.rc
 ################################
 # Ansible
 ################################
-*.retry
+
 vault.yml
 vault.yaml
 .vault_pass
@@ -828,58 +736,41 @@ vault.yaml
 ################################
 # Kubernetes
 ################################
+
 kubeconfig
 .kube/config
 *.kubeconfig
 
 ################################
-# CI/CD
+# CI and CD
 ################################
+
 .gitlab-ci-local/
 .github/actions/*/dist/
 .github/actions/*/node_modules/
 
 ################################
-# AWS
+# Cloud tooling
 ################################
+
+# AWS
 .aws/
 aws_credentials
 .aws-sam/
 
-################################
 # Azure
-################################
 .azure/
 local.settings.json
 
-################################
 # Google Cloud
-################################
 .gcloud/
 gcloud-key.json
 service-account-key.json
 
 ################################
-# Archivos de Respaldo de Editores
+# Testing and reports
 ################################
-*.backup
-*~
-*.bak
-*.gho
-*.ori
-*.orig
-*.tmp
-\#*\#
-.\#*
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
 
-################################
-# Testing
-################################
 test-results/
 playwright-report/
 test-output/
@@ -888,38 +779,19 @@ allure-report/
 .nyc_output/
 coverage/
 *.lcov
+coverage/*
 
 ################################
-# Monorepo Tools
+# Monorepo tools
 ################################
+
 .turbo/
 .nx/
-lerna-debug.log*
 
 ################################
-# Package Managers Lock Files
+# Dart and Flutter
 ################################
-# Comentar si quieres commitear lock files
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
-# composer.lock
-# Gemfile.lock
-# Pipfile.lock
-# poetry.lock
 
-################################
-# OS Específicos Linux
-################################
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
-
-################################
-# Dart/Flutter
-################################
 .dart_tool/
 .packages
 .flutter-plugins
@@ -929,29 +801,36 @@ lerna-debug.log*
 /build/
 *.dart.js
 *.info.json
-*.js
-*.js_
-*.js.deps
-*.js.map
 
 ################################
-# Herramientas de Desarrollo
+# Development environments
 ################################
+
 .devcontainer/
 .gitpod.yml
 .gitpod/
 
 ################################
-# Archivos de Sistema
+# Lock files
 ################################
-Icon?
-$RECYCLE.BIN/
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
 
+# Uncomment any of these if you want to ignore lock files
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+# composer.lock
+# Gemfile.lock
+# Pipfile.lock
+# poetry.lock
 
+################################
+# Docusaurus site source files
+################################
 
-# Allow Docusaurus site source files
+# Keep generated Docusaurus output ignored, but allow tracked site source code
 !website/**/*.js
+!website/**/*.jsx
+!website/**/*.ts
+!website/**/*.tsx
+!website/docusaurus.config.*
+!website/sidebars.*
