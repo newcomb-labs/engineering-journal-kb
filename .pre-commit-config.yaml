@@ -46,3 +46,11 @@ repos:
         entry: python3 scripts/validate_blog_tags.py
         language: system
         pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: validate-blog-tags
+        name: validate-blog-tags
+        entry: bash scripts/docs_check.sh
+        language: system
+        pass_filenames: false
