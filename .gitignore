@@ -950,3 +950,8 @@ $RECYCLE.BIN/
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+
+
+# Allow Docusaurus site source files
+!website/**/*.js
