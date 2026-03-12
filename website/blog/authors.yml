@@ -1,11 +1,5 @@
 chris:
   name: Chris Newcomb
-  title:
-  url:
-  image_url:
-  page: true
-  socials:
-    x:
-    linkedin:
-    github:
-    newsletter:
+  title: Engineer
+  url: https://github.com/newcomb-labs
+  image_url: https://github.com/newcomb-labs.png
