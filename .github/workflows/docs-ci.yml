@@ -33,6 +33,11 @@ jobs:
       - name: Write workflow summary
         if: always()
         run: |
+          mkdocs build --strict
+
+      - name: Write workflow summary
+        if: always()
+        run: |
           {
             echo "## 📚 Docs CI Summary"
             echo ""
