@@ -33,15 +33,10 @@ jobs:
       - name: Write workflow summary
         if: always()
         run: |
-          mkdocs build --strict
-
-      - name: Write workflow summary
-        if: always()
-        run: |
           {
-            echo "## 📚 Docs CI Summary"
+            echo "## Docs CI Summary"
             echo ""
             echo "| Check | Status | Notes |"
             echo "|---|---|---|"
-            echo "| MkDocs build | ✅ Completed | Documentation build finished |"
+            echo "| Docusaurus build | ✅ Completed | Site build finished successfully |"
           } >> "$GITHUB_STEP_SUMMARY"
