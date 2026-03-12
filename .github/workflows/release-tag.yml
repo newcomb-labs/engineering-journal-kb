@@ -1,65 +1,45 @@
----
-name: Release Tag
+# ---
+# name: Release Tag
 
-"on":
-  push:
-    branches:
-      - main
+# "on":
+#   push:
+#     branches:
+#       - main
 
-permissions:
-  contents: write
+# permissions:
+#   contents: write
 
-jobs:
-  tag-release:
-    runs-on: ubuntu-latest
+# jobs:
+#   tag-release:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v5
+#         with:
+#           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+#       - name: Setup Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.11"
 
-      - name: Install Commitizen
-        run: pip install commitizen
+#       - name: Install Commitizen
+#         run: pip install commitizen
 
-      - name: Determine version
-        id: version
-        run: |
-          VERSION=$(cz version -p)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+#       - name: Determine version
+#         id: version
+#         run: |
+#           VERSION=$(cz version -p)
+#           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Create tag
-        run: |
-          git tag v${VERSION}
-          git push origin v${VERSION}
+#       - name: Create tag
+#         run: |
+#           git tag v${VERSION}
+#           git push origin v${VERSION}
 
-      - name: Create release tag
-        run: |
-          VERSION=$(cat VERSION)
-
-          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
-            echo "Tag v${VERSION} already exists. Skipping."
-            exit 0
-          fi
-
-          git tag v${VERSION}
-          git push origin v${VERSION}
-          generate_release_notes: true
-
-      - name: Write workflow summary
-        if: always()
-        run: |
-          {
-            echo "## 📦 Release Tag Summary"
-            echo ""
-            echo "| Item | Value |"
-            echo "|---|---|"
-            echo "| Version | v${VERSION} |"
-            echo "| Tag | Created |"
-            echo "| GitHub Release | Published |"
-          } >> "$GITHUB_STEP_SUMMARY"
+#       - name: Create GitHub release
+#         uses: softprops/action-gh-release@v2
+#         with:
+#           tag_name: v${{ env.VERSION }}
+#           generate_release_notes: true
