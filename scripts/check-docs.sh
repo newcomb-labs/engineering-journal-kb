@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "== Engineering Journal Docs Check =="
+echo "== Docs validation =="
 
-echo "Step 1: Sync blog tags"
-./scripts/sync_blog_tags.py
+echo "-> Validate blog tags"
+python3 scripts/validate_blog_tags.py
 
-echo "Step 2: Install dependencies"
+echo "-> Install website dependencies"
 cd website
 npm ci
 
-echo "Step 3: Build site"
+echo "-> Build Docusaurus site"
 npm run build
 
 echo ""
-echo "✔ Docs build completed successfully"
+echo "✔ Docs validation completed successfully"

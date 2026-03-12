@@ -15,12 +15,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: website/package-lock.json
+
+      - name: Install Python dependency
+        run: pip install pyyaml
+
+      - name: Validate blog tags
+        run: python3 scripts/validate_blog_tags.py
 
       - name: Install dependencies
         working-directory: website
@@ -38,5 +49,6 @@ jobs:
             echo ""
             echo "| Check | Status | Notes |"
             echo "|---|---|---|"
+            echo "| Blog tag validation | ✅ Completed | All blog tags are defined in website/blog/tags.yml |"
             echo "| Docusaurus build | ✅ Completed | Site build finished successfully |"
           } >> "$GITHUB_STEP_SUMMARY"

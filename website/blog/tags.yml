@@ -1,9 +1,12 @@
-migration:
-  label: Migration
-  permalink: /migration
-  description: Site and platform migration notes
-
 docs:
+  description: Documentation-related posts
   label: Docs
   permalink: /docs-tag
-  description: Documentation-related posts
+docusaurus:
+  description: Posts tagged with docusaurus
+  label: Docusaurus
+  permalink: /docusaurus
+migration:
+  description: Site and platform migration notes
+  label: Migration
+  permalink: /migration
