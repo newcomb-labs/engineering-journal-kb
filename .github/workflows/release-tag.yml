@@ -38,10 +38,17 @@ jobs:
           git tag v${VERSION}
           git push origin v${VERSION}
 
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ env.VERSION }}
+      - name: Create release tag
+        run: |
+          VERSION=$(cat VERSION)
+
+          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
+            echo "Tag v${VERSION} already exists. Skipping."
+            exit 0
+          fi
+
+          git tag v${VERSION}
+          git push origin v${VERSION}
           generate_release_notes: true
 
       - name: Write workflow summary
