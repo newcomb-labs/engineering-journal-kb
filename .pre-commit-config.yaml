@@ -39,3 +39,10 @@ repos:
         files: \.py$
       - id: ruff-format
         files: \.py$
+  - repo: local
+    hooks:
+      - id: validate-blog-tags
+        name: validate blog tags
+        entry: python3 scripts/validate_blog_tags.py
+        language: system
+        pass_filenames: false
