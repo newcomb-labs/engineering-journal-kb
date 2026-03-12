@@ -1,0 +1,9 @@
+migration:
+  label: Migration
+  permalink: /migration
+  description: Site and platform migration notes
+
+docs:
+  label: Docs
+  permalink: /docs-tag
+  description: Documentation-related posts

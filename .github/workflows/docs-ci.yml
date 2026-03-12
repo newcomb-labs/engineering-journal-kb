@@ -12,28 +12,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          python-version: "3.11"
+          node-version: 20
+          cache: npm
+          cache-dependency-path: website/package-lock.json
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements-docs.txt
+        working-directory: website
+        run: npm ci
 
-      - name: Build documentation
-        run: |
-          mkdocs build --strict
+      - name: Build documentation site
+        working-directory: website
+        run: npm run build
 
       - name: Write workflow summary
         if: always()
         run: |
           {
-            echo "## 📚 Docs CI Summary"
+            echo "## Docs CI Summary"
             echo ""
             echo "| Check | Status | Notes |"
             echo "|---|---|---|"
-            echo "| MkDocs build | ✅ Completed | Documentation build finished |"
+            echo "| Docusaurus build | ✅ Completed | Site build finished successfully |"
           } >> "$GITHUB_STEP_SUMMARY"
