@@ -1,7 +1,7 @@
 ---
 slug: docusaurus-migration
 title: Migrating from MkDocs to Docusaurus
-authors: [default]
+authors: [chris]
 tags: [docusaurus, migration, docs]
 ---
 
