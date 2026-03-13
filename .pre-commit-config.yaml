@@ -54,3 +54,14 @@ repos:
         entry: bash scripts/docs_check.sh
         language: system
         pass_filenames: false
+
+  # ------------------------------------------------------------
+  # Repo governance guards
+  # ------------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: check-no-legacy-docs
+        name: prevent legacy docs drift
+        entry: python scripts/check_no_mkdocs.py
+        language: system
+        pass_filenames: false

@@ -1,12 +1,10 @@
 ---
 slug: docusaurus-migration
-title: Migrating from MkDocs to Docusaurus
+title: Migrating the docs site to Docusaurus
 authors: [chris]
 tags: [docusaurus, migration, docs]
 ---
 
-We migrated the site from MkDocs to Docusaurus classic to support a cleaner docs + journal structure and a better long-term fit for GitHub Pages.
+Migrating the docs site to Docusaurus classic to simplify the docs + journal setup and improve the long-term fit for GitHub Pages.
 
-<!-- truncate -->
-
-The site now separates evergreen documentation from dated engineering notes.
+This repo now separates evergreen documentation from dated engineering notes.

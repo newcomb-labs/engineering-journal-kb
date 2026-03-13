@@ -4,6 +4,6 @@ All commits must follow Conventional Commits.
 
 Examples:
 
-- `feat(site): migrate docs site from mkdocs to docusaurus`
+- `feat(site): migrate docs site to docusaurus`
 - `docs(journal): add first migration entry`
 - `ci(pages): add GitHub Pages deployment workflow`

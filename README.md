@@ -32,7 +32,7 @@ docs/
 
 Documentation is built using:
 
-- MkDocs Material
+- Docusaurus
 - Mermaid diagrams
 - Wiki-style links
 - Backlinks
