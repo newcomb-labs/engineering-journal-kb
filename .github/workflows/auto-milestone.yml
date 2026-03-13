@@ -3,9 +3,20 @@ name: Auto Milestone
 
 "on":
   issues:
-    types: [opened]
+    types:
+      - opened
+      - reopened
+      - edited
+      - labeled
+      - unlabeled
   pull_request:
-    types: [opened]
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+      - labeled
+      - unlabeled
 
 permissions:
   issues: write
@@ -16,46 +27,128 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Assign milestone if missing
+      - name: Assign milestone from labels if missing
         uses: actions/github-script@v7
         with:
           script: |
-            const milestoneTitle = "Governance Backbone";
+            const item = context.payload.issue ?? context.payload.pull_request;
 
-            const repo = context.repo;
-            const issueNumber =
-              context.payload.issue?.number ||
-              context.payload.pull_request?.number;
-
-            const existingMilestone =
-              context.payload.issue?.milestone ||
-              context.payload.pull_request?.milestone;
-
-            if (existingMilestone) {
-              core.info("Milestone already set. Skipping.");
+            if (!item) {
+              core.info("No issue or pull request found in payload. Skipping.");
               return;
             }
 
-            const milestones = await github.rest.issues.listMilestones({
-              owner: repo.owner,
-              repo: repo.repo,
-              state: "open",
-            });
+            const issueNumber = item.number;
+            const itemType = context.payload.issue ? "issue" : "pull_request";
 
-            const milestone = milestones.data.find(
-              m => m.title === milestoneTitle
+            if (item.milestone) {
+              core.info(
+                `${itemType} #${issueNumber} already has milestone "${item.milestone.title}". Skipping.`
+              );
+              return;
+            }
+
+            const labels = (item.labels || [])
+              .map(label => typeof label === "string" ? label : label.name)
+              .filter(Boolean)
+              .map(name => name.toLowerCase());
+
+            core.info(`Detected labels: ${labels.join(", ") || "(none)"}`);
+
+            /**
+             * Ordered rules: first match wins.
+             * Add new milestones by appending another object here.
+             */
+            const milestoneRules = [
+              {
+                milestone: "Release Automation",
+                labels: [
+                  "area:release",
+                  "type:release",
+                  "release:workflow",
+                  "release:versioning",
+                  "release:tagging",
+                  "release:automation"
+                ]
+              },
+              {
+                milestone: "Quality Gates",
+                labels: [
+                  "area:ci",
+                  "area:docs",
+                  "type:docs",
+                  "type:ci",
+                  "docs:ci",
+                  "quality:gates",
+                  "quality:linting",
+                  "quality:link-check",
+                  "quality:spell-check",
+                  "quality:preview-env"
+                ]
+              },
+              {
+                milestone: "Security Hardening",
+                labels: [
+                  "area:security",
+                  "security",
+                  "security:automation",
+                  "security:secret-scanning",
+                  "security:push-protection",
+                  "security:gitleaks"
+                ]
+              }
+            ];
+
+            const matchedRule = milestoneRules.find(rule =>
+              rule.labels.some(label => labels.includes(label))
             );
 
-            if (!milestone) {
-              core.setFailed(`Milestone "${milestoneTitle}" not found`);
+            if (!matchedRule) {
+              core.info(
+                `${itemType} #${issueNumber} did not match any milestone rule. Leaving unchanged.`
+              );
+              return;
+            }
+
+            core.info(
+              `${itemType} #${issueNumber} matched milestone "${matchedRule.milestone}".`
+            );
+
+            const milestones = await github.paginate(
+              github.rest.issues.listMilestones,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "all",
+                per_page: 100
+              }
+            );
+
+            const targetMilestone = milestones.find(
+              milestone => milestone.title === matchedRule.milestone
+            );
+
+            if (!targetMilestone) {
+              core.warning(
+                `Target milestone "${matchedRule.milestone}" does not exist. Leaving ${itemType} #${issueNumber} unchanged.`
+              );
+              return;
+            }
+
+            if (targetMilestone.state !== "open") {
+              core.warning(
+                `Target milestone "${matchedRule.milestone}" exists but is "${targetMilestone.state}". Leaving ${itemType} #${issueNumber} unchanged.`
+              );
               return;
             }
 
             await github.rest.issues.update({
-              owner: repo.owner,
-              repo: repo.repo,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               issue_number: issueNumber,
-              milestone: milestone.number
+              milestone: targetMilestone.number
             });
 
-            core.info(`Milestone "${milestoneTitle}" assigned`);
+            core.info(
+              `Assigned milestone "${targetMilestone.title}" to ${itemType} #${issueNumber}.`
+            );
