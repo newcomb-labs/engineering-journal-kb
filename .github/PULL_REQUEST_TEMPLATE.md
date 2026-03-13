@@ -1,43 +1,19 @@
+
 # Summary
 
-Describe the change.
+Describe the purpose of this change.
 
-Closes #
+## Changes
 
-## Type of Change
+- item
+- item
 
-- [ ] Feature
-- [ ] Fix
-- [ ] Documentation
-- [ ] CI
-- [ ] Chore
+## Related Issues
 
-## Changes Made
-
--
-
-## Changelog
-
-- [ ] Added changelog entry
-- [ ] No changelog entry needed
-
-Reason if none:
-
-## Validation
-
-Describe how this change was tested.
-
-## Security Considerations
-
-Describe any security implications.
-
-## Documentation Impact
-
-Does documentation need updates?
+Fixes #
 
 ## Checklist
 
-- [ ] Linked issue
-- [ ] Tests pass
-- [ ] CI passes
-- [ ] Commit messages follow conventions
+- [ ] CI checks pass
+- [ ] documentation updated
+- [ ] issue linked
