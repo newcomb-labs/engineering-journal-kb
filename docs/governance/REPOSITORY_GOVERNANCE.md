@@ -101,7 +101,7 @@ CI checks include:
 
 Example command:
 
-`mkdocs build --strict`
+`cd website && npm run build`
 
 ---
 

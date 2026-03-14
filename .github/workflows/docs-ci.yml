@@ -1,54 +1,71 @@
 ---
-name: Docs CI
+name: docs-ci
 
 "on":
-  push:
-    branches-ignore:
-      - main
   pull_request:
+    paths:
+      - "docs/**"
+      - "website/**"
+      - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/link-check.yml"
+      - ".github/workflows/spell-check.yml"
+      - ".pre-commit-config.yaml"
+      - "scripts/check_no_mkdocs.py"
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - "website/**"
+      - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/link-check.yml"
+      - ".github/workflows/spell-check.yml"
+      - ".pre-commit-config.yaml"
+      - "scripts/check_no_mkdocs.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  docs-build:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+      - name: Fail on legacy docs drift
+        run: python3 scripts/check_no_mkdocs.py
 
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "20"
           cache: npm
           cache-dependency-path: website/package-lock.json
 
-      - name: Install Python dependency
-        run: pip install pyyaml
+      - name: Lint Markdown
+        run: npx --yes markdownlint-cli@0.41.0 "**/*.md" --ignore node_modules --ignore website/build --ignore website/.docusaurus
 
-      - name: Validate blog tags
-        run: python3 scripts/validate_blog_tags.py
-
-      - name: Install dependencies
+      - name: Install website dependencies
         working-directory: website
         run: npm ci
 
-      - name: Build documentation site
+      - name: Build Docusaurus site
         working-directory: website
+        env:
+          CI: "true"
         run: npm run build
 
-      - name: Write workflow summary
-        if: always()
-        run: |
-          {
-            echo "## Docs CI Summary"
-            echo ""
-            echo "| Check | Status | Notes |"
-            echo "|---|---|---|"
-            echo "| Blog tag validation | ✅ Completed | All blog tags are defined in website/blog/tags.yml |"
-            echo "| Docusaurus build | ✅ Completed | Site build finished successfully |"
-          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload built site artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: docusaurus-site
+          path: website/build
+          if-no-files-found: error
