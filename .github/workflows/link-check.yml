@@ -1,0 +1,104 @@
+---
+name: link-check
+
+"on":
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lychee:
+    name: Check documentation links
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Run drift guard
+        run: python3 scripts/check_no_mkdocs.py
+
+      - name: Run Lychee
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --config ./.lychee.toml
+            --format markdown
+            --output ./lychee-report.md
+            ./docs ./website
+          fail: false
+
+      - name: Upload Lychee report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lychee-report-${{ github.run_id }}
+          path: ./lychee-report.md
+          if-no-files-found: error
+
+      - name: Add report to workflow summary
+        if: always()
+        run: |
+          {
+            echo "## Lychee Link Check Report"
+            echo
+            cat ./lychee-report.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail PR and main runs on link errors
+        if: >
+          github.event_name != 'schedule' &&
+          steps.lychee.outputs.exit_code != '0'
+        run: |
+          echo "Lychee detected link errors."
+          exit 1
+
+      - name: Create weekly issue for scheduled failures
+        if: >
+          github.event_name == 'schedule' &&
+          steps.lychee.outputs.exit_code != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY="$(date -u +%F)"
+          TITLE="fix(docs): weekly link check failures - ${TODAY}"
+
+          {
+            echo "## Summary"
+            echo
+            echo "The scheduled weekly Lychee run detected documentation link failures."
+            echo
+            echo "- Workflow: \`${{ github.workflow }}\`"
+            echo "- Run ID: \`${{ github.run_id }}\`"
+            echo "- Date (UTC): \`${TODAY}\`"
+            echo
+            echo "## Report"
+            echo
+            cat ./lychee-report.md
+          } > weekly-link-issue.md
+
+          gh issue create \
+            --title "${TITLE}" \
+            --body-file weekly-link-issue.md \
+            --label "area:ci" \
+            --label "type:fix"
+
+      - name: Fail scheduled run after issue creation
+        if: >
+          github.event_name == 'schedule' &&
+          steps.lychee.outputs.exit_code != '0'
+        run: |
+          echo "Lychee detected link errors during scheduled run."
+          exit 1
