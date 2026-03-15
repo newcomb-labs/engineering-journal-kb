@@ -1,0 +1,53 @@
+---
+name: spell-check
+
+"on":
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cspell:
+    name: Check spelling
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Run documentation drift guard
+        run: python3 scripts/check_no_mkdocs.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Run CSpell on changed files
+        if: github.event_name == 'pull_request'
+        uses: streetsidesoftware/cspell-action@v8
+        with:
+          config: ./cspell.config.yaml
+          incremental_files_only: true
+          files: |
+            **/*.md
+            **/*.mdx
+            docs/**
+            website/**
+
+      - name: Run CSpell on full docs surface
+        if: github.event_name != 'pull_request'
+        uses: streetsidesoftware/cspell-action@v8
+        with:
+          config: ./cspell.config.yaml
+          incremental_files_only: false
+          files: |
+            **/*.md
+            **/*.mdx
+            docs/**
+            website/**
