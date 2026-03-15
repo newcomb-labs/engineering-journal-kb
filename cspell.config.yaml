@@ -1,0 +1,38 @@
+---
+version: "0.2"
+language: en
+enabled: true
+
+dictionaryDefinitions:
+  - name: repo-words
+    path: ./config/cspell-dictionary.txt
+    addWords: true
+
+dictionaries:
+  - repo-words
+
+files:
+  - "**/*.md"
+  - "**/*.mdx"
+
+ignorePaths:
+  - node_modules/**
+  - build/**
+  - .docusaurus/**
+  - .git/**
+  - website/build/**
+  - website/.docusaurus/**
+  - website/static/img/**
+  - "**/*.svg"
+  - "**/*.js"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.lock"
+  - package-lock.json
+
+ignoreRegExpList:
+  - "/https?:\\/\\/[^\\s)]+/g"
+  - "/`[^`]+`/g"
+
+words: []
+ignoreWords: []
