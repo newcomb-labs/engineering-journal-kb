@@ -49,3 +49,4 @@ Labs and operational knowledge are documented separately using structured templa
 ## Status
 
 Initial documentation foundation.
+\n<!-- chatgpt review trigger test -->\n
