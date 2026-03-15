@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import time
 
 import requests
 
@@ -20,9 +21,9 @@ OPENAI_HEADERS = {
     "Content-Type": "application/json",
 }
 
-# ------------------------------------------------------------
-# File filtering rules
-# ------------------------------------------------------------
+MAX_RETRIES = 5
+BACKOFF = 10
+MAX_CHARS = 12000
 
 ALLOWED_PATH_PREFIXES = [
     ".github/workflows/",
@@ -43,29 +44,29 @@ ALLOWED_ROOT_FILES = [
 def allowed_file(path: str) -> bool:
     if path in ALLOWED_ROOT_FILES:
         return True
-    return any(path.startswith(p) for p in ALLOWED_PATH_PREFIXES)
+    return any(path.startswith(prefix) for prefix in ALLOWED_PATH_PREFIXES)
 
 
-# ------------------------------------------------------------
-# Fetch PR files
-# ------------------------------------------------------------
+def post_pr_comment(body: str) -> None:
+    comment_url = f"{API}/issues/{PR_NUMBER}/comments"
+    comment_payload = {"body": body}
+    requests.post(comment_url, headers=HEADERS, json=comment_payload).raise_for_status()
+
 
 files_url = f"{API}/pulls/{PR_NUMBER}/files"
 resp = requests.get(files_url, headers=HEADERS)
 resp.raise_for_status()
 
 files = resp.json()
-
 diff_chunks = []
 
-for f in files:
-    path = f["filename"]
+for file_obj in files:
+    path = file_obj["filename"]
 
     if not allowed_file(path):
         continue
 
-    patch = f.get("patch", "")
-
+    patch = file_obj.get("patch", "")
     if not patch:
         continue
 
@@ -74,15 +75,7 @@ for f in files:
 if not diff_chunks:
     diff_chunks.append("No relevant files matched review filters.")
 
-diff_text = "\n\n".join(diff_chunks)
-
-# limit prompt size to avoid token explosions
-MAX_CHARS = 12000
-diff_text = diff_text[:MAX_CHARS]
-
-# ------------------------------------------------------------
-# Build prompt
-# ------------------------------------------------------------
+diff_text = "\n\n".join(diff_chunks)[:MAX_CHARS]
 
 prompt = f"""
 You are reviewing a pull request for a documentation and CI governance repository.
@@ -95,6 +88,8 @@ Focus on:
 - Docusaurus documentation best practices
 
 Only comment on real issues or improvements.
+Be concise and practical.
+If there are no significant issues, say that clearly.
 
 Pull request changes:
 
@@ -109,24 +104,40 @@ payload = {
     ],
 }
 
-response = requests.post(
-    "https://api.openai.com/v1/chat/completions",
-    headers=OPENAI_HEADERS,
-    json=payload,
-)
+review = None
 
-response.raise_for_status()
+for attempt in range(MAX_RETRIES):
+    response = requests.post(
+        "https://api.openai.com/v1/chat/completions",
+        headers=OPENAI_HEADERS,
+        json=payload,
+        timeout=120,
+    )
 
-review = response.json()["choices"][0]["message"]["content"]
+    if response.status_code == 200:
+        review = response.json()["choices"][0]["message"]["content"]
+        break
 
-# ------------------------------------------------------------
-# Post PR comment
-# ------------------------------------------------------------
+    if response.status_code == 429:
+        wait = BACKOFF * (attempt + 1)
+        print(f"Rate limited. Waiting {wait}s before retry...")
+        time.sleep(wait)
+        continue
 
-comment_payload = {"body": f"### 🤖 ChatGPT CI Review\n\n{review}"}
+    response.raise_for_status()
 
-comment_url = f"{API}/issues/{PR_NUMBER}/comments"
+if review is None:
+    fallback = """### 🤖 ChatGPT CI Review
 
-requests.post(comment_url, headers=HEADERS, json=comment_payload).raise_for_status()
+ChatGPT review could not complete because the OpenAI API returned repeated rate-limit responses (HTTP 429).
+
+Please retry by commenting `chatgpt` again on this pull request.
+"""
+    post_pr_comment(fallback)
+    print("Posted fallback comment after repeated rate limits.")
+    raise SystemExit(0)
+
+comment_body = f"### 🤖 ChatGPT CI Review\n\n{review}"
+post_pr_comment(comment_body)
 
 print("Review posted successfully.")
