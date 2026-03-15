@@ -28,7 +28,7 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
-      - name: Run CSpell on changed files
+      - name: Run CSpell on changed markdown and MDX files
         if: github.event_name == 'pull_request'
         uses: streetsidesoftware/cspell-action@v8
         with:
@@ -37,10 +37,8 @@ jobs:
           files: |
             **/*.md
             **/*.mdx
-            docs/**
-            website/**
 
-      - name: Run CSpell on full docs surface
+      - name: Run CSpell on full markdown and MDX surface
         if: github.event_name != 'pull_request'
         uses: streetsidesoftware/cspell-action@v8
         with:
@@ -49,5 +47,3 @@ jobs:
           files: |
             **/*.md
             **/*.mdx
-            docs/**
-            website/**

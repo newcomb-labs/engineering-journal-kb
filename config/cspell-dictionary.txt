@@ -13,7 +13,6 @@ PRs
 repo
 repos
 CI
-Netlify
 markdownlint
 frontmatter
 front-matter
@@ -22,3 +21,7 @@ pathname
 newcomb
 labs
 kotahukka
+Zettelkasten
+zettel
+mocs
+Backlinks

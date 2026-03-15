@@ -11,22 +11,24 @@ dictionaryDefinitions:
 dictionaries:
   - repo-words
 
+files:
+  - "**/*.md"
+  - "**/*.mdx"
+
 ignorePaths:
   - node_modules/**
   - build/**
   - .docusaurus/**
   - .git/**
-  - .github/**/*.svg
   - website/build/**
   - website/.docusaurus/**
-  - "*.lock"
+  - website/static/img/**
+  - "**/*.svg"
+  - "**/*.js"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.lock"
   - package-lock.json
-
-files:
-  - "**/*.md"
-  - "**/*.mdx"
-  - "docs/**"
-  - "website/**"
 
 ignoreRegExpList:
   - "/https?:\\/\\/[^\\s)]+/g"
