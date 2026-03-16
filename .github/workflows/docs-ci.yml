@@ -69,3 +69,6 @@ jobs:
           name: docusaurus-site
           path: website/build
           if-no-files-found: error
+
+      - name: Run documentation drift guard
+        run: python3 scripts/check_no_mkdocs.py
