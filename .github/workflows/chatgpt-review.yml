@@ -1,53 +1,48 @@
 ---
 name: chatgpt-review
 
-"on":
+on:
   issue_comment:
-    types:
-      - created
+    types: [created]
 
 permissions:
   contents: read
-  issues: write
   pull-requests: read
-
-concurrency:
-  group: chatgpt-review-${{ github.event.issue.number }}
-  cancel-in-progress: true
+  issues: write
 
 jobs:
-  review:
-    name: Review pull request with ChatGPT
-    runs-on: ubuntu-latest
+  chatgpt:
     if: |
-      github.event.issue.pull_request &&
+      github.event.issue.pull_request != null &&
+      github.actor == 'kotahukka' &&
       contains(github.event.comment.body, 'chatgpt')
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Run documentation drift guard
+        run: python3 scripts/check_no_mkdocs.py
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Run ChatGPT review
-        id: review
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          OPENAI_TOKEN: ${{ secrets.OPENAI_TOKEN }}
           PR_NUMBER: ${{ github.event.issue.number }}
-          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
-          COMMENT_BODY: ${{ github.event.comment.body }}
-          GITHUB_STEP_SUMMARY: ${{ env.GITHUB_STEP_SUMMARY }}
+          REPO: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/chatgpt_review.py
 
-      - name: Upload review artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: chatgpt-review-pr-${{ github.event.issue.number }}
-          path: .github/chatgpt-review-output.md
-          if-no-files-found: error
+      - name: Add summary
+        run: |
+          echo "## ChatGPT Review Complete" >> "$GITHUB_STEP_SUMMARY"
+          echo "Triggered by @${{ github.actor }}" >> "$GITHUB_STEP_SUMMARY"

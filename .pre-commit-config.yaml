@@ -39,29 +39,34 @@ repos:
         files: \.py$
       - id: ruff-format
         files: \.py$
-  - repo: local
-    hooks:
-      - id: validate-blog-tags
-        name: validate blog tags
-        entry: python3 scripts/validate_blog_tags.py
-        language: system
-        pass_filenames: false
-
-  - repo: local
-    hooks:
-      - id: validate-blog-tags
-        name: validate-blog-tags
-        entry: bash scripts/docs_check.sh
-        language: system
-        pass_filenames: false
 
   # ------------------------------------------------------------
   # Repo governance guards
   # ------------------------------------------------------------
   - repo: local
     hooks:
-      - id: check-no-legacy-docs
-        name: prevent legacy docs drift
-        entry: python scripts/check_no_mkdocs.py
+      - id: validate-blog-tags
+        name: validate blog tags
+        entry: python scripts/validate_blog_tags.py
+        language: python
+        additional_dependencies:
+          - pyyaml
+        pass_filenames: false
+
+      - id: docs-check
+        name: docs consistency checks
+        entry: bash scripts/docs_check.sh
         language: system
         pass_filenames: false
+
+      - id: check-no-legacy-docs
+        name: prevent legacy docs drift
+        entry: python3 scripts/check_no_mkdocs.py
+        language: system
+        pass_filenames: false
+
+      - id: cspell
+        name: spell check docs
+        entry: npx cspell --config cspell.config.yaml
+        language: system
+        files: \.(md|mdx)$
