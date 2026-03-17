@@ -40,6 +40,20 @@ jobs:
           output: ./lychee-report.md
           fail: false
 
+      - name: Debug Lychee outputs
+        if: always()
+        run: |
+          echo "exit_code=${{ steps.lychee.outputs.exit_code }}"
+          echo "stderr<<EOF"
+          echo "${{ steps.lychee.outputs.stderr }}"
+          echo "EOF"
+          echo "stdout<<EOF"
+          echo "${{ steps.lychee.outputs.stdout }}"
+          echo "EOF"
+          echo "Workspace files:"
+          pwd
+          find . -maxdepth 3 -type f | sort
+
       - name: Upload Lychee report artifact
         if: always()
         uses: actions/upload-artifact@v4
