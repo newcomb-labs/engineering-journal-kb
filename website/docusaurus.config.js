@@ -17,10 +17,12 @@ const config = {
   onBrokenLinks: "throw",
 
   markdown: {
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: "warn",
     },
   },
+  themes: ["@docusaurus/theme-mermaid"],
 
   i18n: {
     defaultLocale: "en",
@@ -36,6 +38,8 @@ const config = {
           routeBasePath: "docs",
           editUrl:
             "https://github.com/newcomb-labs/engineering-journal-kb/tree/main/",
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
         },
         blog: {
           showReadingTime: true,
@@ -55,6 +59,13 @@ const config = {
 
   themeConfig: {
     image: "img/social-card.jpg",
+
+    colorMode: {
+      defaultMode: "dark",
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
+
     navbar: {
       title: "Engineering Journal",
       logo: {
@@ -71,6 +82,7 @@ const config = {
         },
       ],
     },
+
     footer: {
       style: "dark",
       links: [
@@ -93,9 +105,17 @@ const config = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Chris Newcomb`,
     },
+
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+    },
+
+    docs: {
+      sidebar: {
+        hideable: true,
+        autoCollapseCategories: true,
+      },
     },
   },
 };
