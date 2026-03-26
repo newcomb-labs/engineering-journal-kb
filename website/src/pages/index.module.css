@@ -4,20 +4,166 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+    padding: 5rem 0 4rem;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
+.heroGrid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.kicker {
+    margin: 0 0 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    opacity: 0.8;
+}
+
+.heroTitle {
+    font-size: clamp(2.4rem, 5vw, 4.25rem);
+    line-height: 1.05;
+    margin-bottom: 1rem;
+}
+
+.heroSubtitle {
+    max-width: 700px;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.heroActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+}
+
+.heroPanel {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.55);
+    box-shadow: 0 18px 40px rgba(2, 8, 23, 0.22);
+    backdrop-filter: blur(10px);
+}
+
+.panelHeader {
+    padding: 0.85rem 1rem;
+    font-family:
+        ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    color: #93c5fd;
+}
+
+.panelBody {
+    padding: 1rem;
+}
+
+.panelRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    font-size: 0.97rem;
+}
+
+.panelRow:last-child {
+    border-bottom: none;
+}
+
+.section {
+    padding: 4rem 0;
+}
+
+.sectionAlt {
+    padding: 1rem 0 4rem;
+}
+
+.sectionHeading {
+    max-width: 760px;
+    margin-bottom: 2rem;
+}
+
+.sectionHeading h2 {
+    margin-bottom: 0.75rem;
+}
+
+.sectionHeading p {
+    margin: 0;
+    font-size: 1.02rem;
+    line-height: 1.7;
+}
+
+.card {
+    height: 100%;
+    padding: 1.5rem;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 18px;
+    background: var(--ifm-card-background-color, rgba(255, 255, 255, 0.02));
+    box-shadow: 0 12px 30px rgba(2, 8, 23, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.cardDescription {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.cardLink {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.callout {
     padding: 2rem;
-  }
+    border-radius: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: linear-gradient(
+        135deg,
+        rgba(30, 41, 59, 0.08),
+        rgba(37, 99, 235, 0.08)
+    );
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.callout h2 {
+    margin-bottom: 0.75rem;
+}
+
+.callout p {
+    max-width: 850px;
+    line-height: 1.7;
+}
+
+.calloutList {
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+}
+
+.calloutList li {
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 996px) {
+    .heroGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .heroBanner {
+        padding: 4rem 0 3rem;
+    }
+
+    .heroTitle {
+        font-size: 2.5rem;
+    }
 }
