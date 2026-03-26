@@ -102,7 +102,8 @@ const features = [
 function HomepageHeader() {
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className="container">
+      <div className={styles.heroPattern} />
+      <div className={clsx("container", styles.heroInner)}>
         <div className={styles.heroGrid}>
           <div>
             <p className={styles.kicker}>ENGINEERING JOURNAL</p>

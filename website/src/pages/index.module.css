@@ -264,3 +264,24 @@
         font-size: 2.5rem;
     }
 }
+.heroInner {
+    position: relative;
+    z-index: 1;
+}
+
+.heroPattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.32;
+    background-image:
+        linear-gradient(rgba(94, 234, 212, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94, 234, 212, 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 85%);
+}
+
+.heroBanner {
+    position: relative;
+    overflow: hidden;
+}
