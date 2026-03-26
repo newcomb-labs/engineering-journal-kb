@@ -17,6 +17,16 @@ const sidebars = {
       label: "Governance",
       items: ["governance/repo-standards", "governance/commit-policy"],
     },
+    {
+      type: "doc",
+      id: "labs/vm-cloning-auth-failure-lab",
+      label: "VM Cloning Failure Lab",
+    },
+    {
+      type: "doc",
+      id: "case-studies/vm-cloning-auth-failure",
+      label: "VM Cloning Failure Case Study",
+    },
   ],
 };
 

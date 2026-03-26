@@ -1,7 +1,15 @@
 ---
 repos:
+  - repo: local
+    hooks:
+      - id: fix-markdown-headings
+        name: fix markdown headings
+        entry: python3 scripts/fix_markdown_headings.py
+        language: system
+        files: ^website/docs/.*\.md$
+
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.41.0
+    rev: v0.48.0
     hooks:
       - id: markdownlint
         args: ["--fix", "**/*.md"]
@@ -23,7 +31,7 @@ repos:
   # YAML linting
   # ------------------------------------------------------------
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.37.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         files: \.(yml|yaml)$
@@ -32,7 +40,7 @@ repos:
   # Ruff (Python)
   # ------------------------------------------------------------
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+    rev: v0.15.7
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -70,3 +78,5 @@ repos:
         entry: npx cspell --config cspell.config.yaml
         language: system
         files: \.(md|mdx)$
+
+  # keep your existing markdownlint hook after this

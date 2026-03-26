@@ -25,3 +25,6 @@ Zettelkasten
 zettel
 mocs
 Backlinks
+
+NTFS
+Intune
