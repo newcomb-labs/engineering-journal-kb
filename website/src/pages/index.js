@@ -13,6 +13,22 @@ const features = [
       "Structured reference material, procedures, and evergreen technical notes.",
     link: "/docs/intro",
     linkLabel: "Open Docs",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7 3.75h7.5L19 8.25V20.25a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20.25V5.25a1.5 1.5 0 0 1 1.5-1.5Z" />
+        <path d="M14.5 3.75v4.5H19" />
+        <path d="M9 12h6" />
+        <path d="M9 15.5h6" />
+      </svg>
+    ),
   },
   {
     title: "Labs",
@@ -20,6 +36,21 @@ const features = [
       "Hands-on exercises, reproducible walkthroughs, and implementation notes from real practice.",
     link: "/docs/labs",
     linkLabel: "View Labs",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M10 3.75v5.5l-4.75 8.25a2 2 0 0 0 1.73 3h10.04a2 2 0 0 0 1.73-3L14 9.25v-5.5" />
+        <path d="M8.25 3.75h7.5" />
+        <path d="M8.5 14.5h7" />
+      </svg>
+    ),
   },
   {
     title: "Case Studies",
@@ -27,6 +58,21 @@ const features = [
       "Troubleshooting write-ups, root cause analysis, and lessons learned from applied engineering work.",
     link: "/docs/case-studies",
     linkLabel: "Read Case Studies",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M10.5 18.75A8.25 8.25 0 1 1 18.75 10.5" />
+        <path d="m21 21-4.35-4.35" />
+        <path d="M9 10.5h3.75v3.75" />
+      </svg>
+    ),
   },
   {
     title: "Journal",
@@ -34,6 +80,22 @@ const features = [
       "Engineering notes, updates, and working history that document progress over time.",
     link: "/blog",
     linkLabel: "Read Journal",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M6.75 4.5h10.5A1.75 1.75 0 0 1 19 6.25v11A1.75 1.75 0 0 1 17.25 19H6.75A1.75 1.75 0 0 1 5 17.25v-11A1.75 1.75 0 0 1 6.75 4.5Z" />
+        <path d="M8.5 8h7" />
+        <path d="M8.5 11.5h7" />
+        <path d="M8.5 15h4.5" />
+      </svg>
+    ),
   },
 ];
 
@@ -93,10 +155,13 @@ function HomepageHeader() {
   );
 }
 
-function FeatureCard({ title, description, link, linkLabel }) {
+function FeatureCard({ title, description, link, linkLabel, icon }) {
   return (
     <div className={clsx("col col--6")}>
       <div className={styles.card}>
+        <div className={styles.cardIconWrap}>
+          <div className={styles.cardIcon}>{icon}</div>
+        </div>
         <Heading as="h2" className={styles.cardTitle}>
           {title}
         </Heading>
