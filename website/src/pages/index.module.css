@@ -3,17 +3,17 @@
     background:
         radial-gradient(
             circle at top left,
-            rgba(45, 212, 191, 0.12),
+            rgba(45, 212, 191, 0.18),
             transparent 28%
         ),
         radial-gradient(
             circle at top right,
-            rgba(20, 184, 166, 0.1),
+            rgba(20, 184, 166, 0.14),
             transparent 24%
         ),
-        linear-gradient(135deg, #0b1120 0%, #111827 55%, #0f172a 100%);
+        linear-gradient(135deg, #020617 0%, #031a1a 45%, #012b2b 100%);
     color: #e2e8f0;
-    border-bottom: 1px solid rgba(45, 212, 191, 0.12);
+    border-bottom: 1px solid rgba(45, 212, 191, 0.18);
 }
 
 .heroGrid {
@@ -275,8 +275,8 @@
     pointer-events: none;
     opacity: 0.32;
     background-image:
-        linear-gradient(rgba(94, 234, 212, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(94, 234, 212, 0.06) 1px, transparent 1px);
+        linear-gradient(rgba(94, 234, 212, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94, 234, 212, 0.08) 1px, transparent 1px);
     background-size: 28px 28px;
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 85%);
 }
