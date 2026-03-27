@@ -1,0 +1,41 @@
+area:theme:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/src/**"
+          - "website/static/**"
+
+area:labs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/labs/**"
+
+area:journal:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/journal/**"
+
+area:case-studies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/case-studies/**"
+
+area:external-docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/**"
+
+area:repo-docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+
+area:repo:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+          - "scripts/**"
+
+area:ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"

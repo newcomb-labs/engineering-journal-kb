@@ -196,3 +196,47 @@ This repository emphasizes:
 - maintainability
 
 Automation is used wherever possible to enforce standards and reduce manual maintenance.
+
+## Documentation Structure
+
+This repository separates documentation into two systems:
+
+### Site Documentation
+
+Located in `website/docs/`
+
+- Labs, journal, and case studies
+- Public-facing content
+
+### Repository Documentation
+
+Located in `docs/`
+
+- Governance
+- internal process documentation
+- supporting materials
+
+## Area Labeling
+
+### Infrastructure Areas
+
+- area:ci
+- area:repo
+- area:security
+- area:theme
+
+### Site Content Areas
+
+- area:labs
+- area:journal
+- area:case-studies
+- area:external-docs
+
+### Repository Docs
+
+- area:repo-docs
+
+## PR Scope Rules
+
+- Default to one primary area per PR
+- Multi-area PRs must be justified
