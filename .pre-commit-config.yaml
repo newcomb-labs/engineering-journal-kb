@@ -5,29 +5,32 @@ repos:
   # ------------------------------------------------------------
   - repo: local
     hooks:
-      # Auto-stage config changes
-      - id: auto-stage-precommit-config
-        name: auto stage pre-commit config
-        entry: bash -c 'git add .pre-commit-config.yaml'
+      # Auto-stage common config/package files changed by hooks
+      - id: auto-stage-managed-files
+        name: auto stage managed config files
+        entry: bash -c 'git add .pre-commit-config.yaml package.json package-lock.json website/package.json website/package-lock.json 2>/dev/null || true'
         language: system
         pass_filenames: false
         always_run: true
-        files: ^\.pre-commit-config\.yaml$
+        stages: [pre-commit]
 
-      # Docs formatting
+      # Fast local docs formatting
       - id: fix-markdown-headings
         name: fix markdown headings
         entry: python3 scripts/fix_markdown_headings.py
         language: system
         files: ^website/docs/.*\.md$
+        stages: [pre-commit]
 
-      # Repo governance
+      # Fast local governance guard
       - id: check-no-legacy-docs
         name: prevent legacy docs drift
         entry: python3 scripts/check_no_mkdocs.py
         language: system
         pass_filenames: false
+        stages: [pre-commit, manual]
 
+      # Slow hooks: run manually when needed
       - id: validate-blog-tags
         name: validate blog tags
         entry: python scripts/validate_blog_tags.py
@@ -35,12 +38,14 @@ repos:
         additional_dependencies:
           - pyyaml
         pass_filenames: false
+        stages: [manual]
 
       - id: docs-check
         name: docs consistency checks
         entry: bash scripts/docs_check.sh
         language: system
         pass_filenames: false
+        stages: [manual]
 
       # Frontend + docs tooling
       - id: cspell
@@ -48,24 +53,29 @@ repos:
         entry: npx cspell --config cspell.config.yaml
         language: system
         files: \.(md|mdx)$
+        stages: [pre-commit]
 
       - id: eslint
         name: eslint
         entry: npx eslint --fix
         language: system
         files: ^website/src/.*\.(js|mjs|cjs|jsx)$
+        stages: [pre-commit]
 
       - id: stylelint
         name: stylelint
         entry: npx stylelint --fix
         language: system
         files: ^website/src/.*\.(css|scss)$
+        stages: [pre-commit]
 
       - id: prettier
         name: prettier
         entry: npx prettier --write
         language: system
-        types_or: [javascript, css, json, markdown, yaml]
+        files: \.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$
+        exclude: ^\.yamllint$
+        stages: [pre-commit]
 
   # ------------------------------------------------------------
   # Markdown linting
@@ -75,6 +85,7 @@ repos:
     hooks:
       - id: markdownlint
         args: ["--fix"]
+        stages: [pre-commit]
 
   # ------------------------------------------------------------
   # Basic hygiene
@@ -83,11 +94,16 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        stages: [pre-commit]
       - id: end-of-file-fixer
+        stages: [pre-commit]
       - id: check-yaml
+        stages: [pre-commit]
       - id: check-added-large-files
         args: ["--maxkb=1024"]
+        stages: [pre-commit]
       - id: check-merge-conflict
+        stages: [pre-commit]
 
   # ------------------------------------------------------------
   # YAML linting
@@ -97,6 +113,7 @@ repos:
     hooks:
       - id: yamllint
         files: \.(yml|yaml)$
+        stages: [pre-commit]
 
   # ------------------------------------------------------------
   # Python linting + formatting
@@ -107,5 +124,7 @@ repos:
       - id: ruff
         args: ["--fix"]
         files: \.py$
+        stages: [pre-commit]
       - id: ruff-format
         files: \.py$
+        stages: [pre-commit]
