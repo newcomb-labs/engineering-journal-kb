@@ -1,4 +1,3 @@
-
 # Repository Governance
 
 This document explains how the repository is structured, how work flows through it, and how automation enforces quality and consistency.

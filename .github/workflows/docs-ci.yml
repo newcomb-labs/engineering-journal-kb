@@ -36,39 +36,98 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Fail on legacy docs drift
         run: python3 scripts/check_no_mkdocs.py
 
-      - name: Set up Node.js
+      # -----------------------------
+      # Node setup (root)
+      # -----------------------------
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: npm
-          cache-dependency-path: website/package-lock.json
 
+      - name: Install root deps
+        run: npm ci
+
+      # -----------------------------
+      # Markdown lint
+      # -----------------------------
       - name: Lint Markdown
-        run: npx --yes markdownlint-cli@0.41.0 "**/*.md" --ignore node_modules --ignore website/build --ignore website/.docusaurus
+        run: npx markdownlint-cli "**/*.md" \
+          --ignore node_modules \
+          --ignore website/build \
+          --ignore website/.docusaurus
 
-      - name: Install website dependencies
+      # -----------------------------
+      # Detect changed files
+      # -----------------------------
+      - name: Get changed files
+        id: changed
+        uses: tj-actions/changed-files@v46
+
+      # -----------------------------
+      # ESLint (changed only)
+      # -----------------------------
+      - name: ESLint (changed files)
+        if: steps.changed.outputs.any_changed == 'true'
+        run: |
+          FILES="${{ steps.changed.outputs.all_changed_files }}"
+          JS=$(echo "$FILES" | tr ' ' '\n' | grep -E '^website/src/.*\.(js|mjs|cjs|jsx)$' || true)
+          if [ -n "$JS" ]; then
+            echo "$JS" | xargs npx eslint
+          fi
+
+      # -----------------------------
+      # Stylelint (changed only)
+      # -----------------------------
+      - name: Stylelint (changed files)
+        if: steps.changed.outputs.any_changed == 'true'
+        run: |
+          FILES="${{ steps.changed.outputs.all_changed_files }}"
+          CSS=$(echo "$FILES" | tr ' ' '\n' | grep -E '^website/src/.*\.(css|scss)$' || true)
+          if [ -n "$CSS" ]; then
+            echo "$CSS" | xargs npx stylelint
+          fi
+
+      # -----------------------------
+      # Prettier (changed only)
+      # -----------------------------
+      - name: Prettier check (changed files)
+        if: steps.changed.outputs.any_changed == 'true'
+        run: |
+          FILES="${{ steps.changed.outputs.all_changed_files }}"
+          FORMAT=$(echo "$FILES" | tr ' ' '\n' | grep -E '\.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$' || true)
+          if [ -n "$FORMAT" ]; then
+            echo "$FORMAT" | xargs npx prettier --check
+          fi
+
+      # -----------------------------
+      # FULL lint on main only
+      # -----------------------------
+      - name: Full lint (main only)
+        if: github.ref == 'refs/heads/main'
+        run: npm run lint
+
+      # -----------------------------
+      # Build site (always)
+      # -----------------------------
+      - name: Install website deps
         working-directory: website
         run: npm ci
 
-      - name: Build Docusaurus site
+      - name: Build Docusaurus
         working-directory: website
         env:
           CI: "true"
         run: npm run build
 
-      - name: Upload built site artifact
+      - name: Upload artifact (PR only)
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: docusaurus-site
           path: website/build
-          if-no-files-found: error
-
-      - name: Run documentation drift guard
-        run: python3 scripts/check_no_mkdocs.py
