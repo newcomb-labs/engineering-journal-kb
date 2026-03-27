@@ -1,23 +1,6 @@
 #!/usr/bin/env python3
 """
 Sync GitHub labels from .github/labels.yml to a repository.
-
-Features:
-- Creates missing labels
-- Updates changed labels
-- Optionally deletes unmanaged labels with --prune
-- Works locally and in CI
-- Uses GitHub CLI auth/session via `gh api`
-
-Requirements:
-- Python 3.11+
-- GitHub CLI (`gh`) installed and authenticated
-- PyYAML installed
-
-Examples:
-    python scripts/sync_labels.py
-    python scripts/sync_labels.py --repo owner/repo
-    python scripts/sync_labels.py --prune
 """
 
 from __future__ import annotations
@@ -27,12 +10,13 @@ import json
 import shutil
 import subprocess
 import sys
+import urllib.parse
 from dataclasses import dataclass
 from pathlib import Path
 
 try:
     import yaml
-except ImportError as exc:  # pragma: no cover
+except ImportError as exc:
     raise SystemExit("PyYAML is required. Install it with: pip install pyyaml") from exc
 
 
@@ -149,6 +133,8 @@ def gh_api_json(
 
     result = run_command(cmd)
     try:
+        if not result.stdout.strip():
+            return {}
         return json.loads(result.stdout)
     except json.JSONDecodeError as exc:
         raise SystemExit(f"Failed to parse GitHub API response for {endpoint}") from exc
@@ -174,7 +160,11 @@ def fetch_existing_labels(repo: str) -> dict[str, Label]:
     return labels
 
 
-def create_label(repo: str, label: Label) -> None:
+def create_label(repo: str, label: Label, dry_run: bool) -> None:
+    if dry_run:
+        print(f"+ [DRY-RUN] would create: {label.name}")
+        return
+
     owner, name = repo.split("/", 1)
     endpoint = f"/repos/{owner}/{name}/labels"
     gh_api_json(
@@ -189,9 +179,14 @@ def create_label(repo: str, label: Label) -> None:
     print(f"+ created: {label.name}")
 
 
-def update_label(repo: str, label: Label) -> None:
+def update_label(repo: str, label: Label, dry_run: bool) -> None:
+    if dry_run:
+        print(f"~ [DRY-RUN] would update: {label.name}")
+        return
+
     owner, name = repo.split("/", 1)
-    endpoint = f"/repos/{owner}/{name}/labels/{label.name}"
+    safe_name = urllib.parse.quote(label.name)
+    endpoint = f"/repos/{owner}/{name}/labels/{safe_name}"
     gh_api_json(
         "PATCH",
         endpoint,
@@ -204,15 +199,24 @@ def update_label(repo: str, label: Label) -> None:
     print(f"~ updated: {label.name}")
 
 
-def delete_label(repo: str, label_name: str) -> None:
+def delete_label(repo: str, label_name: str, dry_run: bool) -> None:
+    if dry_run:
+        print(f"- [DRY-RUN] would delete: {label_name}")
+        return
+
     owner, name = repo.split("/", 1)
-    endpoint = f"/repos/{owner}/{name}/labels/{label_name}"
+    safe_name = urllib.parse.quote(label_name)
+    endpoint = f"/repos/{owner}/{name}/labels/{safe_name}"
     gh_api_json("DELETE", endpoint)
     print(f"- deleted: {label_name}")
 
 
 def sync_labels(
-    repo: str, desired: dict[str, Label], existing: dict[str, Label], prune: bool
+    repo: str,
+    desired: dict[str, Label],
+    existing: dict[str, Label],
+    prune: bool,
+    dry_run: bool,
 ) -> int:
     changes = 0
 
@@ -220,7 +224,7 @@ def sync_labels(
         current = existing.get(name)
 
         if current is None:
-            create_label(repo, desired_label)
+            create_label(repo, desired_label, dry_run)
             changes += 1
             continue
 
@@ -228,7 +232,7 @@ def sync_labels(
             current.color != desired_label.color
             or current.description != desired_label.description
         ):
-            update_label(repo, desired_label)
+            update_label(repo, desired_label, dry_run)
             changes += 1
         else:
             print(f"= no change: {name}")
@@ -237,7 +241,7 @@ def sync_labels(
 
     if prune:
         for name in unmanaged:
-            delete_label(repo, name)
+            delete_label(repo, name, dry_run)
             changes += 1
     elif unmanaged:
         print("\nUnmanaged labels preserved:")
@@ -266,6 +270,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Delete repository labels not present in the labels file.",
     )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Preview changes without making API calls.",
+    )
     return parser.parse_args()
 
 
@@ -281,11 +290,13 @@ def main() -> int:
 
     print(f"Repository: {repo}")
     print(f"Label file: {args.file}")
-    print(f"Prune mode: {'enabled' if args.prune else 'disabled'}\n")
+    print(f"Mode: {'DRY-RUN (No changes will be saved)' if args.dry_run else 'LIVE'}")
+    print(f"Prune: {'enabled' if args.prune else 'disabled'}\n")
 
-    changes = sync_labels(repo, desired, existing, args.prune)
+    changes = sync_labels(repo, desired, existing, args.prune, args.dry_run)
 
-    print(f"\nDone. {changes} change(s) applied.")
+    status_word = "would be" if args.dry_run else "were"
+    print(f"\nDone. {changes} change(s) {status_word} applied.")
     return 0
 
 
