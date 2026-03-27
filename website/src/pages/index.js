@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import Layout from "@theme/Layout";
@@ -100,9 +100,16 @@ const features = [
 ];
 
 function HomepageHeader() {
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setOffset(window.scrollY * 0.12);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className={styles.heroPattern} />
+      <div className={styles.heroPattern} style={{ transform: `translateY(px)` }} />
       <div className={clsx("container", styles.heroInner)}>
         <div className={styles.heroGrid}>
           <div>

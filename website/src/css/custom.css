@@ -31,8 +31,8 @@
     --ifm-color-primary-lighter: #99f6e4;
     --ifm-color-primary-lightest: #ccfbf1;
 
-    --ifm-background-color: #0b1120;
-    --ifm-navbar-background-color: rgba(11, 17, 32, 0.88);
+    --ifm-background-color: #021313;
+    --ifm-navbar-background-color: rgba(2, 18, 18, 0.9);
     --ifm-navbar-border-color: rgba(94, 234, 212, 0.14);
     --ifm-footer-background-color: #060b16;
     --ifm-heading-color: #e2e8f0;
@@ -48,6 +48,7 @@ body {
 }
 
 .navbar {
+  box-shadow: 0 8px 24px rgba(2, 8, 23, 0.08), 0 0 20px rgba(45, 212, 191, 0.06);
     background: var(--ifm-navbar-background-color);
     border-bottom: 1px solid var(--ifm-navbar-border-color);
     backdrop-filter: blur(12px);
@@ -55,7 +56,8 @@ body {
 }
 
 [data-theme="dark"] .navbar {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 8px 24px rgba(2, 8, 23, 0.08), 0 0 20px rgba(45, 212, 191, 0.06);
+    box-shadow: 0 10px 30px rgba(0, 12, 12, 0.3);
 }
 
 .navbar__title,
@@ -69,7 +71,7 @@ body {
 }
 
 .footer {
-    background: linear-gradient(180deg, #0b1220 0%, #060b16 100%);
+    background: linear-gradient(180deg, #021313 0%, #010a0a 100%);
     border-top: 1px solid rgba(94, 234, 212, 0.08);
 }
 
