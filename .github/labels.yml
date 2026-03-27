@@ -32,3 +32,26 @@
 - name: bootstrap
   color: 1d76db
   description: Repository bootstrap and foundation work
+- name: area:theme
+  color: "0e7490"
+  description: Visual design, homepage styling, theme polish, and UI presentation
+
+- name: area:labs
+  color: "1d4ed8"
+  description: Lab guides, lab writeups, and lab-focused content
+
+- name: area:journal
+  color: "7c3aed"
+  description: Engineering journal entries and working notes
+
+- name: area:case-studies
+  color: "b45309"
+  description: Case study content and supporting materials
+
+- name: area:external-docs
+  color: "475569"
+  description: Documentation content not specific to repository governance or repo operations
+
+- name: area:repo-docs
+  color: "334155"
+  description: Repository-side documentation and internal docs under /docs
