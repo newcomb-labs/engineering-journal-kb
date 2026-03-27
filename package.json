@@ -3,5 +3,25 @@
     "@docusaurus/core": "^3.5.2",
     "@docusaurus/preset-classic": "^3.5.2",
     "@docusaurus/theme-mermaid": "^3.5.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1",
+    "stylelint": "^17.6.0",
+    "stylelint-config-css-modules": "^4.6.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "stylelint-prettier": "^5.0.3"
+  },
+  "type": "module",
+  "scripts": {
+    "lint:js": "eslint website/src --ext .js,.mjs,.cjs,.jsx",
+    "lint:css": "stylelint \"website/src/**/*.{css,scss}\"",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "lint": "npm run lint:js && npm run lint:css && npm run format:check"
   }
 }
