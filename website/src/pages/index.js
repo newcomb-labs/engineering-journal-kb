@@ -107,9 +107,14 @@ function HomepageHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className={styles.heroPattern} style={{ transform: `translateY(px)` }} />
+      <div
+        className={styles.heroPattern}
+        style={{ transform: `translateY(${offset}px)` }}
+      />
+      <div className={styles.heroGradientOrb} />
       <div className={clsx("container", styles.heroInner)}>
         <div className={styles.heroGrid}>
           <div>
@@ -164,9 +169,33 @@ function HomepageHeader() {
 }
 
 function FeatureCard({ title, description, link, linkLabel, icon }) {
+  const [glow, setGlow] = useState({ x: "50%", y: "50%", active: false });
+
+  const handleMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = `${event.clientX - rect.left}px`;
+    const y = `${event.clientY - rect.top}px`;
+    setGlow({ x, y, active: true });
+  };
+
+  const handleLeave = () => {
+    setGlow({ x: "50%", y: "50%", active: false });
+  };
+
   return (
     <div className={clsx("col col--6")}>
-      <div className={styles.card}>
+      <div
+        className={styles.card}
+        onMouseMove={handleMove}
+        onMouseEnter={handleMove}
+        onMouseLeave={handleLeave}
+        style={{
+          "--glow-x": glow.x,
+          "--glow-y": glow.y,
+          "--glow-opacity": glow.active ? 1 : 0,
+        }}
+      >
+        <div className={styles.cardGlow} />
         <div className={styles.cardIconWrap}>
           <div className={styles.cardIcon}>{icon}</div>
         </div>
