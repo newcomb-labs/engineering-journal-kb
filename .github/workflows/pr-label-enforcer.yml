@@ -1,9 +1,9 @@
 ---
 name: pr-label-enforcer
 
-on:
+"on":
   workflow_run:
-    workflows: ["pr-auto-label"] # MUST match exact name in pr-auto-label.yml
+    workflows: ["pr-auto-label"]
     types:
       - completed
 
