@@ -55,3 +55,7 @@
 - name: area:repo-docs
   color: "334155"
   description: Repository-side documentation and internal docs under /docs
+
+- name: type:meta
+  color: "5319e7"
+  description: Meta-level work (roadmap, governance, coordination)
