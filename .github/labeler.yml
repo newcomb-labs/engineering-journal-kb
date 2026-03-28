@@ -1,8 +1,47 @@
+---
+area:ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/actions/**"
+          - "scripts/**"
+          - "config/**"
+
+area:repo:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+          - "README.md"
+          - "CONTRIBUTING.md"
+          - "CODE_OF_CONDUCT.md"
+          - "SECURITY.md"
+          - ".pre-commit-config.yaml"
+          - ".commitlintrc*"
+          - "commitlint.config.*"
+          - ".editorconfig"
+          - ".gitignore"
+          - "package.json"
+          - "package-lock.json"
+          - "pyproject.toml"
+          - "requirements*.txt"
+
+area:security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - "SECURITY.md"
+          - "gitleaks*"
+          - ".gitleaks*"
+          - "security/**"
+
 area:theme:
   - changed-files:
       - any-glob-to-any-file:
-          - "website/src/**"
+          - "website/src/css/**"
+          - "website/src/theme/**"
+          - "website/src/components/**"
           - "website/static/**"
+          - "website/docusaurus.config.*"
 
 area:labs:
   - changed-files:
@@ -22,20 +61,11 @@ area:case-studies:
 area:external-docs:
   - changed-files:
       - any-glob-to-any-file:
-          - "website/docs/**"
+          - "website/docs/external-docs/**"
 
 area:repo-docs:
   - changed-files:
       - any-glob-to-any-file:
           - "docs/**"
-
-area:repo:
-  - changed-files:
-      - any-glob-to-any-file:
-          - ".github/**"
-          - "scripts/**"
-
-area:ci:
-  - changed-files:
-      - any-glob-to-any-file:
-          - ".github/workflows/**"
+          - "website/docs/governance/**"
+          - "website/docs/reference/**"
