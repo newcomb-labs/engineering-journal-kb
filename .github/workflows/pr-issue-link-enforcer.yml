@@ -1,0 +1,87 @@
+---
+name: pr-issue-link-enforcer
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-issue-link:
+    name: Validate PR issue linkage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check issue linkage
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || "";
+            const isDraft = pr.draft;
+
+            // Match any issue reference (#123)
+            const issueRefs = body.match(/#\d+/g) || [];
+
+            // Match closing keywords
+            const closingRefs = body.match(/(closes|fixes|resolves)\s+#\d+/gi) || [];
+
+            let errors = [];
+
+            if (issueRefs.length === 0) {
+              errors.push("No issue reference found (e.g., #123)");
+            }
+
+            if (errors.length === 0) {
+              core.info("Issue linkage valid");
+              return;
+            }
+
+            const message = [
+              "## ⚠️ PR Issue Link Validation",
+              "",
+              ...errors.map(e => `- ${e}`),
+              "",
+              "### Requirements",
+              "- Include at least one issue reference (e.g., `#123`)",
+              "- Prefer closing keywords (`Closes #123`, `Fixes #123`)",
+              "",
+              isDraft
+                ? "🟡 Draft PR: add issue linkage before marking ready."
+                : "🔴 Ready PR: issue linkage required before merge."
+            ].join("\n");
+
+            // Prevent duplicate comments
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number
+            });
+
+            const existing = comments.find(c =>
+              c.user.type === "Bot" &&
+              c.body.includes("PR Issue Link Validation")
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: message
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: message
+              });
+            }
+
+            if (!isDraft) {
+              core.setFailed("PR must reference an issue");
+            }
