@@ -131,3 +131,6 @@ jobs:
         with:
           name: docusaurus-site
           path: website/build
+
+      - name: Validate content governance
+        run: python3 scripts/validate_content.py

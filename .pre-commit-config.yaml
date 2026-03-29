@@ -77,6 +77,11 @@ repos:
         exclude: ^\.yamllint$
         stages: [pre-commit]
 
+      - id: validate-content
+        name: validate content governance
+        entry: python3 scripts/validate_content.py
+        language: system
+        files: ^website/docs/.*\.md$
   # ------------------------------------------------------------
   # Markdown linting
   # ------------------------------------------------------------
