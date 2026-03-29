@@ -1,0 +1,68 @@
+domains:
+  - governance
+  - networking
+  - security
+  - systems
+  - cloud
+  - devops
+  - troubleshooting
+  - career
+  - learning
+
+tags:
+  # governance
+  - policy
+  - standards
+  - process
+  - lifecycle
+  - taxonomy
+
+  # networking
+  - tcp-ip
+  - routing
+  - switching
+  - dns
+  - dhcp
+  - smb
+  - packet-tracer
+
+  # security
+  - authentication
+  - authorization
+  - encryption
+  - incident-response
+  - threat-detection
+  - vulnerability-management
+
+  # systems
+  - windows
+  - linux
+  - active-directory
+  - virtualization
+
+  # cloud
+  - aws
+  - azure
+  - gcp
+
+  # devops
+  - ci-cd
+  - automation
+  - infrastructure-as-code
+
+  # troubleshooting
+  - debugging
+  - root-cause-analysis
+  - diagnostics
+
+  # career
+  - resume
+  - interview
+  - job-search
+
+  # learning
+  - notes
+  - study-guide
+  - lab
+  - case-study
+  - journal
