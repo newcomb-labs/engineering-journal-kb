@@ -1,74 +1,59 @@
 #!/usr/bin/env python3
-"""Validate content taxonomy and type/category mappings."""
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
-from typing import Any
 
-from content_validation_common import (
-    discover_content_files,
-    extract_frontmatter,
-    format_error,
-    load_rules,
-    parse_args,
-)
+from content_validation_common import parse_frontmatter
+
+ALLOWED_TYPES = {"case-study", "doc", "journal", "lab"}
+ALLOWED_CATEGORIES = {
+    "case-studies",
+    "engineering",
+    "governance",
+    "labs",
+    "operations",
+}
+TYPE_TO_ALLOWED_CATEGORIES = {
+    "case-study": {"case-studies"},
+    "doc": {"engineering", "governance", "operations"},
+    "journal": {"engineering", "operations"},
+    "lab": {"labs"},
+}
 
 
-def validate_taxonomy(
-    file_paths: list[Path],
-    rules: dict[str, Any],
-) -> list[str]:
+def validate_taxonomy(files: list[Path]) -> list[str]:
     errors: list[str] = []
-    taxonomy_rules = rules.get("taxonomy", {})
-    type_rules = taxonomy_rules.get("types", {})
-    allowed_types = set(type_rules.keys())
 
-    for path in file_paths:
-        frontmatter, _ = extract_frontmatter(path)
-        if frontmatter is None:
+    for path in files:
+        frontmatter, parse_error = parse_frontmatter(path)
+        if parse_error:
             continue
+
+        assert frontmatter is not None
 
         content_type = frontmatter.get("type")
         category = frontmatter.get("category")
 
-        if content_type not in allowed_types:
+        if content_type not in ALLOWED_TYPES:
+            allowed = sorted(ALLOWED_TYPES)
             errors.append(
-                format_error(
-                    path,
-                    f"invalid content type '{content_type}'; allowed values: {sorted(allowed_types)}",
-                )
+                f"{path}: invalid content type '{content_type}'; allowed values: {allowed}"
             )
             continue
 
-        config = type_rules.get(content_type, {})
-        allowed_categories = set(config.get("categories", []))
-        if category not in allowed_categories:
+        if category not in ALLOWED_CATEGORIES:
+            allowed = sorted(ALLOWED_CATEGORIES)
             errors.append(
-                format_error(
-                    path,
-                    (
-                        f"invalid category '{category}' for type '{content_type}'; "
-                        f"allowed categories: {sorted(allowed_categories)}"
-                    ),
-                )
+                f"{path}: invalid category '{category}'; allowed values: {allowed}"
+            )
+            continue
+
+        allowed_categories = TYPE_TO_ALLOWED_CATEGORIES[content_type]
+        if category not in allowed_categories:
+            expected = sorted(allowed_categories)
+            errors.append(
+                f"{path}: invalid category '{category}' for type '{content_type}'; allowed values: {expected}"
             )
 
     return errors
-
-
-def main() -> int:
-    args = parse_args("Validate taxonomy rules.")
-    rules = load_rules(Path(args.rules))
-    file_paths = discover_content_files(rules, args.paths)
-    errors = validate_taxonomy(file_paths, rules)
-
-    for error in errors:
-        print(error)
-
-    return 1 if errors else 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

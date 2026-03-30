@@ -82,6 +82,13 @@ repos:
         entry: python3 scripts/validate_content.py
         language: system
         files: ^website/docs/.*\.md$
+
+      - id: validate-governed-content
+        name: validate governed content
+        entry: python3 scripts/validate_all.py
+        language: system
+        files: ^website/docs/.*\.(md|mdx)$
+        pass_filenames: true
   # ------------------------------------------------------------
   # Markdown linting
   # ------------------------------------------------------------
