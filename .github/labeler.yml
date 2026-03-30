@@ -1,4 +1,5 @@
 ---
+# Continuous Integration and Automation
 area:ci:
   - changed-files:
       - any-glob-to-any-file:
@@ -7,6 +8,20 @@ area:ci:
           - "scripts/**"
           - "config/**"
 
+# Physical and Virtual Lab Infrastructure
+area:infrastructure:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "ansible/**"
+          - "docker/**"
+          - "kubernetes/**"
+          - "terraform/**"
+          - "provisioning/**"
+          - "**/docker-compose.yml"
+          - "**/inventory.ini"
+          - "**/inventory.yml"
+
+# Repository Governance and configuration files
 area:repo:
   - changed-files:
       - any-glob-to-any-file:
@@ -25,15 +40,16 @@ area:repo:
           - "pyproject.toml"
           - "requirements*.txt"
 
+# Security specific configurations
 area:security:
   - changed-files:
       - any-glob-to-any-file:
-          - ".github/workflows/**"
           - "SECURITY.md"
           - "gitleaks*"
           - ".gitleaks*"
           - "security/**"
 
+# Docusaurus UI and Styling
 area:theme:
   - changed-files:
       - any-glob-to-any-file:
@@ -43,6 +59,7 @@ area:theme:
           - "website/static/**"
           - "website/docusaurus.config.*"
 
+# Documentation Categories
 area:labs:
   - changed-files:
       - any-glob-to-any-file:
@@ -63,6 +80,7 @@ area:external-docs:
       - any-glob-to-any-file:
           - "website/docs/external-docs/**"
 
+# Internal/Project Documentation
 area:repo-docs:
   - changed-files:
       - any-glob-to-any-file:

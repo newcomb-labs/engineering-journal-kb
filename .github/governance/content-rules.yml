@@ -1,0 +1,116 @@
+---
+version: 1
+
+content_roots:
+  - website/docs
+
+ignore_paths:
+  - website/docs/blog
+  - website/build
+  - node_modules
+
+allowed_extensions:
+  - .md
+  - .mdx
+
+frontmatter:
+  required_fields:
+    - title
+    - description
+    - type
+    - category
+    - lifecycle
+    - tags
+
+  fields:
+    title:
+      type: string
+    description:
+      type: string
+    type:
+      type: string
+    category:
+      type: string
+    lifecycle:
+      type: string
+    tags:
+      type: list
+    slug:
+      type: string
+      required: false
+    date:
+      type: string
+      required: false
+    last_reviewed:
+      type: string
+      required: false
+    archived_on:
+      type: string
+      required: false
+    authors:
+      type: list
+      required: false
+
+lifecycle:
+  allowed:
+    - draft
+    - review
+    - published
+    - archived
+
+  state_requirements:
+    draft:
+      - title
+      - type
+      - category
+      - lifecycle
+    review:
+      - title
+      - description
+      - type
+      - category
+      - lifecycle
+      - tags
+    published:
+      - title
+      - description
+      - type
+      - category
+      - lifecycle
+      - tags
+      - last_reviewed
+    archived:
+      - title
+      - description
+      - type
+      - category
+      - lifecycle
+      - tags
+      - archived_on
+
+taxonomy:
+  types:
+    lab:
+      categories:
+        - labs
+      path_prefixes:
+        - website/docs/labs/
+    case-study:
+      categories:
+        - case-studies
+      path_prefixes:
+        - website/docs/case-studies/
+    journal:
+      categories:
+        - journal
+      path_prefixes:
+        - website/docs/journal/
+    doc:
+      categories:
+        - governance
+        - guides
+        - reference
+      path_prefixes:
+        governance: website/docs/governance/
+        guides: website/docs/guides/
+        reference: website/docs/reference/
