@@ -1,8 +1,20 @@
 ---
+title: Engineering Journal
+description: Welcome to the engineering journal and knowledge base.
+content_type: docs
+status: draft
+created_at: "2026-03-30"
+last_reviewed: "2026-03-30"
+owners:
+  - "@newcomb-labs"
+tags:
+  - aws
+primary_domain: networking
 sidebar_position: 1
+type: doc
+lifecycle: draft
+category: engineering
 ---
-
-# Engineering Journal
 
 Welcome to the engineering journal and knowledge base.
 

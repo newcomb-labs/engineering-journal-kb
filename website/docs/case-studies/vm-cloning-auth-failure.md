@@ -1,6 +1,19 @@
 ---
 title: VM Cloning Authentication Failure Case Study
+description: "**Date:** 2026-03-04"
+content_type: case-study
+status: draft
+created_at: "2026-03-30"
+last_reviewed: "2026-03-30"
+owners:
+  - "@newcomb-labs"
+tags:
+  - case-study
+primary_domain: networking
 sidebar_label: VM Cloning Failure Case Study
+type: case-study
+lifecycle: draft
+category: case-studies
 ---
 
 ## Portfolio Case Study: Diagnosing Authentication Failures in a Peer-to-Peer Windows Network
@@ -285,3 +298,15 @@ Instead of cloning running systems directly:
 ## Tags
 
 windows networking smb virtualization troubleshooting identity cybersecurity
+
+## Problem
+
+TODO
+
+## Impact
+
+TODO
+
+## Lessons Learned
+
+TODO

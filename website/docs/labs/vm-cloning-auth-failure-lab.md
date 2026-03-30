@@ -1,6 +1,19 @@
 ---
 title: VM Cloning Authentication Failure Lab
+description: "**Date:** 2026-03-04"
+content_type: lab
+status: draft
+created_at: "2026-03-30"
+last_reviewed: "2026-03-30"
+owners:
+  - "@newcomb-labs"
+tags:
+  - lab
+primary_domain: networking
 sidebar_label: VM Cloning Failure Lab
+type: lab
+lifecycle: draft
+category: labs
 ---
 
 ## Reproducible Lab Guide: VM Cloning Authentication Failure
@@ -404,3 +417,19 @@ flowchart TD
 
 - Explains why valid credentials still fail
 - Demonstrates that SID and identity context are critical to authentication
+
+## Overview
+
+TODO
+
+## Steps
+
+TODO
+
+## Validation
+
+TODO
+
+## Lessons Learned
+
+TODO

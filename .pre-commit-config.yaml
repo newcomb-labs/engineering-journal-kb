@@ -14,7 +14,9 @@ repos:
         always_run: true
         stages: [pre-commit]
 
-      # Fast local docs formatting
+      # --------------------------------------------------------
+      # Fast local docs normalization
+      # --------------------------------------------------------
       - id: fix-markdown-headings
         name: fix markdown headings
         entry: python3 scripts/fix_markdown_headings.py
@@ -22,7 +24,9 @@ repos:
         files: ^website/docs/.*\.md$
         stages: [pre-commit]
 
-      # Fast local governance guard
+      # --------------------------------------------------------
+      # Governance guards (fast, always)
+      # --------------------------------------------------------
       - id: check-no-legacy-docs
         name: prevent legacy docs drift
         entry: python3 scripts/check_no_mkdocs.py
@@ -30,7 +34,33 @@ repos:
         pass_filenames: false
         stages: [pre-commit, manual]
 
-      # Slow hooks: run manually when needed
+      - id: validate-content
+        name: validate content governance
+        entry: python3 scripts/validate_content.py
+        language: system
+        files: ^website/docs/.*\.md$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      - id: validate-governed-content
+        name: validate governed content
+        entry: python3 scripts/validate_all.py
+        language: system
+        files: ^website/docs/.*\.(md|mdx)$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      - id: validate-required-headings
+        name: validate required headings
+        entry: python3 scripts/validate_required_headings.py
+        language: system
+        files: ^website/docs/.*\.md$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # Slow governance / manual checks
+      # --------------------------------------------------------
       - id: validate-blog-tags
         name: validate blog tags
         entry: python scripts/validate_blog_tags.py
@@ -47,7 +77,9 @@ repos:
         pass_filenames: false
         stages: [manual]
 
+      # --------------------------------------------------------
       # Frontend + docs tooling
+      # --------------------------------------------------------
       - id: cspell
         name: spell check docs
         entry: npx cspell --config cspell.config.yaml
@@ -77,18 +109,6 @@ repos:
         exclude: ^\.yamllint$
         stages: [pre-commit]
 
-      - id: validate-content
-        name: validate content governance
-        entry: python3 scripts/validate_content.py
-        language: system
-        files: ^website/docs/.*\.md$
-
-      - id: validate-governed-content
-        name: validate governed content
-        entry: python3 scripts/validate_all.py
-        language: system
-        files: ^website/docs/.*\.(md|mdx)$
-        pass_filenames: true
   # ------------------------------------------------------------
   # Markdown linting
   # ------------------------------------------------------------
@@ -107,13 +127,17 @@ repos:
     hooks:
       - id: trailing-whitespace
         stages: [pre-commit]
+
       - id: end-of-file-fixer
         stages: [pre-commit]
+
       - id: check-yaml
         stages: [pre-commit]
+
       - id: check-added-large-files
         args: ["--maxkb=1024"]
         stages: [pre-commit]
+
       - id: check-merge-conflict
         stages: [pre-commit]
 
@@ -137,6 +161,7 @@ repos:
         args: ["--fix"]
         files: \.py$
         stages: [pre-commit]
+
       - id: ruff-format
         files: \.py$
         stages: [pre-commit]

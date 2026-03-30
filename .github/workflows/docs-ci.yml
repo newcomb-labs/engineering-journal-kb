@@ -6,22 +6,32 @@ name: docs-ci
     paths:
       - "docs/**"
       - "website/**"
+      - ".github/governance/**"
       - ".github/workflows/docs-ci.yml"
       - ".github/workflows/link-check.yml"
       - ".github/workflows/spell-check.yml"
       - ".pre-commit-config.yaml"
       - "scripts/check_no_mkdocs.py"
+      - "scripts/validate_content.py"
+      - "scripts/validate_required_headings.py"
+      - "scripts/apply_frontmatter_defaults.py"
+      - "scripts/apply_required_headings.py"
   push:
     branches:
       - main
     paths:
       - "docs/**"
       - "website/**"
+      - ".github/governance/**"
       - ".github/workflows/docs-ci.yml"
       - ".github/workflows/link-check.yml"
       - ".github/workflows/spell-check.yml"
       - ".pre-commit-config.yaml"
       - "scripts/check_no_mkdocs.py"
+      - "scripts/validate_content.py"
+      - "scripts/validate_required_headings.py"
+      - "scripts/apply_frontmatter_defaults.py"
+      - "scripts/apply_required_headings.py"
   workflow_dispatch:
 
 permissions:
@@ -36,16 +46,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install governance validator dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml
 
       - name: Fail on legacy docs drift
         run: python3 scripts/check_no_mkdocs.py
 
+      - name: Validate content governance
+        run: python3 scripts/validate_content.py
+
+      - name: Validate required headings
+        run: python3 scripts/validate_required_headings.py
+
       # -----------------------------
       # Node setup (root)
       # -----------------------------
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Set up Node
+        uses: actions/setup-node@v5
         with:
           node-version: "20"
           cache: npm
@@ -57,10 +84,11 @@ jobs:
       # Markdown lint
       # -----------------------------
       - name: Lint Markdown
-        run: npx markdownlint-cli "**/*.md" \
-          --ignore node_modules \
-          --ignore website/build \
-          --ignore website/.docusaurus
+        run: |
+          npx markdownlint-cli "**/*.md" \
+            --ignore node_modules \
+            --ignore website/build \
+            --ignore website/.docusaurus
 
       # -----------------------------
       # Detect changed files
@@ -113,7 +141,7 @@ jobs:
         run: npm run lint
 
       # -----------------------------
-      # Build site (always)
+      # Build site (always after validation)
       # -----------------------------
       - name: Install website deps
         working-directory: website
@@ -131,6 +159,3 @@ jobs:
         with:
           name: docusaurus-site
           path: website/build
-
-      - name: Validate content governance
-        run: python3 scripts/validate_content.py
