@@ -1,0 +1,74 @@
+---
+name: content-validation
+
+"on":
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-governed-content:
+    name: Validate governed content
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validation dependencies
+        run: pip install pyyaml
+
+      - name: Collect changed governed content files
+        if: github.event_name == 'pull_request'
+        id: changed-files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t files < <(
+            git diff --name-only --diff-filter=ACMR "origin/${{ github.base_ref }}...HEAD" \
+              | grep -E '^website/docs/.*\.(md|mdx)$' || true
+          )
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "has_files=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          {
+            echo "has_files=true"
+            echo "files<<EOF"
+            printf '%s\n' "${files[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate changed governed content
+        if: github.event_name == 'pull_request' && steps.changed-files.outputs.has_files == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t files <<'EOF'
+          ${{ steps.changed-files.outputs.files }}
+          EOF
+
+          python3 scripts/validate_all.py "${files[@]}"
+
+      - name: Skip validation when no governed content changed
+        if: github.event_name == 'pull_request' && steps.changed-files.outputs.has_files != 'true'
+        run: echo "No governed content changed in this pull request."
+
+      - name: Validate all governed content on main
+        if: github.event_name == 'push'
+        run: python3 scripts/validate_all.py
