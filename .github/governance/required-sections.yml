@@ -1,0 +1,22 @@
+---
+version: 1
+
+excluded_paths:
+  - website/docs/case-studies/index.md
+  - website/docs/labs/index.md
+
+required_sections:
+  case-study:
+    - Summary
+    - Problem
+    - Impact
+    - Root Cause
+    - Resolution
+    - Lessons Learned
+
+  lab:
+    - Overview
+    - Environment
+    - Steps
+    - Validation
+    - Lessons Learned
