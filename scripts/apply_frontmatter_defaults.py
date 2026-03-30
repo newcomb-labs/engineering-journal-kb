@@ -1,115 +1,121 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
+import re
 from pathlib import Path
-from datetime import date
+
 import yaml
 
 DOCS_ROOT = Path("website/docs")
-TAXONOMY_PATH = Path(".github/taxonomy.yml")
-
-DEFAULT_OWNER = "@newcomb-labs"
-DEFAULT_STATUS = "draft"
 
 
-def load_taxonomy():
-    data = yaml.safe_load(TAXONOMY_PATH.read_text()) or {}
-    return set(data.get("domains", [])), set(data.get("tags", []))
+def infer_type(path: Path) -> str:
+    p = str(path)
 
-
-def classify(path: Path):
-    p = path.as_posix()
-    if "case-studies" in p:
+    if "/case-studies/" in p:
         return "case-study"
-    if "labs" in p:
+    if "/labs/" in p:
         return "lab"
-    if "journal" in p:
+    if "/journal/" in p:
         return "journal"
-    if "adr" in p:
-        return "adr"
-    return "docs"
+
+    return "doc"
 
 
-def required_sections(content_type):
-    return {
-        "lab": [
-            "## Overview",
-            "## Environment",
-            "## Steps",
-            "## Validation",
-            "## Lessons Learned",
-        ],
-        "case-study": [
-            "## Summary",
-            "## Problem",
-            "## Impact",
-            "## Root Cause",
-            "## Resolution",
-            "## Lessons Learned",
-        ],
-    }.get(content_type, [])
+def infer_category(path: Path) -> str:
+    p = str(path)
+
+    if "/case-studies/" in p:
+        return "case-studies"
+    if "/labs/" in p:
+        return "labs"
+    if "/engineering/" in p:
+        return "engineering"
+    if "/governance/" in p:
+        return "governance"
+    if "/operations/" in p:
+        return "operations"
+
+    return "engineering"
 
 
-def ensure_sections(body: str, content_type: str) -> str:
-    sections = required_sections(content_type)
-    for sec in sections:
-        if sec not in body:
-            body += f"\n\n{sec}\n\nTODO\n"
-    return body
+def extract_title(content: str, path: Path) -> str:
+    match = re.search(r"^#\s+(.+)", content, re.MULTILINE)
+    if match:
+        return match.group(1).strip()
 
-
-def parse_frontmatter(text: str):
-    if not text.startswith("---"):
-        return {}, text
-    parts = text.split("---", 2)
-    if len(parts) < 3:
-        return {}, text
-    return yaml.safe_load(parts[1]) or {}, parts[2]
-
-
-def render_frontmatter(fm: dict):
-    return "---\n" + yaml.safe_dump(fm, sort_keys=False) + "---\n"
-
-
-def infer_title(path: Path):
     return path.stem.replace("-", " ").title()
 
 
+def split_frontmatter(content: str):
+    if content.startswith("---"):
+        end = content.find("\n---", 3)
+        if end != -1:
+            fm = content[3:end]
+            body = content[end + 4 :]
+            return fm, body
+
+    return None, content
+
+
+def apply_defaults(path: Path):
+    original = path.read_text(encoding="utf-8")
+
+    fm_raw, body = split_frontmatter(original)
+
+    if fm_raw:
+        frontmatter = yaml.safe_load(fm_raw) or {}
+    else:
+        frontmatter = {}
+
+    changed = False
+
+    # title
+    if "title" not in frontmatter or not str(frontmatter["title"]).strip():
+        frontmatter["title"] = extract_title(original, path)
+        changed = True
+
+    # type
+    if "type" not in frontmatter or not frontmatter["type"]:
+        frontmatter["type"] = infer_type(path)
+        changed = True
+
+    # lifecycle
+    if "lifecycle" not in frontmatter or not str(frontmatter["lifecycle"]).strip():
+        frontmatter["lifecycle"] = "draft"
+        changed = True
+
+    # category
+    if "category" not in frontmatter or not frontmatter["category"]:
+        frontmatter["category"] = infer_category(path)
+        changed = True
+
+    if not changed:
+        return False
+
+    new_content = (
+        "---\n"
+        + yaml.safe_dump(frontmatter, sort_keys=False).strip()
+        + "\n---\n\n"
+        + body.lstrip()
+    )
+
+    path.write_text(new_content, encoding="utf-8")
+    return True
+
+
 def main():
-    domains, tags = load_taxonomy()
-    today = date.today().isoformat()
+    files = list(DOCS_ROOT.rglob("*.md"))
 
-    for path in DOCS_ROOT.rglob("*.md"):
-        text = path.read_text(encoding="utf-8")
-        fm, body = parse_frontmatter(text)
+    updated = 0
 
-        ctype = classify(path)
+    for f in files:
+        if apply_defaults(f):
+            print(f"updated: {f}")
+            updated += 1
 
-        fm["title"] = fm.get("title") or infer_title(path)
-        fm["description"] = fm.get("description") or "TODO"
-        fm["content_type"] = ctype
-        fm["status"] = (
-            fm.get("status")
-            if fm.get("status")
-            in {"draft", "review", "active", "deprecated", "archived"}
-            else DEFAULT_STATUS
-        )
-        fm["created_at"] = fm.get("created_at") or today
-        fm["last_reviewed"] = fm.get("last_reviewed") or today
-        fm["owners"] = [DEFAULT_OWNER]
-
-        # domain
-        fm["primary_domain"] = next(iter(domains)) if domains else None
-
-        # tags (safe minimal set)
-        fm["tags"] = [t for t in fm.get("tags", []) if t in tags][:3] or list(tags)[:1]
-
-        body = ensure_sections(body, ctype)
-
-        new_text = render_frontmatter(fm) + body.strip() + "\n"
-        path.write_text(new_text, encoding="utf-8")
-        print(f"UPDATED: {path}")
-
-    print("DONE")
+    print(f"\nDone. Updated {updated} file(s).")
 
 
 if __name__ == "__main__":
