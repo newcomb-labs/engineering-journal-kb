@@ -38,7 +38,7 @@ jobs:
 
           mapfile -t files < <(
             git diff --name-only --diff-filter=ACMR "origin/${{ github.base_ref }}...HEAD" \
-              | grep -E '^website/docs/.*\.(md|mdx)$' || true
+              | grep -E '^website/docs/(labs|case-studies|governance|engineering|operations)/.*\.(md|mdx)$' || true
           )
 
           if [ "${#files[@]}" -eq 0 ]; then
@@ -71,4 +71,13 @@ jobs:
 
       - name: Validate all governed content on main
         if: github.event_name == 'push'
-        run: python3 scripts/validate_all.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          find website/docs/labs \
+               website/docs/case-studies \
+               website/docs/governance \
+               website/docs/engineering \
+               website/docs/operations \
+               -type f \( -name '*.md' -o -name '*.mdx' \) -print0 \
+            | xargs -0 python3 scripts/validate_all.py

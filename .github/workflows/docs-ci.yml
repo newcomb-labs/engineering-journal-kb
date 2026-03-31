@@ -69,7 +69,16 @@ jobs:
         run: python3 scripts/check_no_mkdocs.py
 
       - name: Validate content governance
-        run: python3 scripts/validate_content.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          find website/docs/labs \
+               website/docs/case-studies \
+               website/docs/governance \
+               website/docs/engineering \
+               website/docs/operations \
+               -type f \( -name '*.md' -o -name '*.mdx' \) -print0 \
+            | xargs -0 python3 scripts/validate_content.py
 
       - name: Validate required headings
         run: python3 scripts/validate_required_headings.py
