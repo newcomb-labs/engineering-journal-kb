@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from content_validation_common import parse_frontmatter
+from content_validation_common import is_generated_artifact, parse_frontmatter
 
 ALLOWED_LIFECYCLES = {"draft", "review", "published", "archived"}
 PUBLISHED_REQUIRED_FIELDS = {"title", "description", "type", "category", "tags"}
@@ -19,6 +19,9 @@ def validate_lifecycle(files: list[Path]) -> list[str]:
             continue
 
         assert frontmatter is not None
+
+        if is_generated_artifact(path, frontmatter):
+            continue
 
         lifecycle = frontmatter.get("lifecycle")
         if not isinstance(lifecycle, str) or not lifecycle.strip():

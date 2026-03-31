@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from content_validation_common import parse_frontmatter
+from content_validation_common import is_generated_artifact, parse_frontmatter
 
 ALLOWED_TYPES = {"case-study", "doc", "journal", "lab"}
 ALLOWED_CATEGORIES = {
@@ -31,6 +31,9 @@ def validate_taxonomy(files: list[Path]) -> list[str]:
             continue
 
         assert frontmatter is not None
+
+        if is_generated_artifact(path, frontmatter):
+            continue
 
         content_type = frontmatter.get("type")
         category = frontmatter.get("category")

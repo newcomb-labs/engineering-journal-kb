@@ -1,0 +1,79 @@
+[
+  {
+    "title": "Engineering Journal",
+    "path": "/docs/intro",
+    "type": "doc",
+    "category": "engineering",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "VM Cloning Authentication Failure Lab",
+    "path": "/docs/labs/vm-cloning-auth-failure-lab",
+    "type": "lab",
+    "category": "labs",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Labs",
+    "path": "/docs/labs/index",
+    "type": "lab",
+    "category": "labs",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Incident Response",
+    "path": "/docs/operations/incident-response",
+    "type": "doc",
+    "category": "operations",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Runbooks",
+    "path": "/docs/operations/runbooks",
+    "type": "doc",
+    "category": "operations",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Case Studies",
+    "path": "/docs/case-studies/index",
+    "type": "case-study",
+    "category": "case-studies",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "VM Cloning Authentication Failure Case Study",
+    "path": "/docs/case-studies/vm-cloning-auth-failure",
+    "type": "case-study",
+    "category": "case-studies",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Repo Standards",
+    "path": "/docs/governance/repo-standards",
+    "type": "doc",
+    "category": "governance",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Commit Policy",
+    "path": "/docs/governance/commit-policy",
+    "type": "doc",
+    "category": "governance",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Architecture",
+    "path": "/docs/engineering/architecture",
+    "type": "doc",
+    "category": "engineering",
+    "lifecycle": "draft"
+  },
+  {
+    "title": "Automation",
+    "path": "/docs/engineering/automation",
+    "type": "doc",
+    "category": "engineering",
+    "lifecycle": "draft"
+  }
+]

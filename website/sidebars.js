@@ -4,6 +4,20 @@ const sidebars = {
     "intro",
     {
       type: "category",
+      label: "Indexes",
+      items: [
+        "indexes/index",
+        "indexes/labs",
+        "indexes/case-studies",
+        "indexes/journal",
+        "indexes/engineering",
+        "indexes/governance",
+        "indexes/operations",
+        "indexes/governance-summary",
+      ],
+    },
+    {
+      type: "category",
       label: "Engineering",
       items: ["engineering/architecture", "engineering/automation"],
     },

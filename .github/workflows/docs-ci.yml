@@ -8,6 +8,7 @@ name: docs-ci
       - "website/**"
       - ".github/governance/**"
       - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/generated-content.yml"
       - ".github/workflows/link-check.yml"
       - ".github/workflows/spell-check.yml"
       - ".pre-commit-config.yaml"
@@ -16,6 +17,8 @@ name: docs-ci
       - "scripts/validate_required_headings.py"
       - "scripts/apply_frontmatter_defaults.py"
       - "scripts/apply_required_headings.py"
+      - "scripts/generate_content_artifacts.py"
+      - "scripts/validate_generated_content.py"
   push:
     branches:
       - main
@@ -24,6 +27,7 @@ name: docs-ci
       - "website/**"
       - ".github/governance/**"
       - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/generated-content.yml"
       - ".github/workflows/link-check.yml"
       - ".github/workflows/spell-check.yml"
       - ".pre-commit-config.yaml"
@@ -32,6 +36,8 @@ name: docs-ci
       - "scripts/validate_required_headings.py"
       - "scripts/apply_frontmatter_defaults.py"
       - "scripts/apply_required_headings.py"
+      - "scripts/generate_content_artifacts.py"
+      - "scripts/validate_generated_content.py"
   workflow_dispatch:
 
 permissions:
@@ -67,6 +73,9 @@ jobs:
 
       - name: Validate required headings
         run: python3 scripts/validate_required_headings.py
+
+      - name: Validate generated content freshness
+        run: python3 scripts/validate_generated_content.py
 
       # -----------------------------
       # Node setup (root)

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import yaml
-from content_validation_common import parse_frontmatter
+from content_validation_common import is_generated_artifact, parse_frontmatter
 
 SCHEMA_PATH = Path(".github/governance/frontmatter-schema.yml")
 
@@ -27,6 +27,9 @@ def validate_frontmatter(files: list[Path]) -> list[str]:
             continue
 
         assert frontmatter is not None
+
+        if is_generated_artifact(path, frontmatter):
+            continue
 
         for field in required_fields:
             value = frontmatter.get(field)

@@ -1,0 +1,12 @@
+# Index
+- [Architecture](/docs/engineering/architecture)
+- [Automation](/docs/engineering/automation)
+- [Case Studies](/docs/case-studies/index)
+- [Commit Policy](/docs/governance/commit-policy)
+- [Engineering Journal](/docs/intro)
+- [Incident Response](/docs/operations/incident-response)
+- [Labs](/docs/labs/index)
+- [Repo Standards](/docs/governance/repo-standards)
+- [Runbooks](/docs/operations/runbooks)
+- [VM Cloning Authentication Failure Case Study](/docs/case-studies/vm-cloning-auth-failure)
+- [VM Cloning Authentication Failure Lab](/docs/labs/vm-cloning-auth-failure-lab)
