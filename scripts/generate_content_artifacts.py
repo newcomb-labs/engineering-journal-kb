@@ -11,6 +11,7 @@ Generates deterministic content artifacts for the Engineering Journal:
 Guarantees:
 - Stable ordering (sorted paths)
 - No inclusion of generated files
+- Docusaurus-safe links
 - Deterministic output across environments
 """
 
@@ -48,9 +49,16 @@ def load_frontmatter(path: Path) -> dict | None:
         return None
 
 
-def write(path: Path, content: str):
+def write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
+
+
+def doc_link_from_path(path: Path) -> str:
+    rel = path.relative_to(DOCS_DIR).as_posix().replace(".md", "")
+    if rel.endswith("/index"):
+        rel = rel[:-6]
+    return f"/docs/{rel}"
 
 
 # ------------------------------------------------------------
@@ -87,16 +95,14 @@ def collect_documents() -> list[dict]:
 def generate_manifest(docs: list[dict]) -> None:
     manifest = []
 
-    for d in sorted(docs, key=lambda x: x["path"].as_posix()):
-        rel = d["path"].relative_to(DOCS_DIR)
-
+    for doc in sorted(docs, key=lambda item: item["path"].as_posix()):
         manifest.append(
             {
-                "title": d["title"],
-                "path": f"/docs/{rel.as_posix().replace('.md', '')}",
-                "type": d["type"],
-                "category": d["category"],
-                "lifecycle": d["lifecycle"],
+                "title": doc["title"],
+                "path": doc_link_from_path(doc["path"]),
+                "type": doc["type"],
+                "category": doc["category"],
+                "lifecycle": doc["lifecycle"],
             }
         )
 
@@ -110,14 +116,14 @@ def generate_manifest(docs: list[dict]) -> None:
 # Governance summary
 # ------------------------------------------------------------
 def generate_governance_summary(docs: list[dict]) -> None:
-    type_counts = Counter(d["type"] for d in docs)
-    category_counts = Counter(d["category"] for d in docs)
-    lifecycle_counts = Counter(d["lifecycle"] for d in docs)
+    type_counts = Counter(doc["type"] for doc in docs)
+    category_counts = Counter(doc["category"] for doc in docs)
+    lifecycle_counts = Counter(doc["lifecycle"] for doc in docs)
 
-    def table(title: str, data: dict) -> str:
+    def table(title: str, data: dict[str, int]) -> str:
         lines = [f"## {title}", "", "| Value | Count |", "| --- | ---: |"]
-        for k in sorted(data.keys()):
-            lines.append(f"| {k} | {data[k]} |")
+        for key in sorted(data.keys()):
+            lines.append(f"| {key} | {data[key]} |")
         return "\n".join(lines)
 
     content = [
@@ -139,20 +145,19 @@ def generate_governance_summary(docs: list[dict]) -> None:
 # Category indexes
 # ------------------------------------------------------------
 def generate_category_indexes(docs: list[dict]) -> None:
-    grouped = defaultdict(list)
+    grouped: defaultdict[str, list[dict]] = defaultdict(list)
 
-    for d in docs:
-        grouped[d["category"]].append(d)
+    for doc in docs:
+        grouped[doc["category"]].append(doc)
 
     for category in sorted(grouped.keys()):
-        items = sorted(grouped[category], key=lambda x: x["path"].as_posix())
+        items = sorted(grouped[category], key=lambda item: item["path"].as_posix())
 
         lines = [f"# {category.title()} Index", ""]
 
-        for d in items:
-            rel = d["path"].relative_to(DOCS_DIR)
-            link = rel.as_posix().replace(".md", "")
-            lines.append(f"- [{d['title']}](/docs/{link})")
+        for doc in items:
+            link = doc_link_from_path(doc["path"])
+            lines.append(f"- [{doc['title']}]({link})")
 
         write(INDEX_DIR / f"{category}.md", "\n".join(lines))
 
@@ -161,12 +166,12 @@ def generate_category_indexes(docs: list[dict]) -> None:
 # Root index
 # ------------------------------------------------------------
 def generate_root_index(docs: list[dict]) -> None:
-    categories = sorted(set(d["category"] for d in docs))
+    categories = sorted(set(doc["category"] for doc in docs))
 
     lines = ["# Content Index", ""]
 
-    for c in categories:
-        lines.append(f"- [{c.title()}](/docs/indexes/{c})")
+    for category in categories:
+        lines.append(f"- [{category.title()}](/docs/indexes/{category})")
 
     write(INDEX_DIR / "index.md", "\n".join(lines))
 
@@ -174,7 +179,7 @@ def generate_root_index(docs: list[dict]) -> None:
 # ------------------------------------------------------------
 # Main
 # ------------------------------------------------------------
-def main():
+def main() -> None:
     docs = collect_documents()
 
     generate_manifest(docs)
@@ -183,8 +188,8 @@ def main():
     generate_root_index(docs)
 
     print("Generated content artifacts:")
-    for p in sorted(INDEX_DIR.glob("*")):
-        print(f"- {p}")
+    for path in sorted(INDEX_DIR.glob("*")):
+        print(f"- {path}")
 
 
 if __name__ == "__main__":

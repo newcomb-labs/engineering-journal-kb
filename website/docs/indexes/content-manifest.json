@@ -2,7 +2,7 @@
   {
     "category": "case-studies",
     "lifecycle": "draft",
-    "path": "/docs/case-studies/index",
+    "path": "/docs/case-studies",
     "title": "Case Studies",
     "type": "case-study"
   },
@@ -51,7 +51,7 @@
   {
     "category": "labs",
     "lifecycle": "draft",
-    "path": "/docs/labs/index",
+    "path": "/docs/labs",
     "title": "Labs",
     "type": "lab"
   },
