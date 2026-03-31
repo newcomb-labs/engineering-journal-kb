@@ -106,7 +106,8 @@ jobs:
           npx markdownlint-cli "**/*.md" \
             --ignore node_modules \
             --ignore website/build \
-            --ignore website/.docusaurus
+            --ignore website/.docusaurus \
+            --ignore "website/docs/indexes/**"
 
       # -----------------------------
       # Detect changed files
