@@ -4,7 +4,7 @@ Total governed documents: **11**
 
 ## Counts by Type
 
-| Type | Count |
+| Value | Count |
 | --- | ---: |
 | case-study | 2 |
 | doc | 7 |
@@ -12,7 +12,7 @@ Total governed documents: **11**
 
 ## Counts by Category
 
-| Category | Count |
+| Value | Count |
 | --- | ---: |
 | case-studies | 2 |
 | engineering | 3 |
@@ -22,8 +22,6 @@ Total governed documents: **11**
 
 ## Counts by Lifecycle
 
-| Lifecycle | Count |
+| Value | Count |
 | --- | ---: |
 | draft | 11 |
-
-<!-- generated:content:end -->
