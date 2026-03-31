@@ -10,6 +10,8 @@ Enforces:
 - content_type ↔ path alignment
 - Required sections per content type
 
+Generated artifacts under website/docs/indexes are intentionally skipped.
+
 Exit code:
 - 0 = success
 - 1 = validation failures
@@ -30,6 +32,7 @@ except Exception:
 REPO_ROOT = Path(".").resolve()
 
 DOCS_DIR = REPO_ROOT / "website" / "docs"
+GENERATED_DIR = DOCS_DIR / "indexes"
 TAXONOMY_FILE = REPO_ROOT / ".github" / "taxonomy.yml"
 
 ALLOWED_STATUS = {"draft", "review", "active", "deprecated", "archived"}
@@ -74,7 +77,7 @@ REQUIRED_SECTIONS = {
 }
 
 
-def fail(msg: str):
+def fail(msg: str) -> bool:
     print(f"ERROR: {msg}")
     return False
 
@@ -92,8 +95,8 @@ def parse_frontmatter(text: str):
     fm_raw = parts[1]
     try:
         return yaml.safe_load(fm_raw) or {}
-    except Exception as e:
-        print(f"ERROR: Invalid YAML frontmatter: {e}")
+    except Exception as exc:
+        print(f"ERROR: Invalid YAML frontmatter: {exc}")
         return None
 
 
@@ -109,7 +112,7 @@ def load_taxonomy():
     if not TAXONOMY_FILE.exists():
         print(f"ERROR: Missing taxonomy file: {TAXONOMY_FILE}")
         sys.exit(1)
-    data = yaml.safe_load(TAXONOMY_FILE.read_text()) or {}
+    data = yaml.safe_load(TAXONOMY_FILE.read_text(encoding="utf-8")) or {}
     domains = set(data.get("domains", []))
     tags = set(data.get("tags", []))
     return domains, tags
@@ -142,7 +145,7 @@ def validate_file(path: Path, domains, tags) -> bool:
     # Owners
     owners = fm.get("owners", [])
     if not isinstance(owners, list) or not all(
-        isinstance(o, str) and o.startswith("@") for o in owners
+        isinstance(owner, str) and owner.startswith("@") for owner in owners
     ):
         ok &= fail(f"{path}: owners must be list of @usernames")
 
@@ -151,7 +154,7 @@ def validate_file(path: Path, domains, tags) -> bool:
     if not isinstance(file_tags, list):
         ok &= fail(f"{path}: tags must be a list")
     else:
-        unknown = [t for t in file_tags if t not in tags]
+        unknown = [tag for tag in file_tags if tag not in tags]
         if unknown:
             ok &= fail(f"{path}: unknown tags: {unknown}")
 
@@ -162,7 +165,9 @@ def validate_file(path: Path, domains, tags) -> bool:
     if primary not in domains:
         ok &= fail(f"{path}: invalid primary_domain '{primary}'")
 
-    if not isinstance(secondary, list) or any(d not in domains for d in secondary):
+    if not isinstance(secondary, list) or any(
+        domain not in domains for domain in secondary
+    ):
         ok &= fail(f"{path}: invalid secondary_domains '{secondary}'")
 
     # content_type ↔ path alignment
@@ -171,20 +176,25 @@ def validate_file(path: Path, domains, tags) -> bool:
     if expected_prefix is None:
         ok &= fail(f"{path}: unknown content_type '{ctype}'")
     else:
-        # normalize to posix-like string for comparison
-        p = path.as_posix()
-        if expected_prefix not in p:
+        path_str = path.as_posix()
+        if expected_prefix not in path_str:
             ok &= fail(
                 f"{path}: content_type '{ctype}' does not match path '{expected_prefix}'"
             )
 
-    # Required sections (simple check: headings present)
+    # Required sections
     sections = REQUIRED_SECTIONS.get(ctype, [])
-    for sec in sections:
-        if sec not in text:
-            ok &= fail(f"{path}: missing section '{sec}'")
+    for section in sections:
+        if section not in text:
+            ok &= fail(f"{path}: missing section '{section}'")
 
     return ok
+
+
+def get_target_files() -> list[Path]:
+    if len(sys.argv) > 1:
+        return [Path(arg).resolve() for arg in sys.argv[1:] if arg.endswith(".md")]
+    return list(DOCS_DIR.rglob("*.md"))
 
 
 def main():
@@ -194,14 +204,19 @@ def main():
 
     domains, tags = load_taxonomy()
 
-    files = list(DOCS_DIR.rglob("*.md"))
+    files = get_target_files()
     if not files:
         print("No markdown files found under website/docs")
         sys.exit(0)
 
     all_ok = True
-    for f in files:
-        all_ok &= validate_file(f, domains, tags)
+    for file_path in files:
+        # Skip generated content artifacts entirely
+        if GENERATED_DIR in file_path.parents:
+            print(f"SKIP (generated): {file_path}")
+            continue
+
+        all_ok &= validate_file(file_path, domains, tags)
 
     if not all_ok:
         print("\nValidation failed.")

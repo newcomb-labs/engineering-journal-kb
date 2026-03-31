@@ -8,6 +8,7 @@ name: docs-ci
       - "website/**"
       - ".github/governance/**"
       - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/generated-content.yml"
       - ".github/workflows/link-check.yml"
       - ".github/workflows/spell-check.yml"
       - ".pre-commit-config.yaml"
@@ -16,6 +17,8 @@ name: docs-ci
       - "scripts/validate_required_headings.py"
       - "scripts/apply_frontmatter_defaults.py"
       - "scripts/apply_required_headings.py"
+      - "scripts/generate_content_artifacts.py"
+      - "scripts/validate_generated_content.py"
   push:
     branches:
       - main
@@ -24,6 +27,7 @@ name: docs-ci
       - "website/**"
       - ".github/governance/**"
       - ".github/workflows/docs-ci.yml"
+      - ".github/workflows/generated-content.yml"
       - ".github/workflows/link-check.yml"
       - ".github/workflows/spell-check.yml"
       - ".pre-commit-config.yaml"
@@ -32,6 +36,8 @@ name: docs-ci
       - "scripts/validate_required_headings.py"
       - "scripts/apply_frontmatter_defaults.py"
       - "scripts/apply_required_headings.py"
+      - "scripts/generate_content_artifacts.py"
+      - "scripts/validate_generated_content.py"
   workflow_dispatch:
 
 permissions:
@@ -63,10 +69,22 @@ jobs:
         run: python3 scripts/check_no_mkdocs.py
 
       - name: Validate content governance
-        run: python3 scripts/validate_content.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          find website/docs/labs \
+               website/docs/case-studies \
+               website/docs/governance \
+               website/docs/engineering \
+               website/docs/operations \
+               -type f \( -name '*.md' -o -name '*.mdx' \) -print0 \
+            | xargs -0 python3 scripts/validate_content.py
 
       - name: Validate required headings
         run: python3 scripts/validate_required_headings.py
+
+      - name: Validate generated content freshness
+        run: python3 scripts/validate_generated_content.py
 
       # -----------------------------
       # Node setup (root)
@@ -88,7 +106,8 @@ jobs:
           npx markdownlint-cli "**/*.md" \
             --ignore node_modules \
             --ignore website/build \
-            --ignore website/.docusaurus
+            --ignore website/.docusaurus \
+            --ignore "website/docs/indexes/**"
 
       # -----------------------------
       # Detect changed files
@@ -128,7 +147,7 @@ jobs:
         if: steps.changed.outputs.any_changed == 'true'
         run: |
           FILES="${{ steps.changed.outputs.all_changed_files }}"
-          FORMAT=$(echo "$FILES" | tr ' ' '\n' | grep -E '\.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$' || true)
+          FORMAT=$(echo "$FILES" | tr ' ' '\n' | grep -E '\.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$' | grep -Ev '^website/docs/indexes/.*\.md$' || true)
           if [ -n "$FORMAT" ]; then
             echo "$FORMAT" | xargs npx prettier --check
           fi

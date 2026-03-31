@@ -9,6 +9,7 @@ from typing import Iterable
 import yaml
 
 GOVERNED_ROOT = Path("website/docs")
+GENERATED_ROOT = GOVERNED_ROOT / "indexes"
 ALLOWED_EXTENSIONS = {".md", ".mdx"}
 
 
@@ -20,6 +21,15 @@ def parse_args() -> argparse.Namespace:
         help="Optional explicit list of files to validate. If omitted, scan all governed content.",
     )
     return parser.parse_args()
+
+
+def is_generated_path(path: Path) -> bool:
+    try:
+        return (
+            GENERATED_ROOT in path.resolve().parents or path.resolve() == GENERATED_ROOT
+        )
+    except FileNotFoundError:
+        return GENERATED_ROOT in path.parents or path == GENERATED_ROOT
 
 
 def normalize_files(files: Iterable[str]) -> list[Path]:
@@ -90,3 +100,23 @@ def parse_frontmatter(path: Path) -> tuple[dict | None, str | None]:
         return None, "frontmatter must parse to a YAML mapping"
 
     return parsed, None
+
+
+def is_generated_artifact(path: Path, frontmatter: dict | None = None) -> bool:
+    if is_generated_path(path):
+        return True
+
+    if not frontmatter:
+        return False
+
+    if frontmatter.get("generated") is True:
+        return True
+
+    managed_by = frontmatter.get("managed_by")
+    if (
+        isinstance(managed_by, str)
+        and managed_by.strip() == "generate_content_artifacts.py"
+    ):
+        return True
+
+    return False

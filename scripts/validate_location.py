@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from content_validation_common import parse_frontmatter
+from content_validation_common import is_generated_artifact, parse_frontmatter
 
 TYPE_TO_REQUIRED_DIRECTORY = {
     "case-study": Path("website/docs/case-studies"),
@@ -23,6 +23,9 @@ def validate_location(files: list[Path]) -> list[str]:
             continue
 
         assert frontmatter is not None
+
+        if is_generated_artifact(path, frontmatter):
+            continue
 
         content_type = frontmatter.get("type")
         required_dir = TYPE_TO_REQUIRED_DIRECTORY.get(content_type)
