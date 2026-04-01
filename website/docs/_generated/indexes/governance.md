@@ -8,8 +8,6 @@ generated_by: scripts/generate_content_artifacts.py
 generated_content: true
 ---
 
-# Governance Index
-
 Metadata-driven index of governance and repository policy docs.
 
 ## [Commit Policy](/docs/governance/commit-policy)

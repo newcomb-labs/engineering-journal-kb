@@ -8,8 +8,6 @@ generated_by: scripts/generate_content_artifacts.py
 generated_content: true
 ---
 
-# Glossary
-
 This glossary is generated from governed metadata and is safe to link manually from docs.
 Automatic term-link injection can consume the same glossary metadata later without changing the URL contract.
 

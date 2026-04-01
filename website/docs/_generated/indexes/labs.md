@@ -8,8 +8,6 @@ generated_by: scripts/generate_content_artifacts.py
 generated_content: true
 ---
 
-# Labs Index
-
 Metadata-driven index of hands-on labs.
 
 ## [VM Cloning Authentication Failure Lab](/docs/labs/vm-cloning-auth-failure-lab)

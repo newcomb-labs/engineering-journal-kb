@@ -8,8 +8,6 @@ generated_by: scripts/generate_content_artifacts.py
 generated_content: true
 ---
 
-# Case Studies Index
-
 Metadata-driven index of case studies and analysis write-ups.
 
 ## [VM Cloning Authentication Failure Case Study](/docs/case-studies/vm-cloning-auth-failure)

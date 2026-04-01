@@ -8,8 +8,6 @@ generated_by: scripts/generate_content_artifacts.py
 generated_content: true
 ---
 
-# Journal Index
-
 Metadata-driven index of dated engineering journal entries.
 
 ## [Migrating the docs site to Docusaurus](/blog/docusaurus-migration)
