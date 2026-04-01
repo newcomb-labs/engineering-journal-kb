@@ -1,0 +1,10 @@
+{
+  "collapsed": false,
+  "collapsible": true,
+  "label": "Operations",
+  "link": {
+    "description": "Operational runbooks, response docs, and execution guidance.",
+    "type": "generated-index"
+  },
+  "position": 50
+}

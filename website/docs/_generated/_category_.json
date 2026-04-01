@@ -1,0 +1,11 @@
+{
+  "collapsed": false,
+  "collapsible": true,
+  "label": "Browse",
+  "link": {
+    "description": "Generated navigation aids, discovery indexes, and the glossary.",
+    "title": "Browse",
+    "type": "generated-index"
+  },
+  "position": 5
+}

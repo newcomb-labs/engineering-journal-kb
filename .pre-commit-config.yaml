@@ -1,3 +1,4 @@
+---
 repos:
   # ============================================================
   # 1. CORE WORKFLOW + CONTENT PIPELINE
@@ -14,7 +15,20 @@ repos:
       # automatically when hooks modify them.
       - id: auto-stage-managed-files
         name: auto stage managed config files
-        entry: bash -c 'git add .pre-commit-config.yaml package.json package-lock.json website/package.json website/package-lock.json website/docs/indexes 2>/dev/null || true'
+        entry: >-
+          bash -c 'git add
+          .pre-commit-config.yaml
+          package.json
+          package-lock.json
+          website/package.json
+          website/package-lock.json
+          website/docs/_generated
+          website/docs/labs/_category_.json
+          website/docs/case-studies/_category_.json
+          website/docs/governance/_category_.json
+          website/docs/engineering/_category_.json
+          website/docs/operations/_category_.json
+          2>/dev/null || true'
         language: system
         pass_filenames: false
         always_run: true
@@ -29,7 +43,7 @@ repos:
         entry: python3 scripts/fix_markdown_headings.py
         language: system
         files: ^website/docs/.*\.md$
-        exclude: ^website/docs/indexes/.*\.md$
+        exclude: ^website/docs/_generated/.*\.md$
         stages: [pre-commit]
 
       # --------------------------------------------------------
@@ -63,9 +77,9 @@ repos:
         name: validate generated content
         entry: python3 scripts/validate_generated_content.py
         language: system
-        files: ^website/docs/indexes/.*\.md$
         pass_filenames: false
-        stages: [pre-commit, manual]
+        always_run: true
+        stages: [pre-commit]
 
       # ============================================================
       # 2. GOVERNANCE + CONTENT VALIDATION (AUTHORED CONTENT ONLY)
@@ -120,7 +134,7 @@ repos:
         entry: python3 scripts/validate_required_headings.py
         language: system
         files: ^website/docs/.*\.md$
-        exclude: ^website/docs/indexes/.*\.md$
+        exclude: ^website/docs/_generated/.*\.md$
         pass_filenames: true
         stages: [pre-commit]
 
@@ -197,7 +211,7 @@ repos:
         entry: npx prettier --write
         language: system
         files: \.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$
-        exclude: ^(\.yamllint$|website/docs/indexes/.*\.md$)
+        exclude: ^(\.yamllint$|website/docs/_generated/.*\.md$)
         stages: [pre-commit]
 
   # ============================================================
@@ -211,7 +225,7 @@ repos:
     hooks:
       - id: markdownlint
         args: ["--fix"]
-        exclude: ^website/docs/indexes/.*\.md$
+        exclude: ^website/docs/_generated/.*\.md$
         stages: [pre-commit]
 
   # ============================================================
