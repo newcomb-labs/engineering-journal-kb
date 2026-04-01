@@ -1,0 +1,4 @@
+# Case-Studies Index
+
+- [Case Studies](/docs/case-studies)
+- [VM Cloning Authentication Failure Case Study](/docs/case-studies/vm-cloning-auth-failure)
