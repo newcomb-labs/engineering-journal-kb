@@ -4,4 +4,4 @@ build/
 website/.docusaurus/
 website/build/
 *.min.js
-website/docs/indexes/**
+website/docs/_generated/**

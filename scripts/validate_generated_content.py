@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""Validate generated content freshness for Phase 3 artifacts.
+
+The validator regenerates content in an isolated temp copy of the repository and
+compares the configured managed outputs with the checked-in versions.
+"""
 
 from __future__ import annotations
 
@@ -14,7 +19,7 @@ from typing import Any
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_GENERATED_DIR = REPO_ROOT / "website" / "docs" / "indexes"
+DEFAULT_GENERATED_DIR = REPO_ROOT / "website" / "docs" / "_generated"
 CONFIG_PATH = REPO_ROOT / ".github" / "governance" / "generated-content.yml"
 
 SKIP_DIR_NAMES = {
@@ -30,9 +35,7 @@ SKIP_DIR_NAMES = {
     "build",
 }
 
-SKIP_FILE_NAMES = {
-    ".DS_Store",
-}
+SKIP_FILE_NAMES = {".DS_Store"}
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -47,24 +50,23 @@ def load_yaml(path: Path) -> dict[str, Any]:
 def normalize_path_values(values: Any) -> list[Path]:
     if values is None:
         return []
-
     if isinstance(values, (str, Path)):
         return [Path(str(values))]
-
     if isinstance(values, list):
-        out: list[Path] = []
-        for value in values:
-            if isinstance(value, (str, Path)):
-                out.append(Path(str(value)))
-        return out
-
+        return [Path(str(value)) for value in values if isinstance(value, (str, Path))]
     return []
 
 
 def resolve_generated_paths(config: dict[str, Any]) -> list[Path]:
     candidates: list[Path] = []
 
-    # Support a few boring, explicit schema shapes.
+    generated_outputs = config.get("generated_outputs")
+    if isinstance(generated_outputs, dict):
+        docs_root = generated_outputs.get("docs_root")
+        if docs_root:
+            candidates.extend(normalize_path_values(docs_root))
+        candidates.extend(normalize_path_values(generated_outputs.get("files")))
+
     candidates.extend(normalize_path_values(config.get("generated_paths")))
     candidates.extend(normalize_path_values(config.get("managed_paths")))
     candidates.extend(normalize_path_values(config.get("artifacts")))
@@ -79,7 +81,6 @@ def resolve_generated_paths(config: dict[str, Any]) -> list[Path]:
 
     resolved: list[Path] = []
     seen: set[Path] = set()
-
     for candidate in candidates:
         absolute = (REPO_ROOT / candidate).resolve()
         if absolute in seen:
@@ -104,8 +105,7 @@ def copy_repo_to_temp(temp_root: Path) -> Path:
 
     for root, dirs, files in os.walk(REPO_ROOT):
         root_path = Path(root)
-
-        dirs[:] = [d for d in dirs if not should_skip_dir(d)]
+        dirs[:] = [dirname for dirname in dirs if not should_skip_dir(dirname)]
 
         rel_root = root_path.relative_to(REPO_ROOT)
         dest_root = temp_repo / rel_root
@@ -114,9 +114,7 @@ def copy_repo_to_temp(temp_root: Path) -> Path:
         for filename in files:
             if should_skip_file(filename):
                 continue
-            src = root_path / filename
-            dst = dest_root / filename
-            shutil.copy2(src, dst)
+            shutil.copy2(root_path / filename, dest_root / filename)
 
     return temp_repo
 
@@ -134,116 +132,95 @@ def run_generator(temp_repo: Path) -> None:
     )
 
     if result.returncode != 0:
-        stdout = result.stdout.strip()
-        stderr = result.stderr.strip()
         message = [
             "ERROR: generated artifact regeneration failed in validation sandbox."
         ]
-        if stdout:
-            message.append("")
-            message.append("STDOUT:")
-            message.append(stdout)
-        if stderr:
-            message.append("")
-            message.append("STDERR:")
-            message.append(stderr)
+        if result.stdout.strip():
+            message.extend(["", "STDOUT:", result.stdout.strip()])
+        if result.stderr.strip():
+            message.extend(["", "STDERR:", result.stderr.strip()])
         raise RuntimeError("\n".join(message))
 
 
 def compare_files(src: Path, dst: Path, mismatches: list[str]) -> None:
     if not src.exists() and not dst.exists():
         return
-
     if src.exists() and not dst.exists():
         mismatches.append(
             f"Missing generated file in repository: {src.relative_to(REPO_ROOT)}"
         )
         return
-
     if not src.exists() and dst.exists():
         mismatches.append(
-            f"Unexpected generated file in repository: {src.relative_to(REPO_ROOT)}"
+            f"Unexpected generated file found in repository: {dst.relative_to(REPO_ROOT)}"
+        )
+        return
+    if not filecmp.cmp(src, dst, shallow=False):
+        mismatches.append(f"Generated file is stale: {src.relative_to(REPO_ROOT)}")
+
+
+def compare_directories(src_dir: Path, dst_dir: Path, mismatches: list[str]) -> None:
+    if not src_dir.exists() and not dst_dir.exists():
+        return
+    if src_dir.exists() and not dst_dir.exists():
+        mismatches.append(
+            f"Missing generated directory in repository: {src_dir.relative_to(REPO_ROOT)}"
+        )
+        return
+    if not src_dir.exists() and dst_dir.exists():
+        mismatches.append(
+            f"Unexpected generated directory found in repository: {dst_dir.relative_to(REPO_ROOT)}"
         )
         return
 
-    if not filecmp.cmp(src, dst, shallow=False):
-        mismatches.append(f"Stale generated file: {src.relative_to(REPO_ROOT)}")
+    comparison = filecmp.dircmp(src_dir, dst_dir)
+    for name in sorted(comparison.left_only):
+        mismatches.append(
+            f"Missing generated artifact in repository: {(src_dir / name).relative_to(REPO_ROOT)}"
+        )
+    for name in sorted(comparison.right_only):
+        mismatches.append(
+            f"Unexpected generated artifact in repository: {(dst_dir / name).relative_to(REPO_ROOT)}"
+        )
+    for name in sorted(comparison.diff_files):
+        mismatches.append(
+            f"Generated file is stale: {(src_dir / name).relative_to(REPO_ROOT)}"
+        )
+
+    for common_dir in sorted(comparison.common_dirs):
+        compare_directories(src_dir / common_dir, dst_dir / common_dir, mismatches)
 
 
-def compare_directories(real_dir: Path, temp_dir: Path, mismatches: list[str]) -> None:
-    real_files = (
-        {path.relative_to(real_dir) for path in real_dir.rglob("*") if path.is_file()}
-        if real_dir.exists()
-        else set()
-    )
-
-    temp_files = (
-        {path.relative_to(temp_dir) for path in temp_dir.rglob("*") if path.is_file()}
-        if temp_dir.exists()
-        else set()
-    )
-
-    all_files = sorted(real_files | temp_files)
-
-    for rel_path in all_files:
-        compare_files(real_dir / rel_path, temp_dir / rel_path, mismatches)
-
-
-def validate_generated_paths(temp_repo: Path, generated_paths: list[Path]) -> list[str]:
+def validate_paths(repo_paths: list[Path], temp_repo_paths: list[Path]) -> list[str]:
     mismatches: list[str] = []
-
-    for real_path in generated_paths:
-        rel_path = real_path.relative_to(REPO_ROOT)
-        temp_path = temp_repo / rel_path
-
-        if real_path.is_dir() or (
-            not real_path.exists() and str(real_path).endswith("/")
-        ):
-            compare_directories(real_path, temp_path, mismatches)
-            continue
-
-        if real_path.exists() and real_path.is_file():
-            compare_files(real_path, temp_path, mismatches)
-            continue
-
-        # If path does not exist yet in repo, infer intent from temp output.
-        if temp_path.exists() and temp_path.is_dir():
-            compare_directories(real_path, temp_path, mismatches)
+    for repo_path, temp_path in zip(repo_paths, temp_repo_paths, strict=True):
+        if repo_path.is_dir() or temp_path.is_dir():
+            compare_directories(repo_path, temp_path, mismatches)
         else:
-            compare_files(real_path, temp_path, mismatches)
-
+            compare_files(repo_path, temp_path, mismatches)
     return mismatches
 
 
 def main() -> int:
-    try:
-        config = load_yaml(CONFIG_PATH)
-        generated_paths = resolve_generated_paths(config)
+    config = load_yaml(CONFIG_PATH)
+    repo_paths = resolve_generated_paths(config)
 
-        with tempfile.TemporaryDirectory(
-            prefix="generated-content-check-"
-        ) as temp_dir_raw:
-            temp_root = Path(temp_dir_raw)
-            temp_repo = copy_repo_to_temp(temp_root)
-            run_generator(temp_repo)
-            mismatches = validate_generated_paths(temp_repo, generated_paths)
+    with tempfile.TemporaryDirectory(prefix="generated-content-") as tmp:
+        temp_root = Path(tmp)
+        temp_repo = copy_repo_to_temp(temp_root)
+        run_generator(temp_repo)
 
-        if mismatches:
-            print("Generated artifacts are stale or inconsistent.")
-            print("")
-            for mismatch in mismatches:
-                print(f"- {mismatch}")
-            print("")
-            print("Regenerate them with:")
-            print(f"  {sys.executable} scripts/generate_content_artifacts.py")
-            return 1
+        temp_paths = [temp_repo / path.relative_to(REPO_ROOT) for path in repo_paths]
+        mismatches = validate_paths(repo_paths, temp_paths)
 
-        print("Generated artifacts are already up to date.")
-        return 0
-
-    except Exception as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
+    if mismatches:
+        print("ERROR: generated content is out of date. Regenerate before committing:")
+        for mismatch in mismatches:
+            print(f"- {mismatch}")
         return 1
+
+    print("Generated content is current.")
+    return 0
 
 
 if __name__ == "__main__":

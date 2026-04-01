@@ -10,7 +10,7 @@ Enforces:
 - content_type ↔ path alignment
 - Required sections per content type
 
-Generated artifacts under website/docs/indexes are intentionally skipped.
+Generated artifacts under website/docs/_generated are intentionally skipped.
 
 Exit code:
 - 0 = success
@@ -32,7 +32,7 @@ except Exception:
 REPO_ROOT = Path(".").resolve()
 
 DOCS_DIR = REPO_ROOT / "website" / "docs"
-GENERATED_DIR = DOCS_DIR / "indexes"
+GENERATED_DIR = DOCS_DIR / "_generated"
 TAXONOMY_FILE = REPO_ROOT / ".github" / "taxonomy.yml"
 
 ALLOWED_STATUS = {"draft", "review", "active", "deprecated", "archived"}

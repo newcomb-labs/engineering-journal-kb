@@ -107,7 +107,7 @@ jobs:
             --ignore node_modules \
             --ignore website/build \
             --ignore website/.docusaurus \
-            --ignore "website/docs/indexes/**"
+            --ignore "website/docs/_generated/**"
 
       # -----------------------------
       # Detect changed files
@@ -147,7 +147,7 @@ jobs:
         if: steps.changed.outputs.any_changed == 'true'
         run: |
           FILES="${{ steps.changed.outputs.all_changed_files }}"
-          FORMAT=$(echo "$FILES" | tr ' ' '\n' | grep -E '\.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$' | grep -Ev '^website/docs/indexes/.*\.md$' || true)
+          FORMAT=$(echo "$FILES" | tr ' ' '\n' | grep -E '\.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$' | grep -Ev '^website/docs/_generated/.*\.md$' || true)
           if [ -n "$FORMAT" ]; then
             echo "$FORMAT" | xargs npx prettier --check
           fi

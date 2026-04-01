@@ -1,8 +1,10 @@
 {
+  "collapsed": false,
+  "collapsible": true,
   "label": "Case Studies",
-  "position": 2,
   "link": {
-    "type": "generated-index",
-    "description": "Troubleshooting and engineering analysis write-ups."
-  }
+    "description": "Troubleshooting and engineering analysis write-ups.",
+    "type": "generated-index"
+  },
+  "position": 20
 }
