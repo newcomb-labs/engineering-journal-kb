@@ -6,8 +6,15 @@ from pathlib import Path
 
 from content_validation_common import is_generated_artifact, parse_frontmatter
 
-ALLOWED_LIFECYCLES = {"draft", "review", "published", "archived"}
-PUBLISHED_REQUIRED_FIELDS = {"title", "description", "type", "category", "tags"}
+ALLOWED_LIFECYCLES = {"draft", "review", "active", "deprecated", "archived"}
+ACTIVE_REQUIRED_FIELDS = {
+    "title",
+    "description",
+    "type",
+    "category",
+    "tags",
+    "last_reviewed",
+}
 
 
 def validate_lifecycle(files: list[Path]) -> list[str]:
@@ -37,12 +44,12 @@ def validate_lifecycle(files: list[Path]) -> list[str]:
             )
             continue
 
-        if lifecycle == "published":
-            for field in sorted(PUBLISHED_REQUIRED_FIELDS):
+        if lifecycle in {"active", "deprecated"}:
+            for field in sorted(ACTIVE_REQUIRED_FIELDS):
                 value = frontmatter.get(field)
                 if value is None or (isinstance(value, str) and not value.strip()):
                     errors.append(
-                        f"{path}: published content requires non-empty frontmatter field '{field}'"
+                        f"{path}: lifecycle '{lifecycle}' requires non-empty frontmatter field '{field}'"
                     )
 
     return errors

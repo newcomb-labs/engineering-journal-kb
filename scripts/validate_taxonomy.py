@@ -11,13 +11,14 @@ ALLOWED_CATEGORIES = {
     "case-studies",
     "engineering",
     "governance",
+    "journal",
     "labs",
     "operations",
 }
 TYPE_TO_ALLOWED_CATEGORIES = {
     "case-study": {"case-studies"},
     "doc": {"engineering", "governance", "operations"},
-    "journal": {"engineering", "operations"},
+    "journal": {"journal"},
     "lab": {"labs"},
 }
 

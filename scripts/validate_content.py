@@ -49,7 +49,7 @@ REQUIRED_FIELDS = {
 }
 
 CONTENT_PATHS = {
-    "docs": "website/docs/",
+    "doc": "website/docs/",
     "lab": "website/docs/labs/",
     "case-study": "website/docs/case-studies/",
     "journal": "website/docs/journal/",

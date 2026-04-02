@@ -1,4 +1,64 @@
+---
+# Authoritative frontmatter schema for all governed content.
+#
+# This file is the single source of truth for required fields.
+# validate_content.py, validate_frontmatter.py, and apply_frontmatter_defaults.py
+# all derive their requirements from this file.
+#
+# Field reference:
+#   title         - Human-readable document title
+#   description   - One-sentence summary of the document
+#   content_type  - Governed type: doc | journal | lab | case-study
+#   type          - Alias of content_type (Docusaurus-facing; must match)
+#   status        - Workflow status: draft | review | active | deprecated | archived
+#   lifecycle     - Lifecycle state: draft | review | active | deprecated | archived
+#   created_at    - ISO 8601 date of initial creation (YYYY-MM-DD)
+#   last_reviewed - ISO 8601 date of most recent review (YYYY-MM-DD)
+#   owners        - List of GitHub @usernames responsible for this document
+#   tags          - List of taxonomy tags from .github/taxonomy.yml
+#   primary_domain - Primary domain from .github/taxonomy.yml domains list
+#   category      - Content category; must be valid for the given type
+
+version: 1
+
 required:
   - title
+  - description
+  - content_type
   - type
+  - status
   - lifecycle
+  - created_at
+  - last_reviewed
+  - owners
+  - tags
+  - primary_domain
+  - category
+
+optional:
+  - slug
+  - date
+  - secondary_domains
+  - archived_on
+  - sidebar_label
+  - sidebar_position
+
+field_types:
+  title: string
+  description: string
+  content_type: string
+  type: string
+  status: string
+  lifecycle: string
+  created_at: date
+  last_reviewed: date
+  owners: list
+  tags: list
+  primary_domain: string
+  category: string
+  slug: string
+  date: date
+  secondary_domains: list
+  archived_on: date
+  sidebar_label: string
+  sidebar_position: integer

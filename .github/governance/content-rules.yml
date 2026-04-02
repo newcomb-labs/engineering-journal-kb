@@ -17,45 +17,67 @@ frontmatter:
   required_fields:
     - title
     - description
+    - content_type
     - type
-    - category
+    - status
     - lifecycle
+    - created_at
+    - last_reviewed
+    - owners
     - tags
+    - primary_domain
+    - category
 
   fields:
     title:
       type: string
     description:
       type: string
+    content_type:
+      type: string
     type:
       type: string
-    category:
+    status:
       type: string
     lifecycle:
       type: string
+    created_at:
+      type: string
+    last_reviewed:
+      type: string
+    owners:
+      type: list
     tags:
       type: list
+    primary_domain:
+      type: string
+    category:
+      type: string
     slug:
       type: string
       required: false
     date:
       type: string
       required: false
-    last_reviewed:
-      type: string
+    secondary_domains:
+      type: list
       required: false
     archived_on:
       type: string
       required: false
-    authors:
-      type: list
+    sidebar_label:
+      type: string
+      required: false
+    sidebar_position:
+      type: integer
       required: false
 
 lifecycle:
   allowed:
     - draft
     - review
-    - published
+    - active
+    - deprecated
     - archived
 
   state_requirements:
@@ -67,13 +89,24 @@ lifecycle:
     review:
       - title
       - description
+      - content_type
       - type
       - category
       - lifecycle
       - tags
-    published:
+    active:
       - title
       - description
+      - content_type
+      - type
+      - category
+      - lifecycle
+      - tags
+      - last_reviewed
+    deprecated:
+      - title
+      - description
+      - content_type
       - type
       - category
       - lifecycle
@@ -82,6 +115,7 @@ lifecycle:
     archived:
       - title
       - description
+      - content_type
       - type
       - category
       - lifecycle
@@ -108,9 +142,13 @@ taxonomy:
     doc:
       categories:
         - governance
+        - engineering
+        - operations
         - guides
         - reference
       path_prefixes:
         governance: website/docs/governance/
+        engineering: website/docs/engineering/
+        operations: website/docs/operations/
         guides: website/docs/guides/
         reference: website/docs/reference/
