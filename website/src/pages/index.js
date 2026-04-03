@@ -78,7 +78,7 @@ const features = [
     title: "Journal",
     description:
       "Engineering notes, updates, and working history that document progress over time.",
-    link: "/blog",
+    link: "/docs/journal",
     linkLabel: "Read Journal",
     icon: (
       <svg
