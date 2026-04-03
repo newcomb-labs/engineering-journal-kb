@@ -1,7 +1,7 @@
 ---
 title: Engineering Journal
 description: Welcome to the engineering journal and knowledge base.
-content_type: docs
+content_type: doc
 status: draft
 created_at: "2026-03-30"
 last_reviewed: "2026-03-30"

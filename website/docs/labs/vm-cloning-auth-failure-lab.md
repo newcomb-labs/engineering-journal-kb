@@ -1,7 +1,7 @@
 ---
 title: VM Cloning Authentication Failure Lab
 description: "**Date:** 2026-03-04"
-content_type: lab
+content_type: doc
 status: draft
 created_at: "2026-03-30"
 last_reviewed: "2026-03-30"

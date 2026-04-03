@@ -29,7 +29,7 @@ except Exception:
     )
     sys.exit(1)
 
-REPO_ROOT = Path(".").resolve()
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 DOCS_DIR = REPO_ROOT / "website" / "docs"
 GENERATED_DIR = DOCS_DIR / "_generated"
@@ -193,7 +193,15 @@ def validate_file(path: Path, domains, tags) -> bool:
 
 def get_target_files() -> list[Path]:
     if len(sys.argv) > 1:
-        return [Path(arg).resolve() for arg in sys.argv[1:] if arg.endswith(".md")]
+        resolved = []
+        for arg in sys.argv[1:]:
+            if not arg.endswith(".md"):
+                continue
+            p = Path(arg)
+            if not p.is_absolute():
+                p = REPO_ROOT / p
+            resolved.append(p.resolve())
+        return resolved
     return list(DOCS_DIR.rglob("*.md"))
 
 

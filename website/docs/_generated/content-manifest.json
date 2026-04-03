@@ -1,7 +1,7 @@
 [
   {
     "area": "case-studies",
-    "content_type": "case-study",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "**Date:** 2026-03-04",
     "glossary_terms": [
@@ -33,7 +33,7 @@
   },
   {
     "area": "engineering",
-    "content_type": "docs",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "This section documents the overall architecture, patterns, and technical decisions.",
     "glossary_terms": [
@@ -65,7 +65,7 @@
   },
   {
     "area": "engineering",
-    "content_type": "docs",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "This section covers automation workflows, CI/CD, scripts, and infrastructure tasks.",
     "glossary_terms": [
@@ -97,7 +97,7 @@
   },
   {
     "area": "engineering",
-    "content_type": "docs",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "Welcome to the engineering journal and knowledge base.",
     "glossary_terms": [
@@ -129,7 +129,7 @@
   },
   {
     "area": "governance",
-    "content_type": "docs",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "All commits must follow Conventional Commits.",
     "glossary_terms": [
@@ -161,7 +161,7 @@
   },
   {
     "area": "governance",
-    "content_type": "docs",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "Repository conventions, contribution expectations, and quality controls.",
     "glossary_terms": [
@@ -229,7 +229,7 @@
   },
   {
     "area": "labs",
-    "content_type": "lab",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "**Date:** 2026-03-04",
     "glossary_terms": [
@@ -261,7 +261,7 @@
   },
   {
     "area": "operations",
-    "content_type": "docs",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "Playbooks, escalation notes, and operational response guidance.",
     "glossary_terms": [
@@ -293,7 +293,7 @@
   },
   {
     "area": "operations",
-    "content_type": "docs",
+    "content_type": "doc",
     "created_at": "2026-03-30",
     "description": "Repeatable procedures for operational tasks and support workflows.",
     "glossary_terms": [
