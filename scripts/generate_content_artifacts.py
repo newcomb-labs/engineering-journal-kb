@@ -31,7 +31,7 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "website" / "docs"
-BLOG_DIR = REPO_ROOT / "blog"
+JOURNAL_DIR = DOCS_DIR / "journal"
 GENERATED_DIR = DOCS_DIR / "_generated"
 INDEXES_DIR = GENERATED_DIR / "indexes"
 GLOSSARY_PATH = GENERATED_DIR / "glossary.md"
@@ -76,7 +76,7 @@ INDEX_DEFINITIONS = {
         "title": "Journal Index",
         "description": "Metadata-driven index of dated engineering journal entries.",
         "slug": "/indexes/journal",
-        "source": "blog",
+        "source": "docs",
         "area": "journal",
     },
     "case-studies": {
@@ -119,19 +119,6 @@ class DocRecord:
     related_content: list[str]
 
 
-@dataclass(frozen=True)
-class BlogRecord:
-    source_path: str
-    title: str
-    description: str
-    slug: str
-    tags: list[str]
-    authors: list[str]
-    date: str
-    visible: bool
-    glossary_terms: list[str]
-
-
 def load_yaml_frontmatter(path: Path) -> tuple[dict[str, Any], str] | tuple[None, str]:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---"):
@@ -167,13 +154,6 @@ def doc_permalink(relative_doc_path: Path) -> str:
     if rel.endswith("/index"):
         rel = rel[: -len("/index")]
     return f"/docs/{rel}"
-
-
-def blog_permalink(slug: str) -> str:
-    cleaned = slug.strip()
-    if cleaned.startswith("/"):
-        return f"/blog{cleaned}"
-    return f"/blog/{cleaned}"
 
 
 def normalize_string_list(value: Any) -> list[str]:
@@ -298,56 +278,6 @@ def collect_docs() -> list[DocRecord]:
     )
 
 
-def collect_blog_posts() -> list[BlogRecord]:
-    records: list[BlogRecord] = []
-    if not BLOG_DIR.exists():
-        return records
-
-    for path in sorted(BLOG_DIR.rglob("*.md")) + sorted(BLOG_DIR.rglob("*.mdx")):
-        frontmatter, _body = load_yaml_frontmatter(path)
-        if not frontmatter:
-            continue
-
-        slug = str(frontmatter.get("slug") or path.stem)
-        tags = sorted(
-            {
-                normalize_term(tag)
-                for tag in normalize_string_list(frontmatter.get("tags"))
-                if normalize_term(tag)
-            }
-        )
-        glossary_terms = sorted(
-            {
-                normalize_term(term)
-                for term in normalize_string_list(frontmatter.get("glossary_terms"))
-                + tags
-                if normalize_term(term)
-            }
-        )
-        date_prefix = path.stem.split("-", 3)
-        derived_date = "-".join(date_prefix[:3]) if len(date_prefix) >= 3 else ""
-
-        records.append(
-            BlogRecord(
-                source_path=path.relative_to(REPO_ROOT).as_posix(),
-                title=str(frontmatter.get("title") or path.stem),
-                description=str(frontmatter.get("description") or "").strip(),
-                slug=slug,
-                tags=tags,
-                authors=normalize_string_list(frontmatter.get("authors")),
-                date=str(frontmatter.get("date") or derived_date or ""),
-                visible=str(frontmatter.get("draft") or "false").lower() != "true",
-                glossary_terms=glossary_terms,
-            )
-        )
-
-    return sorted(
-        records,
-        key=lambda item: (item.date, item.title.lower(), item.source_path),
-        reverse=True,
-    )
-
-
 def generate_generated_categories(config: dict[str, Any]) -> None:
     generated_meta = (
         config.get("generated", {}) if isinstance(config.get("generated"), dict) else {}
@@ -406,9 +336,7 @@ def generate_in_place_area_categories(docs: list[DocRecord]) -> None:
         write_json(directory / "_category_.json", category_payload)
 
 
-def manifest_payload(
-    docs: list[DocRecord], posts: list[BlogRecord]
-) -> list[dict[str, Any]]:
+def manifest_payload(docs: list[DocRecord]) -> list[dict[str, Any]]:
     payload: list[dict[str, Any]] = []
 
     for doc in docs:
@@ -441,60 +369,24 @@ def manifest_payload(
             }
         )
 
-    for post in posts:
-        payload.append(
-            {
-                "area": "journal",
-                "content_type": "journal",
-                "created_at": post.date,
-                "description": post.description,
-                "glossary_terms": post.glossary_terms,
-                "kind": "blog",
-                "last_reviewed": None,
-                "lifecycle": "active" if post.visible else "draft",
-                "owners": post.authors,
-                "path": blog_permalink(post.slug),
-                "related_content": [],
-                "sidebar_label": None,
-                "sidebar_position": 9999,
-                "source_path": post.source_path,
-                "tags": post.tags,
-                "title": post.title,
-                "type": "journal",
-                "visible": post.visible,
-                "visibility": {
-                    "in_nav": post.visible,
-                    "in_generated_indexes": post.visible,
-                    "direct_access": True,
-                    "searchable": True,
-                },
-            }
-        )
-
     return sorted(
         payload,
         key=lambda item: (item["area"], item["title"].lower(), item["source_path"]),
     )
 
 
-def glossary_entries(
-    docs: list[DocRecord], posts: list[BlogRecord]
-) -> list[tuple[str, list[str]]]:
+def glossary_entries(docs: list[DocRecord]) -> list[tuple[str, list[str]]]:
     occurrences: dict[str, set[str]] = {}
 
     for doc in docs:
         for term in doc.glossary_terms:
             occurrences.setdefault(term, set()).add(doc.permalink)
 
-    for post in posts:
-        for term in post.glossary_terms:
-            occurrences.setdefault(term, set()).add(blog_permalink(post.slug))
-
     return sorted((term, sorted(paths)) for term, paths in occurrences.items())
 
 
-def generate_glossary(docs: list[DocRecord], posts: list[BlogRecord]) -> None:
-    entries = glossary_entries(docs, posts)
+def generate_glossary(docs: list[DocRecord]) -> None:
+    entries = glossary_entries(docs)
 
     lines = [
         "---",
@@ -563,35 +455,7 @@ def render_doc_listing(items: list[DocRecord]) -> list[str]:
     return lines
 
 
-def render_blog_listing(items: list[BlogRecord]) -> list[str]:
-    lines: list[str] = []
-    if not items:
-        return ["No visible journal entries are available yet.", ""]
-
-    for item in items:
-        permalink = blog_permalink(item.slug)
-        lines.append(f"## [{item.title}]({permalink})")
-        lines.append("")
-        if item.description:
-            lines.append(item.description)
-            lines.append("")
-        meta: list[str] = []
-        if item.date:
-            meta.append(f"Date: `{item.date}`")
-        if item.authors:
-            meta.append(
-                "Authors: " + ", ".join(f"`{author}`" for author in item.authors)
-            )
-        if meta:
-            lines.append("- " + " | ".join(meta))
-        if item.tags:
-            lines.append("- Tags: " + ", ".join(f"`{tag}`" for tag in item.tags))
-        lines.append("")
-
-    return lines
-
-
-def generate_indexes(docs: list[DocRecord], posts: list[BlogRecord]) -> None:
+def generate_indexes(docs: list[DocRecord]) -> None:
     for index_name, definition in INDEX_DEFINITIONS.items():
         lines = [
             "---",
@@ -608,43 +472,36 @@ def generate_indexes(docs: list[DocRecord], posts: list[BlogRecord]) -> None:
             "",
         ]
 
-        if definition["source"] == "docs":
-            items = [
-                doc for doc in docs if doc.area == definition["area"] and doc.visible
-            ]
-            items = sorted(
-                items,
-                key=lambda item: (
-                    item.sidebar_position,
-                    item.title.lower(),
-                    item.source_path,
-                ),
-            )
-            lines.extend(render_doc_listing(items))
-        else:
-            items = [post for post in posts if post.visible]
-            lines.extend(render_blog_listing(items))
+        items = [doc for doc in docs if doc.area == definition["area"] and doc.visible]
+        items = sorted(
+            items,
+            key=lambda item: (
+                item.sidebar_position,
+                item.title.lower(),
+                item.source_path,
+            ),
+        )
+        lines.extend(render_doc_listing(items))
 
         write_text(INDEXES_DIR / f"{index_name}.md", "\n".join(lines))
 
 
-def generate_manifest(docs: list[DocRecord], posts: list[BlogRecord]) -> None:
-    write_json(MANIFEST_PATH, manifest_payload(docs, posts))
+def generate_manifest(docs: list[DocRecord]) -> None:
+    write_json(MANIFEST_PATH, manifest_payload(docs))
 
 
 def main() -> None:
     config = load_config()
     docs = collect_docs()
-    posts = collect_blog_posts()
 
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     INDEXES_DIR.mkdir(parents=True, exist_ok=True)
 
     generate_generated_categories(config)
     generate_in_place_area_categories(docs)
-    generate_indexes(docs, posts)
-    generate_glossary(docs, posts)
-    generate_manifest(docs, posts)
+    generate_indexes(docs)
+    generate_glossary(docs)
+    generate_manifest(docs)
 
     print("Generated content artifacts:")
     for path in sorted(GENERATED_DIR.rglob("*")):

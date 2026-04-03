@@ -78,7 +78,7 @@ const features = [
     title: "Journal",
     description:
       "Engineering notes, updates, and working history that document progress over time.",
-    link: "/blog",
+    link: "/docs/journal",
     linkLabel: "Read Journal",
     icon: (
       <svg
@@ -135,7 +135,10 @@ function HomepageHeader() {
               >
                 Open Docs
               </Link>
-              <Link className="button button--secondary button--lg" to="/blog">
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/journal"
+              >
                 Read Journal
               </Link>
             </div>

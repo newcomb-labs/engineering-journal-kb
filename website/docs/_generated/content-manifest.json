@@ -192,42 +192,6 @@
     "visible": true
   },
   {
-    "area": "journal",
-    "content_type": "journal",
-    "created_at": "2026-03-10",
-    "description": "",
-    "glossary_terms": [
-      "docs",
-      "docusaurus",
-      "migration"
-    ],
-    "kind": "blog",
-    "last_reviewed": null,
-    "lifecycle": "active",
-    "owners": [
-      "chris"
-    ],
-    "path": "/blog/docusaurus-migration",
-    "related_content": [],
-    "sidebar_label": null,
-    "sidebar_position": 9999,
-    "source_path": "blog/2026-03-10-docusaurus-migration.md",
-    "tags": [
-      "docs",
-      "docusaurus",
-      "migration"
-    ],
-    "title": "Migrating the docs site to Docusaurus",
-    "type": "journal",
-    "visibility": {
-      "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
-      "searchable": true
-    },
-    "visible": true
-  },
-  {
     "area": "labs",
     "content_type": "doc",
     "created_at": "2026-03-30",

@@ -41,15 +41,7 @@ const config = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
         },
-        blog: {
-          showReadingTime: true,
-          blogTitle: "Journal",
-          blogDescription: "Engineering notes, changes, and write-ups",
-          blogSidebarTitle: "Recent posts",
-          blogSidebarCount: 10,
-          editUrl:
-            "https://github.com/newcomb-labs/engineering-journal-kb/tree/main/",
-        },
+        blog: false,
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -74,7 +66,7 @@ const config = {
       },
       items: [
         { to: "/docs/intro", label: "Docs", position: "left" },
-        { to: "/blog", label: "Journal", position: "left" },
+        { to: "/docs/journal", label: "Journal", position: "left" },
         {
           href: "https://github.com/newcomb-labs/engineering-journal-kb",
           label: "GitHub",
@@ -90,7 +82,7 @@ const config = {
           title: "Content",
           items: [
             { label: "Docs", to: "/docs/intro" },
-            { label: "Journal", to: "/blog" },
+            { label: "Journal", to: "/docs/journal" },
           ],
         },
         {
