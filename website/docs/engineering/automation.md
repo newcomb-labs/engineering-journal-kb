@@ -3,7 +3,7 @@ title: Automation
 description:
   This section covers automation workflows, CI/CD, scripts, and infrastructure
   tasks.
-content_type: docs
+content_type: doc
 status: draft
 created_at: "2026-03-30"
 last_reviewed: "2026-03-30"

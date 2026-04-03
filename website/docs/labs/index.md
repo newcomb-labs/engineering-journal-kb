@@ -1,7 +1,7 @@
 ---
 title: Labs
 description: Hands-on labs and reproducible exercises.
-content_type: lab
+content_type: doc
 status: draft
 created_at: "2026-03-30"
 last_reviewed: "2026-03-30"
