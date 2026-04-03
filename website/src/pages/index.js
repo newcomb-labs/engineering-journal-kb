@@ -135,7 +135,10 @@ function HomepageHeader() {
               >
                 Open Docs
               </Link>
-              <Link className="button button--secondary button--lg" to="/blog">
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/journal"
+              >
                 Read Journal
               </Link>
             </div>
