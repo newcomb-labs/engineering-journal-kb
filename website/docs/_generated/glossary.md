@@ -38,22 +38,6 @@ Referenced by:
 
 - [/docs/case-studies/vm-cloning-auth-failure](/docs/case-studies/vm-cloning-auth-failure)
 
-## docs
-
-Canonical anchor: `#docs`
-
-Referenced by:
-
-- [/blog/docusaurus-migration](/blog/docusaurus-migration)
-
-## docusaurus
-
-Canonical anchor: `#docusaurus`
-
-Referenced by:
-
-- [/blog/docusaurus-migration](/blog/docusaurus-migration)
-
 ## lab
 
 Canonical anchor: `#lab`
@@ -61,14 +45,6 @@ Canonical anchor: `#lab`
 Referenced by:
 
 - [/docs/labs/vm-cloning-auth-failure-lab](/docs/labs/vm-cloning-auth-failure-lab)
-
-## migration
-
-Canonical anchor: `#migration`
-
-Referenced by:
-
-- [/blog/docusaurus-migration](/blog/docusaurus-migration)
 
 ## policy
 
