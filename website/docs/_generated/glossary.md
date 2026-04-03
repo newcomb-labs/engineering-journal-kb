@@ -18,6 +18,7 @@ Canonical anchor: `#automation`
 Referenced by:
 
 - [/docs/engineering/automation](/docs/engineering/automation)
+- [/docs/journal/2026-03-12-docusaurus-migration](/docs/journal/2026-03-12-docusaurus-migration)
 
 ## aws
 
@@ -37,6 +38,14 @@ Canonical anchor: `#case-study`
 Referenced by:
 
 - [/docs/case-studies/vm-cloning-auth-failure](/docs/case-studies/vm-cloning-auth-failure)
+
+## ci-cd
+
+Canonical anchor: `#ci-cd`
+
+Referenced by:
+
+- [/docs/journal/2026-03-12-docusaurus-migration](/docs/journal/2026-03-12-docusaurus-migration)
 
 ## lab
 

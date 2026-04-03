@@ -16,6 +16,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 ALLOWED_FILE = REPO_ROOT / "scripts" / "check_no_mkdocs.py"
 
+# Files that may reference MkDocs by name for historical/documentation purposes
+ALLOWED_FILES = {
+    ALLOWED_FILE,
+    REPO_ROOT / "website" / "docs" / "journal" / "2026-03-12-docusaurus-migration.md",
+}
+
 # Patterns that indicate MkDocs usage
 MKDOCS_PATTERNS = [
     r"\bmkdocs\b",
@@ -32,6 +38,7 @@ IGNORE_DIRS = {
     "build",
     ".venv",
     ".cache",
+    "_generated",
 }
 
 
@@ -49,7 +56,7 @@ def scan():
         if not file.is_file():
             continue
 
-        if file == ALLOWED_FILE:
+        if file in ALLOWED_FILES:
             continue
 
         if should_skip(file):

@@ -1,7 +1,7 @@
 ---
 title: Case Studies
 description: Troubleshooting and engineering analysis write-ups.
-content_type: doc
+content_type: case-study
 status: draft
 created_at: "2026-03-30"
 last_reviewed: "2026-03-30"
