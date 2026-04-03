@@ -1,7 +1,7 @@
 [
   {
     "area": "case-studies",
-    "content_type": "doc",
+    "content_type": "case-study",
     "created_at": "2026-03-30",
     "description": "**Date:** 2026-03-04",
     "glossary_terms": [
@@ -192,8 +192,42 @@
     "visible": true
   },
   {
+    "area": "journal",
+    "content_type": "journal",
+    "created_at": "2026-03-12",
+    "description": "Notes on migrating the engineering knowledge base from MkDocs to Docusaurus classic, including the decision rationale, structural changes, and open work.",
+    "glossary_terms": [
+      "automation",
+      "ci-cd"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-12",
+    "lifecycle": "active",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/journal/2026-03-12-docusaurus-migration",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "journal/2026-03-12-docusaurus-migration.md",
+    "tags": [
+      "automation",
+      "ci-cd"
+    ],
+    "title": "Migrating the Docs Site to Docusaurus",
+    "type": "journal",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
     "area": "labs",
-    "content_type": "doc",
+    "content_type": "lab",
     "created_at": "2026-03-30",
     "description": "**Date:** 2026-03-04",
     "glossary_terms": [

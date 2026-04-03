@@ -10,4 +10,9 @@ generated_content: true
 
 Metadata-driven index of dated engineering journal entries.
 
-No visible content is available in this section yet.
+## [Migrating the Docs Site to Docusaurus](/docs/journal/2026-03-12-docusaurus-migration)
+
+Notes on migrating the engineering knowledge base from MkDocs to Docusaurus classic, including the decision rationale, structural changes, and open work.
+
+- Type: `journal` | Lifecycle: `active` | Created: `2026-03-12` | Last reviewed: `2026-03-12`
+- Tags: `automation`, `ci-cd`
