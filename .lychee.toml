@@ -18,9 +18,14 @@ exclude = [
   "https://github.com/.*/tree/",
   "https://raw.githubusercontent.com",
 
-  # Internal Docusaurus paths (not resolvable without a running server)
-  "/docs/",
-  "/blog/",
-  "/indexes/",
-  "/glossary",
+  # Root-relative Docusaurus paths — only valid with a running server
+  "^/docs/",
+  "^/blog/",
+  "^/indexes/",
+  "^/glossary",
+]
+
+exclude_path = [
+  # Generated indexes contain root-relative links verified by Docusaurus build
+  "website/docs/_generated",
 ]
