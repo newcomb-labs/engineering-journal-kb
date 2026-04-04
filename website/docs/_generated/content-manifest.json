@@ -25,11 +25,11 @@
     "type": "case-study",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "engineering",
@@ -57,11 +57,11 @@
     "type": "doc",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "engineering",
@@ -89,11 +89,11 @@
     "type": "doc",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "engineering",
@@ -121,11 +121,11 @@
     "type": "doc",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "governance",
@@ -153,11 +153,11 @@
     "type": "doc",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "governance",
@@ -185,11 +185,11 @@
     "type": "doc",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "journal",
@@ -251,11 +251,11 @@
     "type": "lab",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "operations",
@@ -283,11 +283,11 @@
     "type": "doc",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   },
   {
     "area": "operations",
@@ -315,10 +315,10 @@
     "type": "doc",
     "visibility": {
       "direct_access": true,
-      "in_generated_indexes": true,
-      "in_nav": true,
+      "in_generated_indexes": false,
+      "in_nav": false,
       "searchable": true
     },
-    "visible": true
+    "visible": false
   }
 ]

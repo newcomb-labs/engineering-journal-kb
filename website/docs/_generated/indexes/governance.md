@@ -10,16 +10,4 @@ generated_content: true
 
 Metadata-driven index of governance and repository policy docs.
 
-## [Commit Policy](/docs/governance/commit-policy)
-
-All commits must follow Conventional Commits.
-
-- Type: `doc` | Lifecycle: `draft` | Created: `2026-03-30` | Last reviewed: `2026-03-30`
-- Tags: `policy`
-
-## [Repo Standards](/docs/governance/repo-standards)
-
-Repository conventions, contribution expectations, and quality controls.
-
-- Type: `doc` | Lifecycle: `draft` | Created: `2026-03-30` | Last reviewed: `2026-03-30`
-- Tags: `standards`
+No visible content is available in this section yet.

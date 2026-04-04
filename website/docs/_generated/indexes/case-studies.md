@@ -10,9 +10,4 @@ generated_content: true
 
 Metadata-driven index of case studies and analysis write-ups.
 
-## [VM Cloning Authentication Failure Case Study](/docs/case-studies/vm-cloning-auth-failure)
-
-**Date:** 2026-03-04
-
-- Type: `case-study` | Lifecycle: `draft` | Created: `2026-03-30` | Last reviewed: `2026-03-30`
-- Tags: `case-study`
+No visible content is available in this section yet.
