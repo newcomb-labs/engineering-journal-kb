@@ -1,0 +1,154 @@
+---
+version: 1
+
+content_roots:
+  - website/docs
+
+ignore_paths:
+  - website/docs/blog
+  - website/build
+  - node_modules
+
+allowed_extensions:
+  - .md
+  - .mdx
+
+frontmatter:
+  required_fields:
+    - title
+    - description
+    - content_type
+    - type
+    - status
+    - lifecycle
+    - created_at
+    - last_reviewed
+    - owners
+    - tags
+    - primary_domain
+    - category
+
+  fields:
+    title:
+      type: string
+    description:
+      type: string
+    content_type:
+      type: string
+    type:
+      type: string
+    status:
+      type: string
+    lifecycle:
+      type: string
+    created_at:
+      type: string
+    last_reviewed:
+      type: string
+    owners:
+      type: list
+    tags:
+      type: list
+    primary_domain:
+      type: string
+    category:
+      type: string
+    slug:
+      type: string
+      required: false
+    date:
+      type: string
+      required: false
+    secondary_domains:
+      type: list
+      required: false
+    archived_on:
+      type: string
+      required: false
+    sidebar_label:
+      type: string
+      required: false
+    sidebar_position:
+      type: integer
+      required: false
+
+lifecycle:
+  allowed:
+    - draft
+    - review
+    - active
+    - deprecated
+    - archived
+
+  state_requirements:
+    draft:
+      - title
+      - type
+      - category
+      - lifecycle
+    review:
+      - title
+      - description
+      - content_type
+      - type
+      - category
+      - lifecycle
+      - tags
+    active:
+      - title
+      - description
+      - content_type
+      - type
+      - category
+      - lifecycle
+      - tags
+      - last_reviewed
+    deprecated:
+      - title
+      - description
+      - content_type
+      - type
+      - category
+      - lifecycle
+      - tags
+      - last_reviewed
+    archived:
+      - title
+      - description
+      - content_type
+      - type
+      - category
+      - lifecycle
+      - tags
+      - archived_on
+
+taxonomy:
+  types:
+    lab:
+      categories:
+        - labs
+      path_prefixes:
+        - website/docs/labs/
+    case-study:
+      categories:
+        - case-studies
+      path_prefixes:
+        - website/docs/case-studies/
+    journal:
+      categories:
+        - journal
+      path_prefixes:
+        - website/docs/journal/
+    doc:
+      categories:
+        - governance
+        - engineering
+        - operations
+        - guides
+        - reference
+      path_prefixes:
+        governance: website/docs/governance/
+        engineering: website/docs/engineering/
+        operations: website/docs/operations/
+        guides: website/docs/guides/
+        reference: website/docs/reference/

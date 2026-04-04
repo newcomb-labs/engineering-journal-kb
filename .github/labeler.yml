@@ -1,0 +1,89 @@
+---
+# Continuous Integration and Automation
+area:ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/actions/**"
+          - "scripts/**"
+          - "config/**"
+
+# Physical and Virtual Lab Infrastructure
+area:infrastructure:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "ansible/**"
+          - "docker/**"
+          - "kubernetes/**"
+          - "terraform/**"
+          - "provisioning/**"
+          - "**/docker-compose.yml"
+          - "**/inventory.ini"
+          - "**/inventory.yml"
+
+# Repository Governance and configuration files
+area:repo:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+          - "README.md"
+          - "CONTRIBUTING.md"
+          - "CODE_OF_CONDUCT.md"
+          - "SECURITY.md"
+          - ".pre-commit-config.yaml"
+          - ".commitlintrc*"
+          - "commitlint.config.*"
+          - ".editorconfig"
+          - ".gitignore"
+          - "package.json"
+          - "package-lock.json"
+          - "pyproject.toml"
+          - "requirements*.txt"
+
+# Security specific configurations
+area:security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "SECURITY.md"
+          - "gitleaks*"
+          - ".gitleaks*"
+          - "security/**"
+
+# Docusaurus UI and Styling
+area:theme:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/src/css/**"
+          - "website/src/theme/**"
+          - "website/src/components/**"
+          - "website/static/**"
+          - "website/docusaurus.config.*"
+
+# Documentation Categories
+area:labs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/labs/**"
+
+area:journal:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/journal/**"
+
+area:case-studies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/case-studies/**"
+
+area:external-docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "website/docs/external-docs/**"
+
+# Internal/Project Documentation
+area:repo-docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "website/docs/governance/**"
+          - "website/docs/reference/**"

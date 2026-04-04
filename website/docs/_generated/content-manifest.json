@@ -1,0 +1,324 @@
+[
+  {
+    "area": "case-studies",
+    "content_type": "case-study",
+    "created_at": "2026-03-30",
+    "description": "**Date:** 2026-03-04",
+    "glossary_terms": [
+      "case-study"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/case-studies/vm-cloning-auth-failure",
+    "related_content": [],
+    "sidebar_label": "VM Cloning Failure Case Study",
+    "sidebar_position": 9999,
+    "source_path": "case-studies/vm-cloning-auth-failure.md",
+    "tags": [
+      "case-study"
+    ],
+    "title": "VM Cloning Authentication Failure Case Study",
+    "type": "case-study",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "engineering",
+    "content_type": "doc",
+    "created_at": "2026-03-30",
+    "description": "This section documents the overall architecture, patterns, and technical decisions.",
+    "glossary_terms": [
+      "aws"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/engineering/architecture",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "engineering/architecture.md",
+    "tags": [
+      "aws"
+    ],
+    "title": "Architecture",
+    "type": "doc",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "engineering",
+    "content_type": "doc",
+    "created_at": "2026-03-30",
+    "description": "This section covers automation workflows, CI/CD, scripts, and infrastructure tasks.",
+    "glossary_terms": [
+      "automation"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/engineering/automation",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "engineering/automation.md",
+    "tags": [
+      "automation"
+    ],
+    "title": "Automation",
+    "type": "doc",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "engineering",
+    "content_type": "doc",
+    "created_at": "2026-03-30",
+    "description": "Welcome to the engineering journal and knowledge base.",
+    "glossary_terms": [
+      "aws"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/intro",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 1,
+    "source_path": "intro.md",
+    "tags": [
+      "aws"
+    ],
+    "title": "Engineering Journal",
+    "type": "doc",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "governance",
+    "content_type": "doc",
+    "created_at": "2026-03-30",
+    "description": "All commits must follow Conventional Commits.",
+    "glossary_terms": [
+      "policy"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/governance/commit-policy",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "governance/commit-policy.md",
+    "tags": [
+      "policy"
+    ],
+    "title": "Commit Policy",
+    "type": "doc",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "governance",
+    "content_type": "doc",
+    "created_at": "2026-03-30",
+    "description": "Repository conventions, contribution expectations, and quality controls.",
+    "glossary_terms": [
+      "standards"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/governance/repo-standards",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "governance/repo-standards.md",
+    "tags": [
+      "standards"
+    ],
+    "title": "Repo Standards",
+    "type": "doc",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "journal",
+    "content_type": "journal",
+    "created_at": "2026-03-12",
+    "description": "Notes on migrating the engineering knowledge base from MkDocs to Docusaurus classic, including the decision rationale, structural changes, and open work.",
+    "glossary_terms": [
+      "automation",
+      "ci-cd"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-12",
+    "lifecycle": "active",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/journal/2026-03-12-docusaurus-migration",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "journal/2026-03-12-docusaurus-migration.md",
+    "tags": [
+      "automation",
+      "ci-cd"
+    ],
+    "title": "Migrating the Docs Site to Docusaurus",
+    "type": "journal",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "labs",
+    "content_type": "lab",
+    "created_at": "2026-03-30",
+    "description": "**Date:** 2026-03-04",
+    "glossary_terms": [
+      "lab"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/labs/vm-cloning-auth-failure-lab",
+    "related_content": [],
+    "sidebar_label": "VM Cloning Failure Lab",
+    "sidebar_position": 9999,
+    "source_path": "labs/vm-cloning-auth-failure-lab.md",
+    "tags": [
+      "lab"
+    ],
+    "title": "VM Cloning Authentication Failure Lab",
+    "type": "lab",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "operations",
+    "content_type": "doc",
+    "created_at": "2026-03-30",
+    "description": "Playbooks, escalation notes, and operational response guidance.",
+    "glossary_terms": [
+      "aws"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/operations/incident-response",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "operations/incident-response.md",
+    "tags": [
+      "aws"
+    ],
+    "title": "Incident Response",
+    "type": "doc",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  },
+  {
+    "area": "operations",
+    "content_type": "doc",
+    "created_at": "2026-03-30",
+    "description": "Repeatable procedures for operational tasks and support workflows.",
+    "glossary_terms": [
+      "aws"
+    ],
+    "kind": "doc",
+    "last_reviewed": "2026-03-30",
+    "lifecycle": "draft",
+    "owners": [
+      "@newcomb-labs"
+    ],
+    "path": "/docs/operations/runbooks",
+    "related_content": [],
+    "sidebar_label": null,
+    "sidebar_position": 9999,
+    "source_path": "operations/runbooks.md",
+    "tags": [
+      "aws"
+    ],
+    "title": "Runbooks",
+    "type": "doc",
+    "visibility": {
+      "direct_access": true,
+      "in_generated_indexes": true,
+      "in_nav": true,
+      "searchable": true
+    },
+    "visible": true
+  }
+]

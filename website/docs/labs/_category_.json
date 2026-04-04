@@ -1,0 +1,10 @@
+{
+  "collapsed": false,
+  "collapsible": true,
+  "label": "Labs",
+  "link": {
+    "description": "Hands-on labs and reproducible exercises.",
+    "type": "generated-index"
+  },
+  "position": 10
+}

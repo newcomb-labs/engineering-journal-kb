@@ -1,19 +1,49 @@
-
 # Summary
 
 Describe the purpose of this change.
 
-## Changes
+## Primary Area
 
-- item
-- item
+- [ ] area:ci
+- [ ] area:repo
+- [ ] area:security
+- [ ] area:theme
+- [ ] area:labs
+- [ ] area:journal
+- [ ] area:case-studies
+- [ ] area:external-docs
+- [ ] area:repo-docs
+- [ ] other
 
-## Related Issues
+## Type
 
-Fixes #
+- [ ] feat
+- [ ] fix
+- [ ] docs
+- [ ] ci
+- [ ] chore
+- [ ] refactor
+- [ ] test
 
-## Checklist
+## Scope Check
 
-- [ ] CI checks pass
-- [ ] documentation updated
-- [ ] issue linked
+- [ ] This PR is single-area
+- [ ] This PR is multi-area and justified below
+
+### Multi-area Justification
+
+Explain why multiple areas are included.
+
+## Issues
+
+Closes #
+
+## Validation
+
+- [ ] pre-commit run --all-files
+- [ ] npm run lint
+- [ ] other validation completed
+
+## Notes
+
+Optional notes, risks, or follow-ups.

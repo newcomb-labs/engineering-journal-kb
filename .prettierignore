@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+website/.docusaurus/
+website/build/
+*.min.js
+website/docs/_generated/**

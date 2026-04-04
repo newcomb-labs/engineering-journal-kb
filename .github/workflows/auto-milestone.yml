@@ -21,6 +21,7 @@ name: Auto Milestone
 permissions:
   issues: write
   pull-requests: write
+  contents: read
 
 jobs:
   assign-milestone:
@@ -38,8 +39,9 @@ jobs:
               return;
             }
 
+            const isIssue = !!context.payload.issue && !context.payload.pull_request;
+            const itemType = isIssue ? "issue" : "pull_request";
             const issueNumber = item.number;
-            const itemType = context.payload.issue ? "issue" : "pull_request";
 
             if (item.milestone) {
               core.info(
@@ -49,9 +51,9 @@ jobs:
             }
 
             const labels = (item.labels || [])
-              .map(label => typeof label === "string" ? label : label.name)
+              .map((label) => (typeof label === "string" ? label : label.name))
               .filter(Boolean)
-              .map(name => name.toLowerCase());
+              .map((name) => name.toLowerCase());
 
             core.info(`Detected labels: ${labels.join(", ") || "(none)"}`);
 
@@ -75,9 +77,9 @@ jobs:
                 milestone: "Quality Gates",
                 labels: [
                   "area:ci",
+                  "type:ci",
                   "area:docs",
                   "type:docs",
-                  "type:ci",
                   "docs:ci",
                   "quality:gates",
                   "quality:linting",
@@ -99,8 +101,8 @@ jobs:
               }
             ];
 
-            const matchedRule = milestoneRules.find(rule =>
-              rule.labels.some(label => labels.includes(label))
+            const matchedRule = milestoneRules.find((rule) =>
+              rule.labels.some((label) => labels.includes(label))
             );
 
             if (!matchedRule) {
@@ -125,7 +127,7 @@ jobs:
             );
 
             const targetMilestone = milestones.find(
-              milestone => milestone.title === matchedRule.milestone
+              (milestone) => milestone.title === matchedRule.milestone
             );
 
             if (!targetMilestone) {

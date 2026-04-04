@@ -1,67 +1,266 @@
----
 repos:
+  # ============================================================
+  # 1. CORE WORKFLOW + CONTENT PIPELINE
+  # ------------------------------------------------------------
+  # This section defines HOW content flows:
+  #   edit → normalize → generate → validate
+  # ============================================================
+  - repo: local
+    hooks:
+      # --------------------------------------------------------
+      # Auto-stage files modified by hooks
+      # --------------------------------------------------------
+      # Ensures generated artifacts + config changes get committed
+      # automatically when hooks modify them.
+      - id: auto-stage-managed-files
+        name: auto stage managed config files
+        entry: >-
+          bash -c 'git add
+          .pre-commit-config.yaml
+          package.json
+          package-lock.json
+          website/package.json
+          website/package-lock.json
+          website/docs/_generated
+          website/docs/labs/_category_.json
+          website/docs/case-studies/_category_.json
+          website/docs/governance/_category_.json
+          website/docs/engineering/_category_.json
+          website/docs/operations/_category_.json
+          2>/dev/null || true'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # Normalize markdown headings (FAST)
+      # --------------------------------------------------------
+      # Fixes heading structure issues before validation runs.
+      - id: fix-markdown-headings
+        name: fix markdown headings
+        entry: python3 scripts/fix_markdown_headings.py
+        language: system
+        files: ^website/docs/.*\.md$
+        exclude: ^website/docs/_generated/.*\.md$
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # Generate deterministic content artifacts
+      # --------------------------------------------------------
+      # Builds:
+      #   - index pages
+      #   - content manifests
+      #   - derived docs
+      #
+      # MUST run before validation so validators see final state.
+      - id: generate-content-artifacts
+        name: generate content artifacts
+        entry: python3 scripts/generate_content_artifacts.py
+        language: system
+        files: ^website/docs/.*\.(md|mdx)$|^\.github/governance/.*\.ya?ml$|^scripts/(generate_content_artifacts|validate_generated_content)\.py$|^website/sidebars\.js$
+        pass_filenames: false
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # Validate generated artifacts ONLY
+      # --------------------------------------------------------
+      # Ensures generated files are:
+      #   - consistent
+      #   - deterministic
+      #   - structurally valid
+      #
+      # IMPORTANT:
+      # Generated files are NOT governed content.
+      - id: validate-generated-content
+        name: validate generated content
+        entry: python3 scripts/validate_generated_content.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+      # ============================================================
+      # 2. GOVERNANCE + CONTENT VALIDATION (AUTHORED CONTENT ONLY)
+      # ------------------------------------------------------------
+      # These hooks enforce rules for HUMAN-WRITTEN content.
+      # Generated files are EXCLUDED.
+      # ============================================================
+
+      # --------------------------------------------------------
+      # Prevent legacy docs system drift
+      # --------------------------------------------------------
+
+      - id: check-no-legacy-docs
+        name: prevent legacy docs drift
+        entry: python3 scripts/check_no_mkdocs.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit, manual]
+
+      # --------------------------------------------------------
+      # Full content governance validator
+      # --------------------------------------------------------
+      # Enforces:
+      #   - frontmatter schema
+      #   - taxonomy
+      #   - lifecycle
+      #   - content structure
+      #
+      # EXCLUDES generated artifacts.
+      - id: validate-content
+        name: validate content governance
+        entry: python3 scripts/validate_content.py
+        language: system
+        files: ^website/docs/.*\.md$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      - id: validate-governed-content
+        name: validate governed content
+        entry: python3 scripts/validate_all.py
+        language: system
+        files: ^website/docs/(labs|case-studies|governance|engineering|operations)/.*\.(md|mdx)$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # Required heading enforcement
+      # --------------------------------------------------------
+      # Ensures authored docs follow structural templates.
+      - id: validate-required-headings
+        name: validate required headings
+        entry: python3 scripts/validate_required_headings.py
+        language: system
+        files: ^website/docs/.*\.md$
+        exclude: ^website/docs/_generated/.*\.md$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # Docs consistency checks (manual)
+      # --------------------------------------------------------
+      # Cross-checks docs for structural consistency.
+      - id: docs-check
+        name: docs consistency checks
+        entry: bash scripts/docs_check.sh
+        language: system
+        pass_filenames: false
+        stages: [manual]
+
+      # ============================================================
+      # 3. TOOLING, FORMATTING, AND HYGIENE
+      # ------------------------------------------------------------
+      # These keep the repo clean, readable, and standardized.
+      # ============================================================
+
+      # --------------------------------------------------------
+      # Spell checking
+      # --------------------------------------------------------
+      # Frontend + docs tooling
+      # --------------------------------------------------------
+      - id: cspell
+        name: spell check docs
+        entry: npx cspell --config cspell.config.yaml
+        language: system
+        files: \.(md|mdx)$
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # JavaScript linting
+      # --------------------------------------------------------
+      - id: eslint
+        name: eslint
+        entry: npx eslint --fix
+        language: system
+        files: ^website/src/.*\.(js|mjs|cjs|jsx)$
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # CSS linting
+      # --------------------------------------------------------
+      - id: stylelint
+        name: stylelint
+        entry: npx stylelint --fix
+        language: system
+        files: ^website/src/.*\.(css|scss)$
+        stages: [pre-commit]
+
+      # --------------------------------------------------------
+      # Prettier formatting
+      # --------------------------------------------------------
+      # Formats code + markdown for consistency.
+      - id: prettier
+        name: prettier
+        entry: npx prettier --write
+        language: system
+        files: \.(js|mjs|cjs|jsx|css|scss|json|md|ya?ml)$
+        exclude: ^(\.yamllint$|website/docs/_generated/.*\.md$)
+        stages: [pre-commit]
+
+  # ============================================================
+  # ------------------------------------------------------------
+  # Markdown linting
+  # ------------------------------------------------------------
+  # Enforces markdown best practices (excluding generated files)
+  # ============================================================
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.41.0
+    rev: v0.48.0
     hooks:
       - id: markdownlint
-        args: ["--fix", "**/*.md"]
+        args: ["--fix"]
+        exclude: ^website/docs/_generated/.*\.md$
+        stages: [pre-commit]
 
+  # ============================================================
+  # Basic repository hygiene
   # ------------------------------------------------------------
-  # Basic hygiene
-  # ------------------------------------------------------------
+  # Prevents common git mistakes and formatting issues
+  # ============================================================
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        stages: [pre-commit]
+
       - id: end-of-file-fixer
+        stages: [pre-commit]
+
       - id: check-yaml
+        stages: [pre-commit]
+
       - id: check-added-large-files
         args: ["--maxkb=1024"]
-      - id: check-merge-conflict
+        stages: [pre-commit]
 
-  # ------------------------------------------------------------
+      - id: check-merge-conflict
+        stages: [pre-commit]
+
+  # ============================================================
   # YAML linting
   # ------------------------------------------------------------
+  # Ensures YAML correctness + style
+  # ============================================================
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.37.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         files: \.(yml|yaml)$
+        stages: [pre-commit]
 
+  # ============================================================
+  # Python linting + formatting
   # ------------------------------------------------------------
-  # Ruff (Python)
-  # ------------------------------------------------------------
+  # Fast + modern Python checks
+  # ============================================================
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+    rev: v0.15.7
     hooks:
       - id: ruff
         args: ["--fix"]
         files: \.py$
+        stages: [pre-commit]
+
       - id: ruff-format
         files: \.py$
-  - repo: local
-    hooks:
-      - id: validate-blog-tags
-        name: validate blog tags
-        entry: python3 scripts/validate_blog_tags.py
-        language: system
-        pass_filenames: false
-
-  - repo: local
-    hooks:
-      - id: validate-blog-tags
-        name: validate-blog-tags
-        entry: bash scripts/docs_check.sh
-        language: system
-        pass_filenames: false
-
-  # ------------------------------------------------------------
-  # Repo governance guards
-  # ------------------------------------------------------------
-  - repo: local
-    hooks:
-      - id: check-no-legacy-docs
-        name: prevent legacy docs drift
-        entry: python scripts/check_no_mkdocs.py
-        language: system
-        pass_filenames: false
+        stages: [pre-commit]

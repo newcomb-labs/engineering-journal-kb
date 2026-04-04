@@ -1,102 +1,94 @@
 #!/usr/bin/env python3
-"""Fail if MkDocs references exist anywhere in the repository.
-
-This repository uses Docusaurus as the only documentation system.
-Any MkDocs references are treated as configuration drift.
 """
+Repository governance guard: MkDocs must not appear anywhere in this repo.
 
-from __future__ import annotations
+Allowed location:
+- scripts/check_no_mkdocs.py
+
+If MkDocs-related references are found elsewhere, CI fails.
+"""
 
 import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
-EXCLUDED_DIR_NAMES = {
+ALLOWED_FILE = REPO_ROOT / "scripts" / "check_no_mkdocs.py"
+
+# Files that may reference MkDocs by name for historical/documentation purposes
+ALLOWED_FILES = {
+    ALLOWED_FILE,
+    REPO_ROOT / "website" / "docs" / "journal" / "2026-03-12-docusaurus-migration.md",
+}
+
+# Patterns that indicate MkDocs usage
+MKDOCS_PATTERNS = [
+    r"\bmkdocs\b",
+    r"mkdocs-material",
+    r"mkdocs\.yml",
+    r"mkdocs build",
+    r"mkdocs serve",
+]
+
+IGNORE_DIRS = {
     ".git",
-    ".github/.cache",
-    ".mypy_cache",
-    ".pytest_cache",
-    ".ruff_cache",
-    ".tox",
-    ".venv",
+    ".github/actions",
     "node_modules",
-    "site",
-    "venv",
-    "__pycache__",
+    "build",
+    ".venv",
+    ".cache",
+    "_generated",
 }
 
-EXCLUDED_PATHS = {
-    REPO_ROOT / "website" / "build",
-    REPO_ROOT / "website" / ".docusaurus",
-    REPO_ROOT / "scripts" / "check_no_mkdocs.py",
-}
 
-PATTERNS: tuple[re.Pattern[str], ...] = (
-    re.compile(r"\bmkdocs\.yml\b", re.IGNORECASE),
-    re.compile(r"\bmkdocs-material\b", re.IGNORECASE),
-    re.compile(r"\bmkdocs\b", re.IGNORECASE),
-)
-
-
-def is_excluded(path: Path) -> bool:
-    if path in EXCLUDED_PATHS:
-        return True
-
+def should_skip(path: Path) -> bool:
     for part in path.parts:
-        if part in EXCLUDED_DIR_NAMES:
+        if part in IGNORE_DIRS:
             return True
-
-    for excluded in EXCLUDED_PATHS:
-        try:
-            path.relative_to(excluded)
-            return True
-        except ValueError:
-            continue
-
     return False
 
 
-def scan_file(path: Path) -> list[str]:
-    violations: list[str] = []
+def scan():
+    violations = []
 
-    try:
-        content = path.read_text(encoding="utf-8")
-    except UnicodeDecodeError:
-        return violations
-    except OSError as exc:
-        violations.append(f"{path}:0: unable to read file: {exc}")
-        return violations
+    for file in REPO_ROOT.rglob("*"):
+        if not file.is_file():
+            continue
 
-    for line_number, line in enumerate(content.splitlines(), start=1):
-        for pattern in PATTERNS:
-            if pattern.search(line):
-                violations.append(f"{path}:{line_number}: {line.strip()}")
-                break
+        if file in ALLOWED_FILES:
+            continue
+
+        if should_skip(file):
+            continue
+
+        try:
+            text = file.read_text(errors="ignore")
+        except Exception:
+            continue
+
+        for pattern in MKDOCS_PATTERNS:
+            if re.search(pattern, text, re.IGNORECASE):
+                violations.append((file.relative_to(REPO_ROOT), pattern))
 
     return violations
 
 
-def main() -> int:
-    violations: list[str] = []
+def main():
+    violations = scan()
 
-    for path in sorted(REPO_ROOT.rglob("*")):
-        if not path.is_file():
-            continue
-        if is_excluded(path):
-            continue
-        violations.extend(scan_file(path))
+    if not violations:
+        print("✓ MkDocs governance check passed.")
+        return
 
-    if violations:
-        print("MkDocs references detected. This repository is Docusaurus-only.\n")
-        for violation in violations:
-            print(violation)
-        return 1
+    print("ERROR: MkDocs references detected in repository.\n")
+    for path, pattern in violations:
+        print(f" - {path} (matched pattern: {pattern})")
 
-    print("No MkDocs references detected.")
-    return 0
+    print("\nMkDocs is prohibited in this repository.")
+    print("Remove the references or update the guard if this is intentional.")
+    sys.exit(1)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

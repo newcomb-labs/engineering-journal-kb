@@ -17,10 +17,12 @@ const config = {
   onBrokenLinks: "throw",
 
   markdown: {
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: "warn",
     },
   },
+  themes: ["@docusaurus/theme-mermaid"],
 
   i18n: {
     defaultLocale: "en",
@@ -36,16 +38,10 @@ const config = {
           routeBasePath: "docs",
           editUrl:
             "https://github.com/newcomb-labs/engineering-journal-kb/tree/main/",
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
         },
-        blog: {
-          showReadingTime: true,
-          blogTitle: "Journal",
-          blogDescription: "Engineering notes, changes, and write-ups",
-          blogSidebarTitle: "Recent posts",
-          blogSidebarCount: 10,
-          editUrl:
-            "https://github.com/newcomb-labs/engineering-journal-kb/tree/main/",
-        },
+        blog: false,
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -55,6 +51,13 @@ const config = {
 
   themeConfig: {
     image: "img/social-card.jpg",
+
+    colorMode: {
+      defaultMode: "dark",
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
+
     navbar: {
       title: "Engineering Journal",
       logo: {
@@ -63,7 +66,7 @@ const config = {
       },
       items: [
         { to: "/docs/intro", label: "Docs", position: "left" },
-        { to: "/blog", label: "Journal", position: "left" },
+        { to: "/docs/journal", label: "Journal", position: "left" },
         {
           href: "https://github.com/newcomb-labs/engineering-journal-kb",
           label: "GitHub",
@@ -71,6 +74,7 @@ const config = {
         },
       ],
     },
+
     footer: {
       style: "dark",
       links: [
@@ -78,7 +82,7 @@ const config = {
           title: "Content",
           items: [
             { label: "Docs", to: "/docs/intro" },
-            { label: "Journal", to: "/blog" },
+            { label: "Journal", to: "/docs/journal" },
           ],
         },
         {
@@ -93,9 +97,17 @@ const config = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Chris Newcomb`,
     },
+
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+    },
+
+    docs: {
+      sidebar: {
+        hideable: true,
+        autoCollapseCategories: true,
+      },
     },
   },
 };

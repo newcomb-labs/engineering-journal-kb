@@ -32,3 +32,70 @@
 - name: bootstrap
   color: 1d76db
   description: Repository bootstrap and foundation work
+- name: area:theme
+  color: "0e7490"
+  description: Visual design, homepage styling, theme polish, and UI presentation
+
+- name: area:labs
+  color: "1d4ed8"
+  description: Lab guides, lab writeups, and lab-focused content
+
+- name: area:journal
+  color: "7c3aed"
+  description: Engineering journal entries and working notes
+
+- name: area:case-studies
+  color: "b45309"
+  description: Case study content and supporting materials
+
+- name: area:external-docs
+  color: "475569"
+  description: Documentation content not specific to repository governance or repo operations
+
+- name: area:repo-docs
+  color: "334155"
+  description: Repository-side documentation and internal docs under /docs
+
+- name: type:meta
+  color: "5319e7"
+  description: Meta-level work (roadmap, governance, coordination)
+
+- name: type:epic
+  color: "5319e7"
+  description: Parent issue tracking multiple sub-issues
+- name: status:in-progress
+  color: ededed
+  description: Work is actively being performed
+- name: status:discussion
+  color: d4c5f9
+  description: Seeking feedback or clarification before proceeding
+- name: type:security
+  color: b60205
+  description: Security-related fixes, audits, or hardening
+- name: type:refactor
+  color: e11d21
+  description: Code/Content improvement without changing behavior
+- name: type:debt
+  color: 5319e7
+  description: Technical or documentation debt that needs addressing
+- name: area:troubleshooting
+  color: d93f0b
+  description: Fixes, post-mortems, and "how-to" solve specific errors
+- name: status:on-hold
+  color: "B60205"
+  description: Work is paused indefinitely
+- name: type:revision
+  color: "475569"
+  description: Updates or edits to existing documentation/content
+- name: type:research
+  color: "7c3aed"
+  description: Exploratory work, spikes, or theoretical journal entries
+- name: area:infrastructure
+  color: "1d76db"
+  description: Home lab, Ansible, Docker, and server-side configs
+- name: type:compliance
+  color: "fbca04"
+  description: Governance, licensing, and repository standards
+- name: type:deprecation
+  color: "d73a4a"
+  description: Marking content or features for removal

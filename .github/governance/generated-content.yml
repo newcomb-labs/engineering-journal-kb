@@ -1,0 +1,94 @@
+---
+version: 1
+
+generated_outputs:
+  docs_root: website/docs/indexes
+  files:
+    - website/docs/indexes/index.md
+    - website/docs/indexes/labs.md
+    - website/docs/indexes/case-studies.md
+    - website/docs/indexes/journal.md
+    - website/docs/indexes/engineering.md
+    - website/docs/indexes/governance.md
+    - website/docs/indexes/operations.md
+    - website/docs/indexes/governance-summary.md
+    - website/docs/indexes/content-manifest.json
+
+managed_markers:
+  markdown_start: "<!-- generated:content:start -->"
+  markdown_end: "<!-- generated:content:end -->"
+  epic_progress_start: "<!-- managed:epic-progress:start -->"
+  epic_progress_end: "<!-- managed:epic-progress:end -->"
+
+collections:
+  labs:
+    title: Labs Index
+    description: Deterministic index of lab content generated from governed frontmatter.
+    include:
+      type: lab
+      category:
+        - labs
+      path_prefixes:
+        - website/docs/labs/
+    sort:
+      primary: date
+      fallback: title
+
+  case_studies:
+    title: Case Studies Index
+    description: Deterministic index of case studies generated from governed frontmatter.
+    include:
+      type: case-study
+      category:
+        - case-studies
+      path_prefixes:
+        - website/docs/case-studies/
+    sort:
+      primary: date
+      fallback: title
+
+  journal:
+    title: Journal Index
+    description: Deterministic index of journal content generated from governed frontmatter.
+    include:
+      type: journal
+      path_prefixes:
+        - website/docs/journal/
+    sort:
+      primary: date
+      fallback: title
+
+  engineering:
+    title: Engineering Docs Index
+    description: Deterministic index of engineering docs generated from governed frontmatter.
+    include:
+      type: doc
+      path_prefixes:
+        - website/docs/engineering/
+    sort:
+      primary: date
+      fallback: title
+
+  governance:
+    title: Governance Docs Index
+    description: Deterministic index of governance docs generated from governed frontmatter.
+    include:
+      type: doc
+      category:
+        - governance
+      path_prefixes:
+        - website/docs/governance/
+    sort:
+      primary: date
+      fallback: title
+
+  operations:
+    title: Operations Docs Index
+    description: Deterministic index of operations docs generated from governed frontmatter.
+    include:
+      type: doc
+      path_prefixes:
+        - website/docs/operations/
+    sort:
+      primary: date
+      fallback: title

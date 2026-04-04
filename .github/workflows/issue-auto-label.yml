@@ -23,43 +23,53 @@ jobs:
           parameters: >-
             [
               {
-                "keywords": ["bug", "error", "failure", "broken"],
+                "keywords": ["bug", "error", "failure", "broken", "hotfix"],
                 "labels": ["type:fix"],
                 "assignees": []
               },
               {
-                "keywords": ["docs", "documentation", "readme"],
+                "keywords": ["docs", "documentation", "readme", "instruction"],
                 "labels": ["type:docs"],
                 "assignees": []
               },
               {
-                "keywords": ["workflow", "action", "ci", "lint"],
+                "keywords": ["workflow", "action", "ci", "lint", "automation", "pipeline"],
                 "labels": ["area:ci"],
                 "assignees": []
               },
               {
-                "keywords": [
-                  "security",
-                  "secret",
-                  "credential",
-                  "token"
-                ],
+                "keywords": ["security", "secret", "credential", "token", "hardening", "leak", "audit"],
                 "labels": ["area:security"],
                 "assignees": []
               },
               {
-                "keywords": ["feature", "enhancement"],
+                "keywords": ["feature", "enhancement", "addition", "new"],
                 "labels": ["type:feature"],
                 "assignees": []
               },
               {
-                "keywords": ["chore", "cleanup", "housekeeping"],
+                "keywords": ["chore", "cleanup", "housekeeping", "maintenance", "deps", "update"],
                 "labels": ["type:chore"],
                 "assignees": []
               },
               {
-                "keywords": ["repo", "governance", "template", "label"],
+                "keywords": ["repo", "governance", "template", "label", "standards", "policy"],
                 "labels": ["area:repo"],
+                "assignees": []
+              },
+              {
+                "keywords": ["ansible", "docker", "compose", "homelab", "server", "provisioning", "infra"],
+                "labels": ["area:infrastructure"],
+                "assignees": []
+              },
+              {
+                "keywords": ["pi", "orange pi", "raspberry pi", "sbc", "hardware", "board"],
+                "labels": ["area:hardware"],
+                "assignees": []
+              },
+              {
+                "keywords": ["research", "explore", "spike", "investigation", "learning"],
+                "labels": ["type:research"],
                 "assignees": []
               }
             ]
