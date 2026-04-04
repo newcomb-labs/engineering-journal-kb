@@ -209,7 +209,7 @@ def collect_docs() -> list[DocRecord]:
         lifecycle = str(
             frontmatter.get("lifecycle") or frontmatter.get("status") or "draft"
         )
-        visible = lifecycle != "archived"
+        visible = lifecycle not in {"draft", "archived"}
         tags = sorted(
             {
                 normalize_term(tag)

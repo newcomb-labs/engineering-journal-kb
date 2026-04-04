@@ -10,9 +10,4 @@ generated_content: true
 
 Metadata-driven index of hands-on labs.
 
-## [VM Cloning Authentication Failure Lab](/docs/labs/vm-cloning-auth-failure-lab)
-
-**Date:** 2026-03-04
-
-- Type: `lab` | Lifecycle: `draft` | Created: `2026-03-30` | Last reviewed: `2026-03-30`
-- Tags: `lab`
+No visible content is available in this section yet.
