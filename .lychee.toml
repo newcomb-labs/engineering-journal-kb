@@ -8,8 +8,23 @@ exclude_loopback = true
 exclude_mail = true
 
 exclude = [
+  # Local development
   "http://localhost",
   "https://localhost",
   "http://127.0.0.1",
   "https://127.0.0.1",
+
+  # GitHub rate-limits heavily — skip raw/blob links
+  "https://github.com/.*/blob/",
+  "https://github.com/.*/tree/",
+  "https://raw.githubusercontent.com",
+
+  # Internal Docusaurus paths (not resolvable without a running server)
+  "/docs/",
+  "/blog/",
+  "/indexes/",
+  "/glossary",
 ]
+
+# Only check external links — internal anchors checked by Docusaurus build
+include_verbatim = false

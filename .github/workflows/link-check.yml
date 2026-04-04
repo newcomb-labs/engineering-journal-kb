@@ -1,0 +1,51 @@
+---
+name: link-check
+
+on:
+  pull_request:
+    paths:
+      - "website/docs/**"
+      - "website/blog/**"
+      - "docs/**"
+      - "*.md"
+  push:
+    branches:
+      - main
+    paths:
+      - "website/docs/**"
+      - "docs/**"
+      - "*.md"
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: link-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  link-check:
+    name: Check links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Run lychee link checker
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --config .lychee.toml
+            --exclude-path website/build
+            --exclude-path website/.docusaurus
+            --exclude-path website/node_modules
+            --exclude-path node_modules
+            "website/docs/**/*.md"
+            "docs/**/*.md"
+            "*.md"
+          fail: true
+          jobSummary: true
